@@ -1,0 +1,141 @@
+[
+  {
+    "id": "pen-and-paper",
+    "slug": "pen-and-paper",
+    "title": "The Pen and Paper Incident",
+    "year": "11 AH",
+    "yearNumeric": 11,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1200&h=500&fit=crop",
+    "summary": "In the final days of the Prophet's life, he asked for pen and paper to write something that would prevent his community from going astray — and what happened next became one of the most discussed moments in early Islamic history.",
+    "description": "<p>It was Thursday. The Prophet ﷺ was gravely ill. Those present in the room included several senior companions. According to narrations preserved in both Sahih Bukhari and Sahih Muslim, the Prophet said:</p><blockquote>\"Bring me a writing material so that I may write for you something after which you will never go astray.\"</blockquote><p>What followed was a disagreement among those present. Some said the Prophet was speaking out of the pain of his illness and that the Quran was sufficient. The dispute grew loud. The Prophet, hearing the argument, told them to leave.</p><p>Ibn Abbas — who narrated this hadith — called what happened in that room <em>\"the great calamity\"</em> (al-razziyya). His narration is found in Sahih Bukhari, one of the most authoritative hadith collections in Sunni Islam.</p><p>The historical significance of this event lies not just in what was refused, but in what was said about it afterward — and why a companion of the Prophet's stature called it the greatest calamity he witnessed.</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of Knowledge, Hadith 114",
+        "url": "https://sunnah.com/bukhari:114"
+      },
+      {
+        "text": "Sahih Muslim — Book of Wills, Hadith 1637",
+        "url": "https://sunnah.com/muslim:1637"
+      },
+      {
+        "text": "Sahih Bukhari — Book of Patients, Hadith 5669",
+        "url": "https://sunnah.com/bukhari:5669"
+      }
+    ],
+    "tags": ["prophet", "final-days", "11AH", "companions", "sahih-bukhari", "sahih-muslim"]
+  },
+  {
+    "id": "ghadir-khum",
+    "slug": "ghadir-khum",
+    "title": "The Declaration at Ghadir Khum",
+    "year": "10 AH",
+    "yearNumeric": 10,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&h=500&fit=crop",
+    "summary": "On the return from the Farewell Pilgrimage, the Prophet stopped at Ghadir Khum and addressed over a hundred thousand companions. The content of that address is recorded in both Sunni and Shia hadith collections with remarkable consistency.",
+    "description": "<p>The year was 10 AH. The Prophet ﷺ had just completed what would be his final pilgrimage — the Farewell Pilgrimage. On the return journey, at a place called Ghadir Khum near the pool of Khumm, he called a halt and ordered that those who had gone ahead be called back and those who were behind be waited for.</p><p>He then delivered a sermon. The most reported part of that sermon includes the statement:</p><blockquote>\"Whoever I am his mawla, then Ali is his mawla. O Allah, be a supporter of whoever supports him and an enemy of whoever opposes him.\"</blockquote><p>This narration is reported in Musnad Ahmad, Sunan al-Tirmidhi, Sunan Ibn Majah, and dozens of other classical Sunni sources. Al-Tirmidhi rated the core narration as <em>hasan sahih</em>. Imam Ahmad ibn Hanbal considered the event one of the most mutawatir (mass-transmitted) narrations he knew.</p><p>The debate is not about whether this happened — that is established by a number of narrators that removes any reasonable doubt. The debate is about what the word <em>mawla</em> means in this context. That debate has never been fully resolved.</p>",
+    "sources": [
+      {
+        "text": "Musnad Ahmad ibn Hanbal — Hadith 950",
+        "url": "https://sunnah.com/ahmad:950"
+      },
+      {
+        "text": "Sunan al-Tirmidhi — Book of Virtues, Hadith 3713",
+        "url": "https://sunnah.com/tirmidhi:3713"
+      },
+      {
+        "text": "Sunan Ibn Majah — Introduction, Hadith 121",
+        "url": "https://sunnah.com/ibnmajah:121"
+      },
+      {
+        "text": "Al-Mustadrak al-Hakim — Vol. 3, p. 109",
+        "url": "https://en.wikipedia.org/wiki/Al-Mustadrak_alaa_al-Sahihayn"
+      }
+    ],
+    "tags": ["prophet", "ghadir", "10AH", "ali", "farewell-pilgrimage", "mawla"]
+  },
+  {
+    "id": "mubahala",
+    "slug": "mubahala",
+    "title": "The Event of Mubahala",
+    "year": "10 AH",
+    "yearNumeric": 10,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=500&fit=crop",
+    "summary": "The Christian delegation from Najran came to Medina to debate with the Prophet. When agreement failed, the Quran commanded a Mubahala — a mutual invoking of God's curse upon the liars. Who the Prophet brought with him is recorded in the Quran itself.",
+    "description": "<p>A delegation of Christians from Najran arrived in Medina for theological discussion with the Prophet ﷺ. After extended debate about the nature of Jesus — whether he was divine, a son of God, or a prophet — they could not reach agreement.</p><p>At this point, the following verse was revealed:</p><blockquote>\"Whoever disputes with you concerning him, after the knowledge that has come to you, say: Come, let us call our sons and your sons, our women and your women, ourselves and yourselves — then let us invoke God's curse upon whoever is lying.\" — Quran 3:61</blockquote><p>The Prophet gathered those he would bring to the Mubahala. Classical Sunni tafsir — including those of al-Tabari, al-Zamakhshari, al-Razi, and Ibn Kathir — record that the Prophet brought Ali, Fatima, Hasan, and Husayn, covering them under his cloak and saying: <em>\"O Allah, these are my household.\"</em></p><p>The Christians, on seeing who the Prophet had brought, declined to proceed with the Mubahala and agreed to a treaty instead. This moment is one of the clearest documented occasions in which the Quran's phrase <em>\"our sons\"</em> is explained by the Prophet's own action.</p>",
+    "sources": [
+      {
+        "text": "Quran 3:61 — Surah Al-Imran",
+        "url": "https://quran.com/3/61"
+      },
+      {
+        "text": "Tafsir al-Tabari — Commentary on 3:61",
+        "url": "https://en.wikipedia.org/wiki/Tafsir_ibn_Jarir_al-Tabari"
+      },
+      {
+        "text": "Sahih Muslim — Book of Virtues, Hadith 2404",
+        "url": "https://sunnah.com/muslim:2404"
+      },
+      {
+        "text": "Tafsir Ibn Kathir — Vol. 2, Surah Al-Imran",
+        "url": "https://en.wikipedia.org/wiki/Tafsir_ibn_Kathir"
+      }
+    ],
+    "tags": ["mubahala", "10AH", "najran", "christians", "ahlul-bayt", "quran-3-61"]
+  },
+  {
+    "id": "hadith-al-dar",
+    "slug": "hadith-al-dar",
+    "title": "The Feast of Dhul Asheera (Hadith al-Dar)",
+    "subTitle": "This is Sub Title (only show in Event Detail)",
+    "author": "Irshad",
+    "published": "20 June, 2026",
+    "year": "1 BH",
+    "yearNumeric": -1,
+    "era": "BH",
+    "thumb": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&h=500&fit=crop",
+    "summary": "When the Prophet first invited his extended family to Islam at the feast known as Hadith al-Dar, the response he received was mostly ridicule — except from one person, who was a young Ali ibn Abi Talib. What was said that day is recorded in Sunni sources including Tarikh al-Tabari.",
+    "description": "<p>Early in the prophetic mission, after the revelation of the verse <em>\"And warn your closest kindred\"</em> (Quran 26:214), the Prophet ﷺ gathered forty members of the Banu Hashim clan at the home of his uncle Abu Talib.</p><p>After feeding them, he addressed them:</p><blockquote>\"O sons of Abd al-Muttalib, I know of no young man among the Arabs who has brought his people something better than what I bring you. I offer you happiness in this life and the next. Who among you will support me in this matter and be my brother, my trustee, and my successor among you?\"</blockquote><p>According to the account preserved in Tarikh al-Tabari (and in some versions of Ibn Ishaq's Sira), only one person responded: Ali ibn Abi Talib, who at the time was a young man. The Prophet repeated the question three times, and each time, Ali alone responded.</p><p>The Prophet then declared, according to this narration: <em>\"This is my brother, my trustee, and my successor among you — listen to him and obey him.\"</em></p><p>The gathering reportedly broke up in laughter. Whether this narration establishes succession or is purely about early support is a question scholars have argued. The narration itself, however, appears in Tarikh al-Tabari — a foundational Sunni historical source.</p>",
+    "images": [
+      {
+        "text": "Banu Hashim gathering (illustrative)",
+        "url": "https://images.unsplash.com/photo-1519677100203-a0e668c92439?w=1200&h=800&fit=crop"
+      },
+      {
+        "text": "Historic manuscript and calligraphy",
+        "url": "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=1200&h=800&fit=crop"
+      }
+    ],
+    "sources": [
+      {
+        "text": "Tarikh al-Tabari — Vol. 2, The Beginning of the Prophetic Mission",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      },
+      {
+        "text": "Quran 26:214 — Surah Al-Shu'ara",
+        "url": "https://quran.com/26/214"
+      },
+      {
+        "text": "Musnad Ahmad — Narration of Ali ibn Abi Talib",
+        "url": "https://sunnah.com/ahmad"
+      }
+    ],
+    "hadiths" : [
+      {
+        "text" : "Narration describing the Prophet inviting his kin at the Feast of Dhul Asheera, where Ali responded alone.",
+        "url" : "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      },
+      {
+        "text" : "Related narration and discussion in classical sources (Tarikh al-Tabari).",
+        "url" : "https://sunnah.com/ahmad"
+      }
+    ],
+    "tags": ["early-islam", "ali", "prophethood", "banu-hashim", "BH", "hadith-al-dar"]
+  }
+]

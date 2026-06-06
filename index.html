@@ -495,17 +495,20 @@
 
     <!-- Logo -->
     <a href="index.html" class="flex items-center gap-3 no-underline">
-      <span class="text-2xl ship-float" style="display:inline-block;">⛵</span>
+      <i data-lucide="ship" class="text-lg" style="display:inline-block; width:1.5em; height:1.5em; stroke-width:1.5; color:#e8a020;"></i>
       <span class="font-display text-parchment" style="color:var(--parchment); font-size:1.1rem; letter-spacing:0.1em;">SAFEENAH</span>
     </a>
 
     <!-- Desktop Nav -->
     <div class="hidden md:flex items-center gap-8">
-      <a href="index.html"   class="nav-link">Home</a>
-      <a href="about.html"   class="nav-link">About</a>
-      <a href="home.html"    class="nav-link">Timeline</a>
-      <a href="submit.html"  class="nav-link">Submit Issue</a>
-      <a href="home.html" class="btn-gold" style="padding:0.5rem 1.25rem; font-size:0.7rem;">
+      <a href="./index.html"   class="nav-link">Home</a>
+      <a href="./timeline.html"    class="nav-link">Timeline</a>
+      <a href="../hadith/index.html" class="nav-link" style="font-size:0.9rem;">Hadith</a>
+      <a href="../data/book/index.html" class="nav-link" style="font-size:0.9rem;">Books</a>
+      <a href="./about.html"   class="nav-link">About</a>
+      <a href="https://github.com/Irshad-11/Safeenah/issues"  class="nav-link">Submit Issue</a>
+      <a href="./generatejson.html"  class="nav-link">Generate JSON</a>
+      <a href="./home.html" class="btn-gold" style="padding:0.5rem 1.25rem; font-size:0.7rem;">
         Explore Archive
       </a>
     </div>
@@ -522,11 +525,14 @@
 
   <!-- Mobile Menu -->
   <div id="mobile-menu">
-    <a href="index.html"  class="nav-link" style="font-size:0.9rem;">Home</a>
-    <a href="about.html"  class="nav-link" style="font-size:0.9rem;">About</a>
-    <a href="home.html"   class="nav-link" style="font-size:0.9rem;">Timeline</a>
+    <a href="./index.html"  class="nav-link" style="font-size:0.9rem;">Home</a>
+    <a href="./timeline.html"   class="nav-link" style="font-size:0.9rem;">Timeline</a>
+    <a href="../hadith/index.html" class="nav-link" style="font-size:0.9rem;">Hadith</a>
+    <a href="../data/book/index.html" class="nav-link" style="font-size:0.9rem;">Books</a>
+    <a href="./about.html"  class="nav-link" style="font-size:0.9rem;">About</a>
     <a href="submit.html" class="nav-link" style="font-size:0.9rem;">Submit Issue</a>
-    <a href="home.html"   class="btn-gold" style="width:fit-content;">Explore Archive</a>
+    <a href="./generatejson.html"  class="nav-link">Generate JSON</a>
+    <a href="./home.html"   class="btn-gold" style="width:fit-content;">Explore Archive</a>
   </div>
 </nav>
 
@@ -586,11 +592,11 @@
 
     <!-- CTA Buttons -->
     <div class="flex flex-wrap gap-4 justify-center" data-aos="fade-up" data-aos-delay="450">
-      <a href="home.html" class="btn-gold">
+      <a href="./home.html" class="btn-gold">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         Enter the Archive
       </a>
-      <a href="about.html" class="btn-outline">
+      <a href="./about.html" class="btn-outline">
         About This Project
       </a>
     </div>
@@ -620,7 +626,7 @@
   <div class="max-w-4xl mx-auto text-center">
 
     <div class="ornament mb-8" data-aos="fade-in">
-      <span class="font-display text-xs tracking-widest" style="color: var(--ink-muted);">THE PURPOSE</span>
+      <span class="font-display text-base tracking-widest" style="color: var(--ink-muted);">THE PURPOSE</span>
     </div>
 
     <blockquote class="font-serif" style="
@@ -652,7 +658,7 @@
 
     <div class="text-center mb-16">
       <div class="ornament mb-6 max-w-xs mx-auto" data-aos="fade-in">
-        <span class="font-display text-xs tracking-widest" style="color: var(--gold-primary);">WHAT'S INSIDE</span>
+        <span class="font-display text-base tracking-widest" style="color: var(--gold-primary);">WHAT'S INSIDE</span>
       </div>
       <h2 class="font-display" style="color: var(--parchment); font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: 0.05em;" data-aos="fade-up">
         The Archive
@@ -717,7 +723,7 @@
     
 
       <!-- Card 4 -->
-      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+      <div class=" md:hidden feature-card" data-aos="fade-up" data-aos-delay="200">
         <div class="mb-4" style="color: var(--gold-primary);">
           <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
@@ -1121,7 +1127,7 @@ Soon, the project will migrate into a full-featured platform with expanded capab
 <section class="section-block cta-section" style="padding: 7rem 1.5rem;">
   <div class="max-w-3xl mx-auto text-center relative z-10">
 
-    <div class="ship-float mb-6 text-6xl" data-aos="zoom-in">⛵</div>
+    <i data-lucide="ship" class="mb-6 text-6xl ship-float" data-aos="zoom-in" style="display:inline-block; color:#e8a020; width:1.5em; height:1.5em; stroke-width:1.5;"></i>
 
     <h2 class="font-display mb-6" style="
       color: var(--parchment);
@@ -1139,10 +1145,10 @@ Soon, the project will migrate into a full-featured platform with expanded capab
     </p>
 
     <div class="flex flex-wrap gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
-      <a href="home.html" class="btn-gold" style="padding: 1rem 2.5rem; font-size: 0.85rem;">
+      <a href="./home.html" class="btn-gold" style="padding: 1rem 2.5rem; font-size: 0.85rem;">
         Open the Archive
       </a>
-      <a href="about.html" class="btn-outline" style="padding: 1rem 2.5rem; font-size: 0.85rem;">
+      <a href="./about.html" class="btn-outline" style="padding: 1rem 2.5rem; font-size: 0.85rem;">
         Read the Methodology
       </a>
     </div>
@@ -1162,7 +1168,7 @@ Soon, the project will migrate into a full-featured platform with expanded capab
       <!-- Brand -->
       <div>
         <div class="flex items-center gap-3 mb-4">
-          <span class="text-2xl">⛵</span>
+          
           <span class="font-display" style="color: var(--parchment); font-size: 1rem; letter-spacing: 0.1em;">SAFEENAH</span>
         </div>
         <p class="font-fell mt-4" style="color: rgba(240,186,96,0.5); font-size: 0.9rem; font-style: italic;">
@@ -1286,6 +1292,9 @@ Soon, the project will migrate into a full-featured platform with expanded capab
   }, { threshold: 0.5 });
 
   counters.forEach(c => observer.observe(c));
+
+  lucide.createIcons();
+
 </script>
 
 </body>

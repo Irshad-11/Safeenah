@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Historical Timeline — Safeenah</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+<!-- Hind Siliguri Font Link (Regular 400 & Bold 700) -->
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+
+
+<style>
+:root {
+  --c-bg:        #0d0b09;
+  --c-bg2:       #131009;
+  --c-surface:   #1a1610;
+  --c-surface2:  #201c14;
+  --c-border:    rgba(160,120,50,0.18);
+  --c-gold:      #c49a30;
+  --c-gold-lt:   #e0b84a;
+  --c-gold-dk:   #8a6518;
+  --c-gold-glow: rgba(196,154,48,0.18);
+  --c-ink:       #e8dcc8;
+  --c-ink-2:     #c8b898;
+  --c-ink-3:     #8a7a62;
+  --c-line:      #7a5f20;
+  --c-dot:       #c49a30;
+  --f-head:      'Libre Baskerville', Georgia, serif;
+  --f-body:      'Cormorant Garamond', Georgia, serif;
+  --f-label:     'Cinzel', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--c-bg);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(100,70,10,0.12) 0%, transparent 70%),
+    repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(255,220,100,0.012) 80px, rgba(255,220,100,0.012) 81px);
+  color: var(--c-ink);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0a0806; }
+::-webkit-scrollbar-thumb { background: var(--c-gold-dk); border-radius: 3px; }
+
+/* ── NAVBAR ── */
+.navbar {
+  position: fixed; top:0; left:0; right:0; z-index:900;
+  background: rgba(8,6,4,0.96);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(160,120,40,0.2);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 52px;
+}
+.logo {
+  font-family: var(--f-label); font-size: 0.88rem; font-weight: 500;
+  letter-spacing: 0.18em; color: var(--c-gold); text-decoration: none;
+  display: flex; align-items: center; gap: 0.55rem;
+}
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-a {
+  font-family: var(--f-label); font-size: 0.8rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(200,180,140,0.55); text-decoration: none;
+  transition: color 0.2s; border-bottom: 1px solid transparent;
+  padding-bottom: 1px;
+}
+.nav-a:hover, .nav-a.active { color: var(--c-gold); border-bottom-color: rgba(196,154,48,0.35); }
+
+/* ── NAVBAR MOBILE MENU ── */
+#ham { 
+  display:none; 
+  background:none; 
+  border:none; 
+  cursor:pointer; 
+  color:rgba(200,180,140,0.7); 
+  padding:4px; 
+}
+
+#mob {
+  display: none;
+  position: fixed;
+  top: 52px;
+  left: 0;
+  right: 0;
+  background: rgba(5,4,2,0.98);
+  border-bottom: 1px solid rgba(160,120,40,0.25);
+  padding: 0.8rem 1rem 1.2rem;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  z-index: 950;
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: all 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: calc(100vh - 52px);
+  overflow-y: auto;
+}
+
+#mob.show {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Backdrop overlay */
+#mob.show::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: -1;
+  animation: mobFade 0.3s ease forwards;
+}
+
+@keyframes mobFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Better mobile link styling */
+#mob .nav-a {
+  font-size: 0.8rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(160,120,40,0.15);
+  transition: color 0.2s;
+}
+
+#mob .nav-a:last-child {
+  border-bottom: none;
+}
+
+@media(max-width:640px){ 
+  #ham{display:block;} 
+  .nav-links{display:none;} 
+}
+
+/* ── PAGE HEADER ── */
+.page-head {
+  padding: 6.5rem 1.5rem 2.5rem;
+  text-align: center;
+  position: relative; z-index: 2;
+}
+.page-head h1 {
+  font-family: var(--f-head); font-size: clamp(1.7rem,4.5vw,2.9rem);
+  font-weight: 700; color: var(--c-ink); letter-spacing: 0.01em; line-height: 1.15;
+}
+.head-rule {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.9rem; margin: 0.8rem auto 0; max-width: 440px;
+}
+.head-rule::before, .head-rule::after {
+  content: ''; flex:1; height: 1px;
+}
+.head-rule::before { background: linear-gradient(to right, transparent, var(--c-gold-dk)); }
+.head-rule::after  { background: linear-gradient(to left,  transparent, var(--c-gold-dk)); }
+.head-rule span {
+  font-family: var(--f-label); font-size: 0.52rem;
+  letter-spacing: 0.3em; color: var(--c-gold-dk); text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── LOADING STATE ── */
+#tl-loading {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  padding: 4rem 2rem;
+  font-family: var(--f-label); font-size: 0.65rem; letter-spacing: 0.2em;
+  color: var(--c-gold-dk); text-transform: uppercase;
+}
+.spinner {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid rgba(196,154,48,0.15);
+  border-top-color: var(--c-gold);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── ERROR / EMPTY ── */
+.tl-msg {
+  text-align: center; padding: 3rem 2rem;
+  font-family: var(--f-body); font-size: 1rem; color: var(--c-ink-3);
+}
+.tl-msg strong { color: var(--c-gold-dk); font-family: var(--f-label); font-size: 0.7rem; letter-spacing: 0.2em; }
+
+/* ── TIMELINE OUTER ── */
+#tl-wrap {
+  position: relative; width: 100%;
+  padding: 0.5rem 0 5rem;
+}
+#tl-svg {
+  position: absolute; top:0; left:0;
+  pointer-events: none; overflow: visible; z-index: 0;
+}
+#tl-rows { position: relative; z-index: 2; }
+
+.fade-cap { display: flex; position: relative; z-index: 3; }
+.fade-cap-line {
+  width: 1.5px; height: 56px;
+  background-image: repeating-linear-gradient(
+    to bottom, var(--c-line) 0, var(--c-line) 5px, transparent 5px, transparent 11px
+  );
+}
+#cap-top .fade-cap-line {
+  mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+}
+#cap-bot .fade-cap-line {
+  mask-image: linear-gradient(to top, transparent 0%, black 100%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, black 100%);
+}
+
+/* ── GRID ROW ── */
+.tl-row {
+  display: grid; gap: 0; padding: 0 2.5%;
+}
+.tl-row.ltr { grid-template-columns: repeat(var(--cols,5),1fr); }
+.tl-row.rtl { grid-template-columns: repeat(var(--cols,5),1fr); direction: rtl; }
+.tl-row.rtl .ev-card { direction: ltr; }
+
+/* ── EVENT CARD ── */
+.ev-card {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 1.1rem 0.5rem 1.4rem;
+  text-decoration: none; color: inherit; cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.25s, opacity 0.5s ease, transform 0.5s ease;
+  position: relative;
+  opacity: 0; transform: translateY(16px);
+}
+.ev-card:hover { background: rgba(196,154,48,0.06); }
+.ev-card.vis { opacity: 1; transform: translateY(0); }
+
+/* circular image */
+.ev-img {
+  width: clamp(60px,8.4vw,84px);
+  height: clamp(60px,8.4vw,84px);
+  border-radius: 50%; overflow: hidden; flex-shrink: 0;
+  border: 1.5px solid var(--c-gold-dk);
+  box-shadow:
+    0 0 0 4px rgba(196,154,48,0.08),
+    0 0 0 7px rgba(196,154,48,0.04),
+    0 4px 22px rgba(0,0,0,0.55);
+  transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), box-shadow 0.3s;
+  background: var(--c-surface2);
+  position: relative;
+}
+.ev-img img {
+  width:100%; height:100%; object-fit:cover; display:block; border-radius:50%;
+  filter: brightness(0.88) saturate(0.8);
+  transition: filter 0.3s;
+}
+.ev-img::after {
+  content:''; position:absolute; inset:3px; border-radius:50%;
+  border:1px solid rgba(196,154,48,0.2); pointer-events:none;
+}
+.ev-card:hover .ev-img {
+  transform: scale(1.02) translateY(-3px);
+  box-shadow:
+    0 0 0 5px rgba(196,154,48,0.18),
+    0 0 0 9px rgba(196,154,48,0.06),
+    0 10px 32px rgba(0,0,0,0.7);
+}
+.ev-card:hover .ev-img img { filter: brightness(1) saturate(1); }
+
+/* dot */
+.ev-dot-col {
+  display: flex; justify-content: center; align-items: center;
+  margin: 0.4rem 0 0.25rem; height: 16px;
+}
+.ev-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--c-dot);
+  border: 1.5px solid rgba(196,154,48,0.5);
+  box-shadow: 0 0 8px rgba(196,154,48,0.55);
+  transition: transform 0.22s, box-shadow 0.22s;
+  position: relative; z-index: 4;
+}
+.ev-card:hover .ev-dot {
+  transform: scale(1.8);
+  box-shadow: 0 0 16px rgba(196,154,48,0.9), 0 0 32px rgba(196,154,48,0.25);
+}
+
+/* year */
+.ev-year {
+  font-family: var(--f-label); font-size: 1rem;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--c-gold-dk); line-height: 1; margin-bottom: 0.9rem;
+}
+
+/* title */
+.ev-title {
+  font-family: var(--f-head);
+  font-size: clamp(0.7rem,1.5vw,0.86rem);
+  font-weight: 700; color: var(--c-ink);
+  line-height: 1.3; margin-bottom: 0.22rem;
+}
+
+/* summary */
+.ev-summary {
+  font-family: var(--f-body); font-size: 0.72rem;
+  color: var(--c-ink-3); line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* ── BOTTOM NOTE ── */
+.tl-note {
+  display: inline-flex; align-items: flex-start; gap: 0.55rem;
+  border: 1px solid rgba(160,120,40,0.2);
+  border-radius: 3px;
+  background: rgba(26,22,16,0.7);
+  backdrop-filter: blur(8px);
+  padding: 0.65rem 1.1rem;
+  font-family: var(--f-body); font-size: 0.82rem;
+  color: var(--c-ink-3); line-height: 1.5;
+}
+.tl-note svg { flex-shrink:0; margin-top:2px; }
+
+/* ── RESPONSIVE ── */
+@media(min-width:1024px) { .tl-row { --cols:5; } }
+@media(min-width:640px) and (max-width:1023px) { .tl-row { --cols:3; } }
+@media(max-width:639px) {
+  .tl-row { --cols:2; padding:0 1.5%; direction:ltr!important; }
+  .tl-row.rtl { direction:ltr!important; }
+  .ev-summary { display:none; }
+  .ev-img { width:58px; height:58px; }
+  .ev-title { font-size:0.7rem; }
+  /* #tl-svg { display:none; } */
+  #cap-top, #cap-bot { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="../index.html" class="logo">Safeenah</a>
+  <div class="nav-links">
+    <a href="../index.html"        class="nav-a">Home</a>
+    <a href="../timeline.html"     class="nav-a active">Timeline</a>
+    <a href="../hadith/index.html" class="nav-a">Hadith</a>
+    <a href="../data/book/index.html" class="nav-a">Books</a>
+    <a href="../about.html"        class="nav-a">About</a>
+    <a href="https://github.com/Irshad-11/Safeenah/issues"       class="nav-a">Submit Issue</a>
+  </div>
+  <button id="ham" aria-label="Menu">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+<div id="mob">
+  <a href="../index.html"        class="nav-a">Home</a>
+  <a href="../timeline.html"     class="nav-a" style="color:var(--c-gold);">Timeline</a>
+  <a href="../hadith/index.html" class="nav-a">Hadith</a>
+  <a href="../data/book/index.html" class="nav-a">Books</a>
+  <a href="../about.html"        class="nav-a">About</a>
+  <a href="../submit.html"       class="nav-a">Submit Issue</a>
+</div>
+
+<!-- PAGE HEADER -->
+<header class="page-head">
+  <h1>Historical Timeline</h1>
+  <div class="head-rule"><span>◆ Dates are mathematical estimates ◆</span></div>
+</header>
+
+<!-- TIMELINE -->
+<div id="tl-wrap">
+  <svg id="tl-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="fade-cap" id="cap-top"><div class="fade-cap-line"></div></div>
+  <div id="tl-rows">
+    <div id="tl-loading">
+      <div class="spinner"></div>
+      <span>Loading events…</span>
+    </div>
+  </div>
+  <div class="fade-cap" id="cap-bot"><div class="fade-cap-line"></div></div>
+</div>
+
+
+
+<script>
+/*
+ * ═══════════════════════════════════════════════════
+ *  HOW EVENT LOADING WORKS
+ * ───────────────────────────────────────────────────
+ *  Strategy: scrape every *.json file from data/events/
+ *
+ *  We try three methods in order:
+ *
+ *  1. Directory listing  — GET data/events/ and parse
+ *     every href that ends in .json from the HTML.
+ *     Works on most static servers (nginx autoindex,
+ *     Apache mod_autoindex, live-server, etc.)
+ *
+ *  2. Manifest file      — GET data/events/manifest.json
+ *     Expected shape: { "files": ["foo.json","bar.json"] }
+ *     Drop a manifest.json in the folder as a fallback
+ *     for servers that don't expose directory listings.
+ *
+ *  3. Hard-coded fallback — demo events so the page
+ *     is never blank during development.
+ *
+ *  Each .json file may be:
+ *    - A single event object  { slug, title, year, … }
+ *    - An array of events     [{ … }, { … }]
+ *
+ *  yearNumeric is derived automatically from the year
+ *  string if not supplied (e.g. "10 AH" → 10,
+ *  "1 BH" → -1, "570 CE" → 570).
+ * ═══════════════════════════════════════════════════
+ */
+
+// Points to the data folder; tracks explicitly where your event files reside
+const DATA_BASE_DIR = '../data/events/';
+const EVENT_FILES = ['index.json', 'more10.json', 'more.json'];
+
+/* ── Parse a year string to a sortable integer ── */
+function parseYear(str) {
+  if (typeof str === 'number') return str;
+  str = String(str || '').trim();
+  const n = parseFloat(str.replace(/[^0-9.\-]/g, '')) || 0;
+  const lo = str.toLowerCase();
+  if (lo.includes('bh') || lo.includes('bce') || lo.includes('bc')) return -Math.abs(n);
+  return n;
+}
+
+/* ── Normalise a raw JSON payload into an event array ── */
+function normalisePayload(data) {
+  const arr = Array.isArray(data) ? data : [data];
+  return arr
+    .filter(e => e && (e.title || e.name))
+    .map(e => ({
+      slug:        e.slug || e.id || slugify(e.title || ''),
+      title:       e.title || e.name || 'Untitled',
+      year:        e.year  || e.date || '',
+      yearNumeric: e.yearNumeric != null ? e.yearNumeric : parseYear(e.year || e.date || '0'),
+      thumb:       e.thumb || e.image || e.thumbnail || '',
+      summary:     e.summary || e.description || e.excerpt || '',
+    }));
+}
+
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+
+/* ── Fetch + parse a single JSON file ── */
+async function fetchEventFile(filename) {
+  const url = DATA_BASE_DIR + filename;
+  const res = await fetch(url, { cache: 'no-cache' });
+  if (!res.ok) throw new Error(url + ' → ' + res.status);
+  return normalisePayload(await res.json());
+}
+
+/* ── Master loader rewritten for real static structures ── */
+async function loadEvents() {
+  try {
+    // Fetches all defined event JSON source sheets concurrently
+    const results = await Promise.allSettled(EVENT_FILES.map(fetchEventFile));
+    
+    const events = results
+      .filter(r => r.status === 'fulfilled')
+      .flatMap(r => r.value);
+
+    if (events.length) {
+      return events;
+    }
+    throw new Error("No valid events found in targets.");
+  } catch (e) {
+    console.warn('[timeline] Target files failed or missing. Falling back to demo array.', e.message);
+  }
+
+  /* Hard-coded demo fallback so the page is never blank during system issues */
+  return [
+    { slug:'hadith-al-dar',   title:'The Feast of Dhul Asheera',
+      year:'1 BH',  yearNumeric:-1,
+      thumb:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=200&fit=crop',
+      summary:'When the Prophet first invited his clan to Islam, only Ali ibn Abi Talib responded — three times.' },
+    { slug:'ghadir-khum',     title:'The Declaration at Ghadir Khum',
+      year:'10 AH', yearNumeric:10,
+      thumb:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=200&h=200&fit=crop',
+      summary:'On the return from the Farewell Pilgrimage, the Prophet addressed over a hundred thousand companions.' }
+  ];
+}
+
+
+/* ── getCols by viewport ── */
+function getCols() {
+  const w = window.innerWidth;
+  if (w >= 1024) return 5;
+  if (w >=  640) return 3;
+  return 2;
+}
+
+/* ── Build DOM rows ── */
+function buildRows(events, cols) {
+  const sorted = [...events].sort((a, b) => a.yearNumeric - b.yearNumeric);
+  const wrap   = document.getElementById('tl-rows');
+  wrap.innerHTML = '';
+
+  const chunks = [];
+  for (let i = 0; i < sorted.length; i += cols)
+    chunks.push(sorted.slice(i, i + cols));
+
+  chunks.forEach((chunk, ri) => {
+    const isLTR = ri % 2 === 0;
+    const row   = document.createElement('div');
+    row.className   = 'tl-row ' + (isLTR ? 'ltr' : 'rtl');
+    row.dataset.row = ri;
+
+    const visual = isLTR ? chunk : [...chunk].reverse();
+
+    visual.forEach(ev => {
+      const a = document.createElement('a');
+      a.className = 'ev-card';
+      a.href = 'event/index.html?id=' + encodeURIComponent(ev.slug);
+
+      const fallback = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop';
+      const img = ev.thumb || fallback;
+
+      a.innerHTML = `
+        <div class="ev-img">
+          <img src="${esc(img)}" alt="${esc(ev.title)}" loading="lazy"
+               onerror="this.src='${esc(fallback)}'"/>
+        </div>
+        <div class="ev-dot-col"><div class="ev-dot"></div></div>
+        <div class="ev-year">${esc(ev.year)}</div>
+        <div class="ev-title">${esc(ev.title)}</div>
+        
+      `;
+      row.appendChild(a);
+    });
+
+    wrap.appendChild(row);
+  });
+}
+
+/* ── Position fade caps ── */
+function positionCaps() {
+  const wrap  = document.getElementById('tl-wrap');
+  const wRect = wrap.getBoundingClientRect();
+  const dots  = wrap.querySelectorAll('.ev-dot');
+  if (!dots.length) return;
+
+  function setX(id, dot) {
+    const cap = document.getElementById(id);
+    if (!cap) return;
+    const r  = dot.getBoundingClientRect();
+    const cx = r.left - wRect.left + r.width / 2;
+    cap.style.paddingLeft = Math.max(0, cx - 0.75) + 'px';
+  }
+  setX('cap-top', dots[0]);
+  setX('cap-bot', dots[dots.length - 1]);
+}
+
+/* ── Draw bezier path ── */
+function drawPath() {
+  const wrap   = document.getElementById('tl-wrap');
+  const svg    = document.getElementById('tl-svg');
+  const rowEls = Array.from(wrap.querySelectorAll('.tl-row'));
+  if (!rowEls.length) { svg.innerHTML = ''; return; }
+
+  const W = wrap.offsetWidth;
+  const H = wrap.scrollHeight;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width',  W);
+  svg.setAttribute('height', H);
+
+  const wRect = wrap.getBoundingClientRect();
+
+  const pts = [];
+  rowEls.forEach(row => {
+    const isLTR = row.classList.contains('ltr');
+    const cards = Array.from(row.querySelectorAll('.ev-card'));
+    const ordered = isLTR ? cards : [...cards].reverse();
+    ordered.forEach(card => {
+      const dot = card.querySelector('.ev-dot');
+      if (!dot) return;
+      const dr = dot.getBoundingClientRect();
+      pts.push({
+        x: dr.left - wRect.left + dr.width  / 2,
+        y: dr.top  - wRect.top  + dr.height / 2
+      });
+    });
+  });
+
+  if (pts.length < 2) { svg.innerHTML = ''; return; }
+
+  let d = `M ${f(pts[0].x)} ${f(pts[0].y)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i], p1 = pts[i + 1];
+    const dx = p1.x - p0.x, dy = p1.y - p0.y;
+    const ady = Math.abs(dy);
+    let cp1x, cp1y, cp2x, cp2y;
+
+    if (ady < 15) {
+      const bow = Math.abs(dx) * 0.1;
+      cp1x = p0.x + dx * 0.33; cp1y = p0.y - bow;
+      cp2x = p0.x + dx * 0.67; cp2y = p1.y + bow;
+    } else {
+      const pull = Math.min(Math.abs(dx) * 0.28, 60);
+      const sx   = (i % 2 === 0) ? 1 : -1;
+      cp1x = p0.x + pull * sx; cp1y = p0.y + ady * 0.52;
+      cp2x = p1.x - pull * sx; cp2y = p1.y - ady * 0.52;
+    }
+    d += ` C ${f(cp1x)} ${f(cp1y)}, ${f(cp2x)} ${f(cp2y)}, ${f(p1.x)} ${f(p1.y)}`;
+  }
+
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="gl" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#7a5f20" stop-opacity="0"/>
+        <stop offset="5%"   stop-color="#7a5f20" stop-opacity="1"/>
+        <stop offset="95%"  stop-color="#7a5f20" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#7a5f20" stop-opacity="0"/>
+      </linearGradient>
+      <mask id="lm"><rect width="${W}" height="${H}" fill="url(#gl)"/></mask>
+    </defs>
+    <path d="${d}" fill="none" stroke="rgba(196,154,48,0.07)" stroke-width="7"
+          stroke-linecap="round" mask="url(#lm)"/>
+    <path d="${d}" fill="none" stroke="#7a5f20" stroke-width="1.2"
+          stroke-linecap="round" opacity="0.75" mask="url(#lm)"/>
+  `;
+}
+
+/* ── Scroll reveal ── */
+function initReveal() {
+  const cards = document.querySelectorAll('.ev-card');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx   = Array.from(e.target.parentNode.children).indexOf(e.target);
+        const delay = idx * 65;
+        setTimeout(() => e.target.classList.add('vis'), delay);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  cards.forEach(c => obs.observe(c));
+}
+
+/* ── Helpers ── */
+function f(n) { return n.toFixed(2); }
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ── INIT ── */
+let activeCols = getCols();
+
+(async () => {
+  try {
+    const events = await loadEvents();
+    const cols   = getCols();
+    activeCols   = cols;
+    buildRows(events, cols);
+
+    setTimeout(() => { positionCaps(); drawPath(); initReveal(); }, 160);
+
+    let rt;
+    window.addEventListener('resize', () => {
+      clearTimeout(rt);
+      rt = setTimeout(() => {
+        if (getCols() !== activeCols) {
+          activeCols = getCols();
+          buildRows(events, activeCols);
+          setTimeout(() => { positionCaps(); drawPath(); initReveal(); }, 160);
+        } else {
+          positionCaps(); drawPath();
+        }
+      }, 130);
+    });
+
+    window.addEventListener('load', () =>
+      setTimeout(() => { positionCaps(); drawPath(); }, 60));
+
+  } catch (err) {
+    console.error('[timeline] fatal:', err);
+    document.getElementById('tl-rows').innerHTML = `
+      <div class="tl-msg">
+        <strong>Could not load events</strong><br>
+        <span style="font-size:0.85rem;color:var(--c-ink-3);margin-top:0.4rem;display:block;">
+          Check the browser console and verify the <code>data/events/</code> folder is accessible.
+        </span>
+      </div>`;
+  }
+})();
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE MENU - Improved (Fixed + Click Outside)
+═══════════════════════════════════════════════════════ */
+const ham = document.getElementById('ham');
+const mob = document.getElementById('mob');
+
+function openMobileMenu() {
+  mob.classList.add('show');
+  ham.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+  mob.classList.remove('show');
+  ham.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
+function toggleMobileMenu() {
+  if (mob.classList.contains('show')) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
+
+// Hamburger Click
+ham.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleMobileMenu();
+});
+
+// Click outside to close
+document.addEventListener('click', (e) => {
+  if (!mob.contains(e.target) && !ham.contains(e.target)) {
+    closeMobileMenu();
+  }
+});
+
+// Close when clicking any link in mobile menu
+mob.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', closeMobileMenu);
+});
+
+// Escape key support
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && mob.classList.contains('show')) {
+    closeMobileMenu();
+  }
+});
+</script>
+</body>
+</html>

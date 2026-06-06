@@ -1,0 +1,232 @@
+[
+  {
+    "id": "saqifah",
+    "slug": "saqifah",
+    "title": "The Gathering at Saqifah",
+    "year": "11 AH",
+    "yearNumeric": 11,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1541410965313-d53b3c16ef17?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1541410965313-d53b3c16ef17?w=1200&h=500&fit=crop",
+    "summary": "While the immediate family of the Prophet was preparing his body for burial, a critical meeting took place at Saqifah Bani Sa'idah to determine who would lead the Muslim community, altering the course of Islamic history.",
+    "description": "<p>Immediately following the death of the Prophet ﷺ, the Ansar (helpers of Medina) gathered at a roofed structure belonging to the Banu Sa'idah clan to discuss leadership. Upon hearing of this, Abu Bakr, Umar ibn al-Khattab, and Abu Ubaidah ibn al-Jarrah rushed to the location to ensure the unity of the community.</p><p>A heated debate ensued regarding whether leadership should remain with the Quraysh or be given to the Ansar. Umar ibn al-Khattab ultimately pledged allegiance to Abu Bakr, followed by the rest of those present. Meanwhile, Ali ibn Abi Talib and members of the Banu Hashim were absent from the meeting, as they were occupied with the Prophet's funeral preparations.</p><p>This event marks the establishment of the first Caliphate, but the political divisions and questions of legitimacy that arose from Saqifah became a foundational point of divergence between Sunni and Shia political theology.</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of Limits, Hadith 6830",
+        "url": "https://sunnah.com/bukhari:6830"
+      },
+      {
+        "text": "Tarikh al-Tabari — Vol. 9, The Last Years of the Prophet",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      }
+    ],
+    "tags": ["saqifah", "11AH", "abu-bakr", "umar", "caliphate", "succession"]
+  },
+  {
+    "id": "fadak-dispute",
+    "slug": "fadak-dispute",
+    "title": "The Dispute Over Fadak",
+    "year": "11 AH",
+    "yearNumeric": 11,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1200&h=500&fit=crop",
+    "summary": "Following the Prophet's death, his daughter Fatima demanded the lands of Fadak as her inheritance. The refusal by Abu Bakr based on a prophetic saying led to a historic grievance.",
+    "description": "<p>Fadak was a wealthy oasis in the Khaybar region that had been acquired by the Prophet ﷺ without military conflict. After his passing, Fatima requested her share of inheritance from this land. The newly appointed Caliph, Abu Bakr, denied the request, citing a statement he heard from the Prophet:</p><blockquote>\"We [Prophets] do not leave inheritance; whatever we leave behind is charity.\"</blockquote><p>Fatima argued her right using Quranic verses that mention prophets inheriting from one another. Deeply aggrieved by the ruling, historical records in Sahih Bukhari state that Fatima withdrew from Abu Bakr and did not speak to him for the remaining six months of her life.</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of One-Fifth of Booty, Hadith 3093",
+        "url": "https://sunnah.com/bukhari:3093"
+      },
+      {
+        "text": "Sahih Muslim — Book of Jihad and Expedition, Hadith 1759",
+        "url": "https://sunnah.com/muslim:1759"
+      }
+    ],
+    "tags": ["fatima", "abu-bakr", "11AH", "fadak", "inheritance"]
+  },
+  {
+    "id": "hadith-al-kisa",
+    "slug": "hadith-al-kisa",
+    "title": "The Event of the Cloak (Hadith al-Kisa)",
+    "year": "9 AH",
+    "yearNumeric": 9,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1601058268499-e52658b8bb88?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1601058268499-e52658b8bb88?w=1200&h=500&fit=crop",
+    "summary": "An intimate gathering where the Prophet gathered his closest family members under a Yemeni cloak, accompanied by a divine revelation establishing their special spiritual status.",
+    "description": "<p>Narrated by Aisha and Umm Salama, this event occurred in the home of the Prophet ﷺ. He gathered his daughter Fatima, his son-in-law Ali, and his grandsons Hasan and Husayn, drawing a dark cloak (kisa) over them all.</p><p>While they were assembled beneath it, the purification verse of the Quran was revealed:</p><blockquote>\"Allah intends only to remove from you the impurity [of sin], O people of the Prophet's household, and to purify you with a thorough purification.\" — Quran 33:33</blockquote><p>The Prophet then declared them to be his 'Ahlul Bayt'. While Sunni scholars view this as an honor shared with the Prophet's wives, Shia theology views this precise event as proof of the unique infallibility and spiritual leadership of the Cloak's occupants.</p>",
+    "sources": [
+      {
+        "text": "Sahih Muslim — Book of Virtues of the Companions, Hadith 2424",
+        "url": "https://sunnah.com/muslim:2424"
+      },
+      {
+        "text": "Sunan al-Tirmidhi — Book of Virtues, Hadith 3787",
+        "url": "https://sunnah.com/tirmidhi:3787"
+      }
+    ],
+    "tags": ["ahlul-bayt", "purification-verse", "9AH", "ali", "fatima", "hasan", "husayn"]
+  },
+  {
+    "id": "army-of-usama",
+    "slug": "army-of-usama",
+    "title": "The Expedition of Usama bin Zayd",
+    "year": "11 AH",
+    "yearNumeric": 11,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1599740831664-9243425029b7?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1599740831664-9243425029b7?w=1200&h=500&fit=crop",
+    "summary": "In his final days, the Prophet appointed the young Usama bin Zayd to command an army. The appointment caused immense friction among senior companions and delayed its departure.",
+    "description": "<p>The Prophet ﷺ ordered a military expedition to the Syrian border and appointed Usama bin Zayd, who was only around 18 years old, as its general. This choice upset several senior companions who felt older, more experienced veterans should lead.</p><p>Despite the grumbling, the Prophet strongly defended Usama's leadership capacity. However, as the Prophet's illness worsened, the army halted its march outside Medina. Critics questioned the timing of the expedition given the looming leadership crisis inside Medina, making it one of the final command tensions before the Prophet's passing.</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of Military Expeditions, Hadith 4469",
+        "url": "https://sunnah.com/bukhari:4469"
+      },
+      {
+        "text": "Tarikh al-Tabari — Vol. 9, The Last Years of the Prophet",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      }
+    ],
+    "tags": ["usama", "military", "11AH", "companions", "final-days"]
+  },
+  {
+    "id": "battle-of-camel",
+    "slug": "battle-of-camel",
+    "title": "The Battle of the Camel",
+    "year": "36 AH",
+    "yearNumeric": 36,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1200&h=500&fit=crop",
+    "summary": "The first major civil war in Muslim history, where an army led by Aisha, Talha, and al-Zubayr faced the forces of the fourth Caliph, Ali ibn Abi Talib, near Basra.",
+    "description": "<p>Following the assassination of the third Caliph, Uthman, political instability gripped the empire. Aisha, alongside senior companions Talha and al-Zubayr, demanded immediate justice for Uthman's killers. Ali, recently elected Caliph, maintained that order had to be restored before trials could begin.</p><p>Negotiations failed, and the two sides clashed in Basra. The battle received its name because the heaviest fighting centered around the armored camel carrying Aisha's litter. Ali's forces emerged victorious, and though Aisha was treated with deep respect and sent back safely to Medina, the shed blood permanently fractured the companion generation.</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of Afflictions, Hadith 7100",
+        "url": "https://sunnah.com/bukhari:7100"
+      },
+      {
+        "text": "Tarikh al-Tabari — Vol. 16, The Community Divided",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      }
+    ],
+    "tags": ["fitna", "ali", "aisha", "36AH", "basra", "civil-war"]
+  },
+  {
+    "id": "battle-of-siffin",
+    "slug": "battle-of-siffin",
+    "title": "The Battle of Siffin and Arbitration",
+    "year": "37 AH",
+    "yearNumeric": 37,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1447069387593-a5de0862481e?w=1200&h=500&fit=crop",
+    "summary": "A massive military standoff between Caliph Ali and Muawiyah that concluded with a controversial arbitration, sparking the rise of the Kharijite sect.",
+    "description": "<p>Muawiyah, the governor of Syria and a relative of the slain Caliph Uthman, refused to pledge allegiance to Ali. The two armies met along the Euphrates River at Siffin. When Ali's forces gained the upper hand, Muawiyah’s troops raised pages of the Quran on their lances, calling for a peaceful judgment by God's word.</p><p>Ali reluctantly agreed to political arbitration under pressure from his own soldiers. This choice alienated a radical faction of his army who yelled, <em>\"Judgment belongs to none but Allah!\"</em> They broke away to form the Kharijites (Seceders), turning into a lethal enemy to both factions.</p>",
+    "sources": [
+      {
+        "text": "Sahih Muslim — Book of Zakat, Hadith 1066",
+        "url": "https://sunnah.com/muslim:1066"
+      },
+      {
+        "text": "Tarikh al-Tabari — Vol. 17, The First Civil War",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      }
+    ],
+    "tags": ["siffin", "37AH", "ali", "muawiyah", "kharijites", "arbitration"]
+  },
+  {
+    "id": "martyrdom-of-ali",
+    "slug": "martyrdom-of-ali",
+    "title": "The Assassination of Ali",
+    "year": "40 AH",
+    "yearNumeric": 40,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1508962914676-134849a727f0?w=1200&h=500&fit=crop",
+    "summary": "The fourth Caliph was struck down while praying in the Great Mosque of Kufa by a Kharijite assassin, ending the era of the Rashidun Caliphate.",
+    "description": "<p>While bowing in morning prayers at the mosque in Kufa, Ali ibn Abi Talib was struck on the head with a poison-coated sword by Abd al-Rahman ibn Muljam, a Kharijite seeking vengeance for their losses at the Battle of Nahrawan.</p><p>Ali succumbed to his wounds two days later. Before dying, he instructed that his assassin be treated humanely and subjected only to equal legal retaliation. His death brought a functional end to the Rightly Guided (Rashidun) era and paved the way for the establishment of dynastic rule under the Umayyads.</p>",
+    "sources": [
+      {
+        "text": "Tarikh al-Tabari — Vol. 17, The Crisis of the Early Caliphate",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      },
+      {
+        "text": "Al-Bidayah wan-Nihayah — Ibn Kathir, Vol. 7",
+        "url": "https://en.wikipedia.org/wiki/Al-Bidayah_wan-Nihayah"
+      }
+    ],
+    "tags": ["ali", "assassination", "40AH", "kufa", "kharijites"]
+  },
+  {
+    "id": "hasan-muawiyah-treaty",
+    "slug": "hasan-muawiyah-treaty",
+    "title": "The Peace Treaty of Hasan",
+    "year": "41 AH",
+    "yearNumeric": 41,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1464746133101-a2c3f88e0dd9?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1464746133101-a2c3f88e0dd9?w=1200&h=500&fit=crop",
+    "summary": "To avert further bloodshed between warring Muslim factions, Hasan ibn Ali abdicated the caliphate to Muawiyah under specific governance stipulations.",
+    "description": "<p>Following Ali’s martyrdom, the people of Kufa elected his eldest son, Hasan, as Caliph. Muawiyah prepared to launch an invasion from Syria. Recognizing the fractured and weary state of his military forces, Hasan decided to prioritize unity.</p><p>He signed a treaty yielding power to Muawiyah on conditions that included ruling according to the Quran and Sunnah, and ensuring that the caliphate would return to a consultative council (shura) or back to Hasan after Muawiyah's death. This historic year became known in mainstream Islamic annals as <em>'Am al-Jama'ah</em> (The Year of Unity).</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of Peacemaking, Hadith 2704",
+        "url": "https://sunnah.com/bukhari:2704"
+      },
+      {
+        "text": "Al-Bidayah wan-Nihayah — Ibn Kathir, Vol. 8",
+        "url": "https://en.wikipedia.org/wiki/Al-Bidayah_wan-Nihayah"
+      }
+    ],
+    "tags": ["hasan", "muawiyah", "41AH", "treaty", "peace"]
+  },
+  {
+    "id": "tragedy-of-karbala",
+    "slug": "tragedy-of-karbala",
+    "title": "The Tragedy of Karbala",
+    "year": "61 AH",
+    "yearNumeric": 61,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1505242844905-a3769a930188?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1505242844905-a3769a930188?w=1200&h=500&fit=crop",
+    "summary": "The brutal massacre of the Prophet's grandson, Husayn ibn Ali, along with his family and small band of followers by the Umayyad army of Yazid I.",
+    "description": "<p>When Yazid I assumed the caliphate via inheritance, Husayn refused to swear an oath of allegiance, viewing his rule as a violation of Islamic governance principles. Traveling toward Kufa after receiving pleas for help, Husayn's small caravan was intercepted in the desert of Karbala by a force of thousands sent by Yazid’s governor.</p><p>Cut off from water for days, Husayn and his 72 companions made a final stand on the 10th of Muharram. Husayn was slain and decapitated, and the surviving women and children were taken as captives to Damascus. This tragedy remains the ultimate focal point of grief and resistance across Shia Islam, and is deeply mourned by Sunnis alike.</p>",
+    "sources": [
+      {
+        "text": "Tarikh al-Tabari — Vol. 19, The Caliphate of Yazid I",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      },
+      {
+        "text": "Sunan al-Tirmidhi — Book of Virtues, Hadith 3778",
+        "url": "https://sunnah.com/tirmidhi:3778"
+      }
+    ],
+    "tags": ["karbala", "61AH", "husayn", "yazid", "muharram", "martyrdom"]
+  },
+  {
+    "id": "battle-of-harra",
+    "slug": "battle-of-harra",
+    "title": "The Battle of al-Harra",
+    "year": "63 AH",
+    "yearNumeric": 63,
+    "era": "AH",
+    "thumb": "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=200&h=200&fit=crop",
+    "banner": "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=1200&h=500&fit=crop",
+    "summary": "Following Karbala, Medina revolted against Umayyad rule. Yazid's army responded with a brutal assault that devastated the historic home city of the Prophet.",
+    "description": "<p>Outraged by the killings at Karbala and the general conduct of the Umayyad court, the citizens of Medina expelled the Umayyad governor. In response, Yazid dispatched an army led by Muslim bin Uqba. The forces clashed on the volcanic lava fields (Harra) outside Medina.</p><p>The defensive lines of Medina were shattered. Umayyad forces overran the city, resulting in the deaths of numerous surviving companions from both the Ansar and Muhajirun. The city was subjected to three days of pillaging, leaving an enduring stain on early Umayyad political legacy.</p>",
+    "sources": [
+      {
+        "text": "Sahih Bukhari — Book of Companions, Hadith 3742",
+        "url": "https://sunnah.com/bukhari:3742"
+      },
+      {
+        "text": "Tarikh al-Tabari — Vol. 19, The Caliphate of Yazid I",
+        "url": "https://en.wikipedia.org/wiki/History_of_the_Prophets_and_Kings"
+      }
+    ],
+    "tags": ["harra", "63AH", "medina", "yazid", "umayyad", "rebellion"]
+  }
+]
