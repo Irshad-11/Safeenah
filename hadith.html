@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hadith Collection — Safeenah</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Fuse.js — fuzzy / advanced search -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* ══════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════ */
+:root {
+  --f-head:  'Libre Baskerville', Georgia, serif;
+  --f-body:  'Cormorant Garamond', Georgia, serif;
+  --f-label: 'Cinzel', serif;
+  --f-bn:    'Hind Siliguri', sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg:       #0c0a08;
+  --surface:  #181410;
+  --surface2: #1f1b13;
+  --surface3: #252018;
+  --border:   rgba(180,140,60,0.15);
+  --border2:  rgba(180,140,60,0.08);
+  --gold:     #c49a30;
+  --gold-lt:  #e0b84a;
+  --gold-dk:  #8a6518;
+  --gold-dim: rgba(196,154,48,0.09);
+  --ink:      #ede0c8;
+  --ink-2:    #cdbf9f;
+  --ink-3:    #8a7a5f;
+  --ink-4:    #4e4232;
+  --nav-bg:   rgba(5,4,2,0.97);
+  --card-sh:  0 4px 24px rgba(0,0,0,0.55);
+  --tag-bg:   rgba(196,154,48,0.08);
+}
+
+[data-theme="light"] {
+  --bg:       #f4ead0;
+  --surface:  #fdf6e6;
+  --surface2: #f5e8ca;
+  --surface3: #edddba;
+  --border:   rgba(140,100,30,0.18);
+  --border2:  rgba(140,100,30,0.1);
+  --gold:     #9a6e10;
+  --gold-lt:  #b88820;
+  --gold-dk:  #7a5208;
+  --gold-dim: rgba(140,100,20,0.08);
+  --ink:      #1a1006;
+  --ink-2:    #2e1e08;
+  --ink-3:    #5a3e18;
+  --ink-4:    #9a7a48;
+  --nav-bg:   rgba(244,234,208,0.97);
+  --card-sh:  0 4px 18px rgba(140,100,20,0.1);
+  --tag-bg:   rgba(140,100,20,0.07);
+}
+
+/* ══════════════════════════════════════════
+   BASE
+══════════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(120,85,15,0.11) 0%, transparent 65%);
+  background-attachment: fixed;
+  color: var(--ink-2);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dk); border-radius: 3px; }
+
+/* ══════════════════════════════════════════
+   NAVBAR
+══════════════════════════════════════════ */
+.navbar {
+  position: fixed; top:0; left:0; right:0; z-index:900;
+  background: var(--nav-bg); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.75rem; height: 50px;
+  transition: background 0.3s;
+}
+.logo {
+  font-family: var(--f-label); font-size: 0.86rem;
+  letter-spacing: 0.18em; color: var(--gold); text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.6rem; align-items: center; }
+.nav-a {
+  font-family: var(--f-label); font-size: 0.8rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-3); text-decoration: none; transition: color 0.2s;
+}
+.nav-a:hover, .nav-a.active { color: var(--gold); }
+.theme-btn {
+  background: none; border: 1px solid var(--border); border-radius: 50px;
+  padding: 0.2rem 0.6rem; cursor: pointer; font-family: var(--f-label);
+  font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-dk); transition: all 0.2s;
+}
+.theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+/* Mobile Hamburger Menu */
+#ham {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-3);
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+#ham:hover {
+  color: var(--gold);
+  background: var(--gold-dim);
+}
+
+#mob {
+  display: none;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 1.25rem 1.75rem 1.5rem;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 899;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  backdrop-filter: blur(12px);
+}
+
+#mob.show {
+  display: flex;
+}
+
+/* Mobile menu links */
+#mob .nav-a {
+  font-family: var(--f-label);
+  font-size: 0.82rem;           /* ≈ 0.8rem as requested */
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  text-decoration: none;
+  padding: 0.4rem 0;
+  transition: color 0.2s;
+}
+
+#mob .nav-a:hover,
+#mob .nav-a.active {
+  color: var(--gold);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  #ham { display: block; }
+  .nav-links { display: none; }
+}
+
+/* ══════════════════════════════════════════
+   PAGE HEADER
+══════════════════════════════════════════ */
+.page-head {
+  padding: 5.5rem 1.5rem 1.5rem;
+  text-align: center; position: relative; z-index: 2;
+}
+.page-head h1 {
+  font-family: var(--f-head); font-size: clamp(1.5rem,4vw,2.4rem);
+  font-weight: 700; color: var(--ink); letter-spacing: 0.01em; line-height: 1.15;
+}
+.head-rule {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0.8rem; margin: 0.6rem auto 0; max-width: 380px;
+}
+.head-rule::before { content:''; flex:1; height:1px; background:linear-gradient(to right,transparent,var(--gold-dk)); }
+.head-rule::after  { content:''; flex:1; height:1px; background:linear-gradient(to left,transparent,var(--gold-dk)); }
+.head-rule span {
+  font-family: var(--f-label); font-size: 0.9rem;
+  letter-spacing: 0.02em; color: var(--gold-dk); text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════
+   SEARCH BAR
+══════════════════════════════════════════ */
+.search-wrap {
+  max-width: 820px; margin: 0 auto 0.75rem;
+  padding: 0 1.5rem; position: relative; z-index: 10;
+}
+
+.search-box {
+  display: flex; align-items: center; gap: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 3px; overflow: hidden;
+  box-shadow: var(--card-sh);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-box:focus-within {
+  border-color: var(--gold-dk);
+  box-shadow: 0 0 0 3px rgba(196,154,48,0.12), var(--card-sh);
+}
+
+.search-icon {
+  padding: 0 0.75rem 0 1rem; color: var(--gold-dk); flex-shrink: 0;
+}
+
+.search-inp {
+  flex: 1; background: none; border: none; outline: none;
+  font-family: var(--f-body); font-size: 0.95rem; color: var(--ink);
+  padding: 0.72rem 0; line-height: 1;
+}
+.search-inp::placeholder { color: var(--ink-4); font-style: italic; }
+
+.search-clear {
+  padding: 0 0.7rem; background: none; border: none; cursor: pointer;
+  color: var(--ink-3); transition: color 0.2s; display: none; flex-shrink: 0;
+}
+.search-clear.show { display: flex; align-items: center; }
+.search-clear:hover { color: var(--gold); }
+
+.search-btn {
+  padding: 0 1.1rem; background: var(--gold-dim); border: none;
+  border-left: 1px solid var(--border); cursor: pointer;
+  font-family: var(--f-label); font-size: 0.5rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gold-dk);
+  transition: all 0.2s; height: 100%; min-height: 44px; white-space: nowrap;
+  display: flex; align-items: center; gap: 0.3rem;
+}
+
+@media (min-width: 768px) {
+  .search-btn {
+    font-size: 0.8rem;
+  }
+}
+
+.search-btn:hover { background: rgba(196,154,48,0.18); color: var(--gold); }
+
+/* Filter chips */
+.filter-row {
+  display: none; gap: 0.4rem; flex-wrap: wrap;
+  max-width: 820px; margin: 0 auto 1.25rem; padding: 0 1.5rem;
+}
+.filter-chip {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-family: var(--f-label); font-size: 0.48rem; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.22rem 0.65rem; border-radius: 50px; cursor: pointer;
+  border: 1px solid var(--border); color: var(--ink-3); background: none;
+  transition: all 0.18s;
+}
+.filter-chip:hover     { border-color: var(--gold-dk); color: var(--gold-dk); }
+.filter-chip.active    { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+
+/* Search hint */
+.search-hint {
+  max-width: 820px; margin: 0 auto 1.5rem; padding: 0 1.5rem;
+  font-family: var(--f-body); font-size: 0.78rem;
+  color: var(--ink-3); font-style: italic;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+
+/* ══════════════════════════════════════════
+   STATS BAR
+══════════════════════════════════════════ */
+.stats-bar {
+  max-width: 1200px; margin: 0 auto 1.25rem; padding: 0 1.5rem;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+}
+.stats-label {
+  font-family: var(--f-label); font-size: 0.7rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.stats-count { color: var(--gold); }
+
+.sort-sel {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 2px;
+  font-family: var(--f-label); font-size: 0.48rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-3); padding: 0.28rem 0.6rem; cursor: pointer; outline: none; transition: border-color 0.2s;
+}
+.sort-sel:focus { border-color: var(--gold-dk); }
+
+/* ══════════════════════════════════════════
+   HADITH GRID
+══════════════════════════════════════════ */
+.hadith-grid {
+  max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+@media(max-width:1100px) { .hadith-grid { grid-template-columns: repeat(4,1fr); } }
+@media(max-width:860px)  { .hadith-grid { grid-template-columns: repeat(3,1fr); } }
+@media(max-width:560px)  { .hadith-grid { grid-template-columns: repeat(2,1fr); gap:0.65rem; padding:0 1rem 3rem; } }
+@media(max-width:360px)  { .hadith-grid { grid-template-columns: 1fr; } }
+
+/* ══════════════════════════════════════════
+   HADITH CARD
+══════════════════════════════════════════ */
+.h-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px; overflow: hidden;
+  display: flex; flex-direction: column;
+  text-decoration: none; color: inherit;
+  cursor: pointer; box-shadow: var(--card-sh);
+  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), border-color 0.25s, box-shadow 0.25s;
+  opacity: 0; transform: translateY(14px);
+  animation: cardIn 0.4s ease forwards;
+}
+@keyframes cardIn { to { opacity:1; transform:translateY(0); } }
+
+.h-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold-dk);
+  box-shadow: 0 10px 36px rgba(0,0,0,0.5);
+}
+
+/* square cover image */
+.h-cover-wrap {
+  width: 100%; aspect-ratio: 1/1; overflow: hidden;
+  position: relative; background: var(--surface2);
+  flex-shrink: 0;
+}
+.h-cover {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.4s ease, filter 0.3s;
+}
+[data-theme="dark"]  .h-cover { filter: brightness(0.82) saturate(0.72); }
+[data-theme="light"] .h-cover { filter: brightness(0.9)  saturate(0.85); }
+.h-card:hover .h-cover { transform: scale(1.06); filter: brightness(1) saturate(1) !important; }
+
+/* no image placeholder */
+.h-cover-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface3); color: var(--gold-dk); font-size: 1.8rem;
+}
+
+/* category badge on image */
+.h-cat-badge {
+  position: absolute; top: 0.45rem; right: 0.45rem;
+  font-family: var(--f-label); font-size: 0.42rem; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 0.14rem 0.5rem; border-radius: 50px;
+  background: rgba(10,8,4,0.75); border: 1px solid var(--border);
+  color: var(--gold-dk); backdrop-filter: blur(4px);
+}
+
+/* card body */
+.h-body {
+  padding: 0.7rem 0.75rem 0.85rem;
+  display: flex; flex-direction: column; gap: 0.3rem; flex: 1;
+}
+
+.h-title {
+  font-family: var(--f-head);
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--ink); line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.h-card:hover .h-title { color: var(--gold); }
+
+.h-book {
+  font-family: var(--f-label); font-size: 0.66rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-dk); line-height: 1.2;
+  display: -webkit-box; -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.h-detail {
+  font-family: var(--f-body); font-size: 0.72rem;
+  color: var(--ink-3); line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.h-footer {
+  margin-top: auto; padding-top: 0.5rem;
+  border-top: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.h-year {
+  font-family: var(--f-label); font-size: 0.44rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-4);
+}
+.h-arrow {
+  color: var(--gold-dk); transition: transform 0.2s;
+  display: flex; align-items: center;
+}
+.h-card:hover .h-arrow { transform: translateX(3px); color: var(--gold); }
+
+/* highlight matched text */
+mark {
+  background: rgba(196,154,48,0.22); color: var(--gold);
+  border-radius: 1px; padding: 0 1px;
+}
+
+/* ══════════════════════════════════════════
+   EMPTY / LOADING STATES
+══════════════════════════════════════════ */
+.state-load, .state-empty {
+  grid-column: 1/-1;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 4rem 1rem; gap: 1rem; text-align: center;
+}
+.spinner {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1.5px solid rgba(196,154,48,0.15);
+  border-top-color: var(--gold);
+  animation: spin 0.85s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.state-msg {
+  font-family: var(--f-body); font-size: 0.9rem;
+  color: var(--ink-3); font-style: italic;
+}
+.state-msg strong {
+  font-family: var(--f-label); font-size: 0.55rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dk);
+  display: block; margin-bottom: 0.35rem; font-style: normal;
+}
+
+/* skeleton cards */
+.skel-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 3px; overflow:hidden;
+}
+.skel {
+  background: linear-gradient(90deg, rgba(196,154,48,0.05) 25%, rgba(196,154,48,0.12) 50%, rgba(196,154,48,0.05) 75%);
+  background-size: 200% 100%; animation: shim 1.3s infinite;
+}
+@keyframes shim { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ══════════════════════════════════════════
+   SEARCH DROPDOWN (recent / suggestions)
+══════════════════════════════════════════ */
+.search-dropdown {
+  position: absolute; top: calc(100% + 4px); left: 1.5rem; right: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 3px; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  max-height: 280px; overflow-y: auto; z-index: 500;
+  display: none;
+}
+.search-dropdown.show { display: block; }
+.dd-section {
+  padding: 0.45rem 0.9rem 0.2rem;
+  font-family: var(--f-label); font-size: 0.46rem;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-4);
+  border-bottom: 1px solid var(--border2);
+}
+.dd-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  padding: 0.5rem 0.9rem; cursor: pointer;
+  transition: background 0.15s;
+}
+.dd-item:hover { background: var(--gold-dim); }
+.dd-item-icon { color: var(--gold-dk); flex-shrink: 0; }
+.dd-item-text {
+  font-family: var(--f-body); font-size: 0.82rem; color: var(--ink-2);
+  display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+}
+.dd-item-sub {
+  font-family: var(--f-label); font-size: 0.43rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-4); margin-left: auto; flex-shrink: 0; white-space: nowrap;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="logo">Safeenah</a>
+  <div class="nav-links">
+    <a href="home.html"        class="nav-a">Home</a>
+    <a href="timeline.html"     class="nav-a">Timeline</a>
+    <a href="hadith.html"       class="nav-a active">Hadith</a>
+    <a href="about.html"        class="nav-a">About</a>
+    <a href="submit.html"       class="nav-a">Submit Issue</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:0.75rem;">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light</button>
+    <button id="ham" aria-label="Menu">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <line x1="3" y1="6"  x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<div id="mob">
+  <a href="home.html"    class="nav-a">Home</a>
+  <a href="timeline.html" class="nav-a">Timeline</a>
+  <a href="hadith.html"   class="nav-a" style="color:var(--gold);">Hadith</a>
+  <a href="about.html"    class="nav-a">About</a>
+</div>
+
+<!-- PAGE HEADER -->
+<header class="page-head">
+  <p style="font-family:var(--f-label);font-size:0.7rem;letter-spacing:0.28em;color:var(--gold-dk);text-transform:uppercase;margin-bottom:0.4rem;">Safeenah Archive</p>
+  <h1>Hadith Collection</h1>
+  <div class="head-rule"><span>◆ Think out of the Box ◆</span></div>
+</header>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="search-icon">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </span>
+    <input class="search-inp" id="searchInp"
+           placeholder="Search by title, narrator, book, tags, year…"
+           autocomplete="off" spellcheck="false"
+           aria-label="Search hadith"/>
+    <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <button class="search-btn" onclick="doSearch()">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      Search
+    </button>
+  </div>
+  <!-- live suggestions dropdown -->
+  <div class="search-dropdown" id="searchDrop"></div>
+</div>
+
+<!-- FILTER CHIPS -->
+<div class="filter-row" id="filterRow">
+  <button class="filter-chip active" data-filter="all" onclick="setFilter('all',this)">All</button>
+  <button class="filter-chip" data-filter="prophet"    onclick="setFilter('prophet',this)">Prophet's Words</button>
+  <button class="filter-chip" data-filter="companion"  onclick="setFilter('companion',this)">Companions</button>
+  <button class="filter-chip" data-filter="sahih"      onclick="setFilter('sahih',this)">Sahih</button>
+  <button class="filter-chip" data-filter="hasan"      onclick="setFilter('hasan',this)">Hasan</button>
+</div>
+
+<!-- SEARCH HINT -->
+<div class="search-hint" id="searchHint" style="display:none;">
+  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold-dk);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  <span id="searchHintText"></span>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <span class="stats-label">
+    Showing <span class="stats-count" id="countEl">—</span> entries
+  </span>
+  <!-- <select class="sort-sel" id="sortSel" onchange="applySort()">
+    <option value="default">Sort: Default</option>
+    <option value="title-az">Title A → Z</option>
+    <option value="title-za">Title Z → A</option>
+    <option value="year-asc">Year ↑</option>
+    <option value="year-desc">Year ↓</option>
+    <option value="book-az">Book A → Z</option>
+  </select> -->
+</div>
+
+<!-- GRID -->
+<div class="hadith-grid" id="grid">
+  <!-- skeleton -->
+  <div class="skel-card">
+    <div class="skel" style="aspect-ratio:1/1;"></div>
+    <div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;">
+      <div class="skel" style="height:0.75rem;width:85%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.55rem;width:55%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.65rem;width:100%;border-radius:1px;"></div>
+    </div>
+  </div>
+  <div class="skel-card">
+    <div class="skel" style="aspect-ratio:1/1;"></div>
+    <div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;">
+      <div class="skel" style="height:0.75rem;width:78%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.55rem;width:60%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.65rem;width:95%;border-radius:1px;"></div>
+    </div>
+  </div>
+  <div class="skel-card">
+    <div class="skel" style="aspect-ratio:1/1;"></div>
+    <div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;">
+      <div class="skel" style="height:0.75rem;width:90%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.55rem;width:50%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.65rem;width:88%;border-radius:1px;"></div>
+    </div>
+  </div>
+  <div class="skel-card hidden sm:block">
+    <div class="skel" style="aspect-ratio:1/1;"></div>
+    <div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;">
+      <div class="skel" style="height:0.75rem;width:80%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.55rem;width:65%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.65rem;width:92%;border-radius:1px;"></div>
+    </div>
+  </div>
+  <div class="skel-card hidden lg:block">
+    <div class="skel" style="aspect-ratio:1/1;"></div>
+    <div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;">
+      <div class="skel" style="height:0.75rem;width:75%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.55rem;width:58%;border-radius:1px;"></div>
+      <div class="skel" style="height:0.65rem;width:97%;border-radius:1px;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   THEME
+══════════════════════════════════════════════════════════ */
+const savedTheme = localStorage.getItem('sf-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? 'Light' : 'Dark';
+function toggleTheme() {
+  const cur  = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sf-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? 'Light' : 'Dark';
+}
+
+
+/* Hamburger Menu with Outside Click */
+const ham = document.getElementById('ham');
+const mobMenu = document.getElementById('mob');
+
+function toggleMobileMenu() {
+  mobMenu.classList.toggle('show');
+}
+
+function closeMobileMenu() {
+  mobMenu.classList.remove('show');
+}
+
+// Click on hamburger
+ham.addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleMobileMenu();
+});
+
+// Close when clicking outside
+document.addEventListener('click', (e) => {
+  if (!mobMenu.contains(e.target) && !ham.contains(e.target)) {
+    closeMobileMenu();
+  }
+});
+
+// Close on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeMobileMenu();
+  }
+});
+
+// Optional: Close menu when a link is clicked
+mobMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    closeMobileMenu();
+  });
+});
+
+/* ══════════════════════════════════════════════════════════
+   DATA SOURCES
+   Add or remove filenames freely.
+   Each file: single object {} or array [{}]
+══════════════════════════════════════════════════════════ */
+const DATA_BASE   = 'data/hadith/';
+const HADITH_FILES = ['index.json', 'extrasample.json'];
+/* ↑ Add more files here: e.g. ['index.json','vol2.json','companions.json'] */
+
+/* ══════════════════════════════════════════════════════════
+   LOAD
+══════════════════════════════════════════════════════════ */
+function parseYear(str) {
+  if (typeof str === 'number') return str;
+  const s = String(str||'').toLowerCase();
+  const n = parseFloat(s.replace(/[^0-9.\-]/g,'')) || 0;
+  return (s.includes('bh')||s.includes('bce')||s.includes('bc')) ? -Math.abs(n) : n;
+}
+
+function normalise(data) {
+  return (Array.isArray(data) ? data : [data])
+    .filter(h => h && (h.title || h.name))
+    .map(h => ({
+      slug:           h.slug || String(h.id) || slugify(h.title||''),
+      title:          h.title || h.name || 'Untitled',
+      subTitle:       h.subTitle || '',
+      summary:        h.details ? h.details.replace(/<[^>]+>/g,'').trim() : (h.summary || h.excerpt || ''),
+      book:           h.book_name || h.book || h.source || '',
+      bookAuthor:     h.book_author || '',
+      bookDetail:     h.edition || h.bookDetail || h.volume || '',
+      publication:    h.publication || '',
+      enlistAuthor:   h.enlist_author || '',
+      enlistDate:     h.enlist_date || '',
+      narrator:       Array.isArray(h.chain_of_narrator)
+                        ? h.chain_of_narrator.map(n => n.name).join(', ')
+                        : (h.narrator || ''),
+      arabicScript:   h.arabic_script || '',
+      banglaScript:   h.bangla_script || '',
+      authorManhaj:   h.author_manhaj || '',
+      year:           h.year || '',
+      yearNumeric:    h.yearNumeric != null ? h.yearNumeric : parseYear(h.year||''),
+      thumb:          h.thumb || h.cover || (Array.isArray(h.images) && h.images[0]) || h.thumbnail || '',
+      banner:         h.banner || '',
+      tags:           Array.isArray(h.tags) ? h.tags : (h.tags||'').split(',').map(t=>t.trim()).filter(Boolean),
+      category:       h.category || h.author_manhaj || '',
+      grade:          h.grade || h.classification || '',
+      _raw: h,
+    }));
+}
+
+function slugify(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+}
+
+async function loadHadith() {
+  const results = await Promise.allSettled(
+    HADITH_FILES.map(async fname => {
+      const r = await fetch(DATA_BASE + fname, { cache:'no-cache' });
+      if (!r.ok) throw new Error(fname + ' → ' + r.status);
+      return normalise(await r.json());
+    })
+  );
+  const all = results.filter(r => r.status==='fulfilled').flatMap(r => r.value);
+  if (all.length) return all;
+
+  /* ── DEMO FALLBACK so page is never blank ── */
+  console.warn('[safeenah] Hadith JSON not found — showing demo data');
+  return normalise([
+    { slug:'hadith-thaqalayn', title:'Hadith al-Thaqalayn',
+      subTitle:'The Two Weighty Things',
+      book:'Sahih Muslim', bookDetail:'Book 44, Hadith 2408',
+      narrator:'Zayd ibn Arqam', year:'10 AH', yearNumeric:10,
+      summary:'The Prophet declared he was leaving two weighty things — the Book of Allah and his household — and that holding fast to both would prevent going astray.',
+      thumb:'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=400&fit=crop',
+      tags:['prophet','ahlul-bayt','quran','10AH'], grade:'Sahih', category:'prophet' },
+    { slug:'hadith-ghadir', title:'Hadith al-Ghadir',
+      subTitle:'Whoever I am his Mawla',
+      book:'Musnad Ahmad', bookDetail:'Vol. 4, p. 370',
+      narrator:'Multiple companions', year:'10 AH', yearNumeric:10,
+      summary:'At Ghadir Khum, the Prophet declared: "Whoever I am his mawla, then Ali is his mawla."',
+      thumb:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop',
+      tags:['prophet','ali','ghadir','10AH'], grade:'Sahih', category:'prophet' },
+    { slug:'hadith-manzila', title:'Hadith al-Manzila',
+      subTitle:'You are to me as Aaron was to Moses',
+      book:'Sahih Bukhari', bookDetail:'Book 59, Hadith 3706',
+      narrator:'Sa\'d ibn Abi Waqqas', year:'9 AH', yearNumeric:9,
+      summary:'The Prophet told Ali: "You are to me as Aaron was to Moses, except there is no prophet after me."',
+      thumb:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      tags:['prophet','ali','9AH','sahih-bukhari'], grade:'Sahih', category:'prophet' },
+    { slug:'hadith-safeenah', title:"Hadith al-Safeenah",
+      subTitle:"The Ship of Noah",
+      book:'Al-Mustadrak', bookDetail:'Vol. 3, p. 151',
+      narrator:'Abu Dharr al-Ghifari', year:'Unknown',
+      summary:'The Prophet likened his household to Noah\'s Ark — whoever boards it is saved, whoever stays behind is drowned.',
+      thumb:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop',
+      tags:['prophet','ahlul-bayt','metaphor'], grade:'Hasan', category:'prophet' },
+    { slug:'hadith-madinah', title:'Hadith Madinatul Ilm',
+      subTitle:'I am the city of knowledge',
+      book:'Al-Hakim', bookDetail:'Al-Mustadrak, Vol. 3, p. 126',
+      narrator:'Ibn Abbas', year:'Unknown',
+      summary:'"I am the city of knowledge and Ali is its gate." A narration reported in multiple classical sources with varying grades.',
+      thumb:'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop',
+      tags:['prophet','ali','knowledge'], grade:'Hasan', category:'prophet' },
+    { slug:'hadith-al-dar-narration', title:'Hadith al-Dar Narration',
+      subTitle:'First public invitation to Islam',
+      book:'Tarikh al-Tabari', bookDetail:'Vol. 2, Early Prophetic Mission',
+      narrator:'Ali ibn Abi Talib', year:'1 BH', yearNumeric:-1,
+      summary:'At the Feast of Dhul Asheera, the Prophet invited his clan. Only Ali responded — three times.',
+      thumb:'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=400&h=400&fit=crop',
+      tags:['early-islam','ali','BH','tabari'], grade:'Reported', category:'companion' },
+  ]);
+}
+
+/* ══════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════ */
+let allHadith     = [];
+let displayList   = [];
+let fuseInstance  = null;
+let activeFilter  = 'all';
+let searchQuery   = '';
+let activeSort    = 'default';
+
+/* ══════════════════════════════════════════════════════════
+   FUSE.JS CONFIG — searches across all relevant fields
+══════════════════════════════════════════════════════════ */
+const FUSE_OPTS = {
+  includeScore:       true,
+  includeMatches:     true,
+  threshold:          0.38,
+  ignoreLocation:     true,
+  minMatchCharLength: 2,
+  useExtendedSearch:  true,
+  keys: [
+    { name:'title',        weight:0.22 },
+    { name:'subTitle',     weight:0.08 },
+    { name:'banglaScript', weight:0.14 },
+    { name:'arabicScript', weight:0.10 },
+    { name:'narrator',     weight:0.12 },
+    { name:'book',         weight:0.10 },
+    { name:'bookAuthor',   weight:0.07 },
+    { name:'publication',  weight:0.04 },
+    { name:'enlistAuthor', weight:0.04 },
+    { name:'bookDetail',   weight:0.04 },
+    { name:'summary',      weight:0.08 },
+    { name:'tags',         weight:0.06 },
+    { name:'grade',        weight:0.03 },
+    { name:'authorManhaj', weight:0.03 },
+    { name:'year',         weight:0.03 },
+    { name:'category',     weight:0.02 },
+  ],
+};
+
+/* ══════════════════════════════════════════════════════════
+   RENDER CARDS
+══════════════════════════════════════════════════════════ */
+const fallback = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=400&fit=crop';
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderGrid(items, query='') {
+  const grid = document.getElementById('grid');
+  document.getElementById('countEl').textContent = items.length;
+
+  if (!items.length) {
+    grid.innerHTML = `
+      <div class="state-empty">
+        <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--gold-dk);">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <div class="state-msg">
+          <strong>No results found</strong>
+          ${query ? `No hadith matched "<em>${esc(query)}</em>". Try a broader term, or check spelling.` : 'No entries in the archive yet.'}
+        </div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = '';
+  items.forEach((item, i) => {
+    const h      = item._normalised || item;
+    const imgSrc = h.thumb || fallback;
+    const delay  = Math.min(i * 40, 500);
+
+    const card = document.createElement('a');
+    card.className = 'h-card';
+    card.href      = `hadith/index.html?id=${encodeURIComponent(h.slug)}`;
+    card.style.animationDelay = delay + 'ms';
+    card.title = h.title;
+
+    card.innerHTML = `
+  <div class="h-cover-wrap">
+    ${imgSrc
+      ? `<img class="h-cover" src="${esc(imgSrc)}" alt="${esc(h.title)}" loading="lazy"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+         <div class="h-cover-placeholder" style="display:none;">📖</div>`
+      : `<div class="h-cover-placeholder">📖</div>`}
+  </div>
+  <div class="h-body">
+    <div class="h-title">${highlightText(h.title, query)}</div>
+    ${h.book ? `<div class="h-book">${highlightText(h.book, query)}</div>` : ''}
+    ${h.banglaScript
+      ? `<div class="h-detail">${highlightText(h.banglaScript, query)}</div>`
+      : (h.summary ? `<div class="h-detail">${highlightText(h.summary, query)}</div>` : '')}
+    <div class="h-footer">
+      <span class="h-year">${esc(h.year || '')}</span>
+      <span class="h-arrow">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </span>
+    </div>
+  </div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   HIGHLIGHT MATCHED TEXT
+══════════════════════════════════════════════════════════ */
+function highlightText(text, query) {
+  if (!query || !text) return esc(text);
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  try {
+    return esc(text).replace(
+      new RegExp(escaped.replace(/&amp;/gi,'&amp;'), 'gi'),
+      m => `<mark>${m}</mark>`
+    );
+  } catch { return esc(text); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   PIPELINE: filter → sort → render
+══════════════════════════════════════════════════════════ */
+function pipeline(items, query='') {
+  let list = [...items];
+
+  /* filter by chip */
+  if (activeFilter !== 'all') {
+    list = list.filter(h => {
+      const f = activeFilter.toLowerCase();
+      return (
+        (h.category||'').toLowerCase().includes(f) ||
+        (h.grade||'').toLowerCase().includes(f) ||
+        h.tags.some(t => t.toLowerCase().includes(f))
+      );
+    });
+  }
+
+  /* sort */
+  switch (activeSort) {
+    case 'title-az':  list.sort((a,b) => a.title.localeCompare(b.title)); break;
+    case 'title-za':  list.sort((a,b) => b.title.localeCompare(a.title)); break;
+    case 'year-asc':  list.sort((a,b) => a.yearNumeric - b.yearNumeric);  break;
+    case 'year-desc': list.sort((a,b) => b.yearNumeric - a.yearNumeric);  break;
+    case 'book-az':   list.sort((a,b) => (a.book||'').localeCompare(b.book||'')); break;
+  }
+
+  renderGrid(list, query);
+}
+
+/* ══════════════════════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════════════════════ */
+function doSearch() {
+  const q = document.getElementById('searchInp').value.trim();
+  searchQuery = q;
+  hideDrop();
+
+  const hint     = document.getElementById('searchHint');
+  const hintText = document.getElementById('searchHintText');
+  const clearBtn = document.getElementById('searchClear');
+
+  clearBtn.classList.toggle('show', q.length > 0);
+
+  if (!q) {
+    hint.style.display = 'none';
+    pipeline(allHadith);
+    return;
+  }
+
+  /* Fuse.js fuzzy search across all fields */
+  const raw = fuseInstance.search(q);
+
+  /* map back to normalised objects, preserve Fuse score order */
+  const results = raw.map(r => r.item);
+
+  hint.style.display = 'flex';
+  hintText.textContent = results.length
+    ? `${results.length} result${results.length !== 1 ? 's' : ''} for "${q}"`
+    : `No matches for "${q}"`;
+
+  /* still apply filter + sort on top of search results */
+  pipeline(results, q);
+}
+
+function clearSearch() {
+  document.getElementById('searchInp').value = '';
+  searchQuery = '';
+  document.getElementById('searchClear').classList.remove('show');
+  document.getElementById('searchHint').style.display = 'none';
+  hideDrop();
+  pipeline(allHadith);
+}
+
+/* ══════════════════════════════════════════════════════════
+   LIVE DROPDOWN (suggestions as user types)
+══════════════════════════════════════════════════════════ */
+let dropTimer;
+const searchInp  = document.getElementById('searchInp');
+const searchDrop = document.getElementById('searchDrop');
+
+searchInp.addEventListener('input', () => {
+  const q = searchInp.value.trim();
+  document.getElementById('searchClear').classList.toggle('show', q.length > 0);
+  clearTimeout(dropTimer);
+  if (!q || q.length < 2) { hideDrop(); return; }
+  dropTimer = setTimeout(() => buildDrop(q), 180);
+});
+
+searchInp.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { doSearch(); hideDrop(); }
+  if (e.key === 'Escape') { hideDrop(); }
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) hideDrop();
+});
+
+function buildDrop(q) {
+  if (!fuseInstance) return;
+  const hits = fuseInstance.search(q, { limit: 7 });
+  if (!hits.length) { hideDrop(); return; }
+
+  searchDrop.innerHTML = `<div class="dd-section">Suggestions</div>`;
+  hits.forEach(hit => {
+    const h   = hit.item;
+    const div = document.createElement('div');
+    div.className = 'dd-item';
+    div.innerHTML = `
+      <svg class="dd-item-icon" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg>
+      <span class="dd-item-text">${esc(h.title)}</span>
+      ${h.book ? `<span class="dd-item-sub">${esc(h.book)}</span>` : ''}`;
+    div.addEventListener('mousedown', e => {
+      e.preventDefault();
+      searchInp.value = h.title;
+      hideDrop();
+      doSearch();
+    });
+    searchDrop.appendChild(div);
+  });
+
+  searchDrop.classList.add('show');
+}
+
+function hideDrop() { searchDrop.classList.remove('show'); searchDrop.innerHTML = ''; }
+
+/* ══════════════════════════════════════════════════════════
+   FILTER CHIPS
+══════════════════════════════════════════════════════════ */
+function setFilter(val, el) {
+  activeFilter = val;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  /* if there's an active search, re-run search with new filter */
+  if (searchQuery) {
+    const results = fuseInstance.search(searchQuery).map(r => r.item);
+    pipeline(results, searchQuery);
+  } else {
+    pipeline(allHadith);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   SORT
+══════════════════════════════════════════════════════════ */
+function applySort() {
+  activeSort = document.getElementById('sortSel').value;
+  if (searchQuery) {
+    const results = fuseInstance.search(searchQuery).map(r => r.item);
+    pipeline(results, searchQuery);
+  } else {
+    pipeline(allHadith);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+(async () => {
+  try {
+    allHadith    = await loadHadith();
+    fuseInstance = new Fuse(allHadith, FUSE_OPTS);
+    pipeline(allHadith);
+  } catch (err) {
+    console.error('[safeenah hadith]', err);
+    document.getElementById('grid').innerHTML = `
+      <div class="state-empty">
+        <div class="state-msg">
+          <strong>Could not load hadith</strong>
+          Verify the <code style="color:var(--gold-dk);">data/hadith/</code> folder and file names are accessible.
+        </div>
+      </div>`;
+    document.getElementById('countEl').textContent = '0';
+  }
+})();
+</script>
+</body>
+</html>

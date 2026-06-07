@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Safeenah — Islamic History Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <!-- Fuse.js for fuzzy search -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+<style>
+:root {
+  --f-head:  'Libre Baskerville', Georgia, serif;
+  --f-body:  'Cormorant Garamond', Georgia, serif;
+  --f-label: 'Cinzel', serif;
+  --f-bn:    'Hind Siliguri', sans-serif;
+}
+[data-theme="dark"] {
+  --bg:#0c0a08; --surface:#181410; --surface2:#201c14; --surface3:#272218;
+  --border:rgba(160,120,50,.18); --border2:rgba(160,120,50,.1);
+  --gold:#c49a30; --gold-lt:#e0b84a; --gold-dk:#8a6518; --gold-dim:rgba(196,154,48,.09);
+  --gold-glow:rgba(196,154,48,.18);
+  --ink:#ede0c8; --ink-body:#d4c4a8; --ink-sub:#a89878; --ink-mute:#6a5a42;
+  --nav-bg:rgba(5,4,2,.97); --nav-border:rgba(140,100,30,.22);
+  --card-shadow:0 6px 28px rgba(0,0,0,.6);
+  --tag-bg:rgba(196,154,48,.08); --tag-border:rgba(138,101,24,.28);
+  --btn-icon:rgba(200,180,140,.65); --overlay:rgba(0,0,0,.88);
+  --result-hover:rgba(196,154,48,.07);
+}
+[data-theme="light"] {
+  --bg:#f5e9cf; --surface:#fdf6e8; --surface2:#f2e4c2; --surface3:#ece0b8;
+  --border:rgba(140,100,30,.22); --border2:rgba(140,100,30,.13);
+  --gold:#9a6e10; --gold-lt:#b88820; --gold-dk:#7a5208; --gold-dim:rgba(160,120,20,.1);
+  --gold-glow:rgba(160,120,20,.15);
+  --ink:#1a1006; --ink-body:#2e1e08; --ink-sub:#5a3e18; --ink-mute:#9a7a48;
+  --nav-bg:rgba(240,228,198,.97); --nav-border:rgba(140,100,30,.22);
+  --card-shadow:0 4px 18px rgba(140,100,20,.12);
+  --tag-bg:rgba(140,100,20,.08); --tag-border:rgba(120,85,15,.28);
+  --btn-icon:rgba(80,55,20,.65); --overlay:rgba(0,0,0,.82);
+  --result-hover:rgba(140,100,20,.07);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background-color:var(--bg);
+  background-image:radial-gradient(ellipse 90% 60% at 50% 0%,rgba(120,85,15,.13) 0%,transparent 65%);
+  background-attachment:fixed;
+  color:var(--ink-body); font-family:var(--f-body);
+  font-size:18px; line-height:1.75;
+  overflow-x:hidden; min-height:100vh;
+  transition:background-color .3s,color .3s;
+}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
+.bn{font-family:var(--f-bn);line-height:1.9;}
+svg{display:inline-block;vertical-align:middle;flex-shrink:0;}
+
+/* ══ NAVBAR ══ */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  background:var(--nav-bg);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--nav-border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.75rem;height:52px;
+  transition:background .3s;
+}
+.logo{font-family:var(--f-label);font-size:.88rem;letter-spacing:.18em;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.8rem;align-items:center;}
+.nav-a{font-family:var(--f-label);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-sub);text-decoration:none;transition:color .2s;border-bottom:1px solid transparent;padding-bottom:1px;}
+.nav-a:hover,.nav-a.active{color:var(--gold);border-bottom-color:rgba(196,154,48,.4);}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:50px;padding:.22rem .65rem;cursor:pointer;font-family:var(--f-label);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dk);transition:all .2s;display:flex;align-items:center;gap:.35rem;}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold);}
+#ham{display:none;background:none;border:none;cursor:pointer;color:var(--btn-icon);padding:4px;}
+#mob{display:none;position:fixed;top:52px;left:0;right:0;background:var(--nav-bg);border-bottom:1px solid var(--nav-border);padding:1.4rem 1.75rem 2rem;flex-direction:column;gap:.6rem;box-shadow:0 10px 25px rgba(0,0,0,.5);z-index:950;opacity:0;transform:translateY(-15px);transition:all .32s cubic-bezier(.32,.72,0,1);}
+#mob.show{display:flex;opacity:1;transform:translateY(0);}
+#mob .nav-a{font-size:.8rem;padding:.65rem 0;border-bottom:1px solid var(--border2);}
+#mob .nav-a:last-child{border-bottom:none;}
+@media(max-width:640px){#ham{display:block;}.nav-links{display:none;}}
+
+/* ══ HERO ══ */
+.hero{
+  min-height:72vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6rem 1.5rem 3rem;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);
+  width:min(800px,120vw);height:min(600px,100vw);
+  background:radial-gradient(ellipse,rgba(196,154,48,.1) 0%,transparent 70%);
+  pointer-events:none;
+  animation:heroPulse 6s ease-in-out infinite alternate;
+}
+@keyframes heroPulse{from{opacity:.5;transform:translate(-50%,-60%) scale(1);}to{opacity:1;transform:translate(-50%,-60%) scale(1.08);}}
+
+/* top line */
+.hero-topline{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,transparent,var(--gold-dk));
+  margin:0 auto 1.5rem;
+  animation:lineIn .7s ease both;
+}
+@keyframes lineIn{from{opacity:0;transform:scaleY(0);}to{opacity:1;transform:scaleY(1);}}
+
+.hero-eyebrow{
+  font-family:var(--f-label);font-size:.65rem;letter-spacing:.4em;
+  text-transform:uppercase;color:var(--gold-dk);margin-bottom:1rem;
+  animation:fadeUp .7s .1s ease both;
+}
+.hero-arabic{
+  font-family:var(--f-bn);
+  font-size:clamp(1.3rem,5vw,2.6rem);
+  color:var(--gold-lt);direction:rtl;line-height:2;
+  margin-bottom:.5rem;letter-spacing:.02em;
+  text-shadow:0 0 50px rgba(196,154,48,.25);
+  animation:fadeUp .7s .18s ease both;
+}
+.hero-trans{
+  font-family:var(--f-body);font-style:italic;
+  font-size:clamp(.85rem,2vw,1rem);color:var(--ink-sub);
+  margin-bottom:.35rem;
+  animation:fadeUp .7s .25s ease both;
+}
+.hero-source{
+  font-family:var(--f-label);font-size:.48rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-mute);
+  margin-bottom:2.2rem;
+  animation:fadeUp .7s .3s ease both;
+}
+.hero-tagline{
+  font-family:var(--f-head);
+  font-size:clamp(1.5rem,5vw,2.8rem);
+  font-weight:700;color:var(--ink);line-height:1.15;
+  margin-bottom:.65rem;
+  animation:fadeUp .7s .36s ease both;
+}
+.hero-tagline em{color:var(--gold);font-style:normal;}
+.hero-sub{
+  font-family:var(--f-body);font-size:clamp(.95rem,2vw,1.15rem);
+  color:var(--ink-sub);max-width:520px;line-height:1.7;
+  margin-bottom:2.5rem;
+  animation:fadeUp .7s .42s ease both;
+}
+
+/* ══ SEARCH ══ */
+.search-section{
+  width:100%;max-width:700px;
+  position:relative;
+  animation:fadeUp .7s .5s ease both;
+}
+.search-box{
+  display:flex;align-items:center;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:3px;overflow:hidden;
+  box-shadow:var(--card-shadow);
+  transition:border-color .2s,box-shadow .2s;
+}
+.search-box:focus-within{
+  border-color:var(--gold-dk);
+  box-shadow:0 0 0 3px rgba(196,154,48,.12),var(--card-shadow);
+}
+.search-icon{padding:0 .75rem 0 1.1rem;color:var(--gold-dk);flex-shrink:0;}
+.search-inp{
+  flex:1;background:none;border:none;outline:none;
+  font-family:var(--f-body);font-size:1rem;color:var(--ink);
+  padding:.85rem 0;line-height:1;
+}
+.search-inp::placeholder{color:var(--ink-mute);font-style:italic;}
+.search-clear{
+  padding:0 .6rem;background:none;border:none;cursor:pointer;
+  color:var(--ink-sub);transition:color .2s;display:none;align-items:center;
+}
+.search-clear.show{display:flex;}
+.search-clear:hover{color:var(--gold);}
+.search-btn{
+  padding:0 1.2rem;background:var(--gold-dim);border:none;
+  border-left:1px solid var(--border);cursor:pointer;
+  font-family:var(--f-label);font-size:.72rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--gold-dk);
+  transition:all .2s;min-height:52px;white-space:nowrap;
+  display:flex;align-items:center;gap:.4rem;
+}
+.search-btn:hover{background:rgba(196,154,48,.18);color:var(--gold);}
+
+/* filter chips */
+.search-filters{
+  display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;
+  margin-top:.75rem;justify-content:center;
+}
+.fchip{
+  font-family:var(--f-label);font-size:.48rem;letter-spacing:.12em;
+  text-transform:uppercase;padding:.22rem .7rem;border-radius:50px;
+  border:1px solid var(--border);color:var(--ink-sub);background:none;
+  cursor:pointer;transition:all .18s;
+}
+.fchip:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
+.fchip.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+
+/* ══ RESULTS DROPDOWN ══ */
+.results-panel{
+  /* position:absolute; */
+  top:calc(100% + 6px);
+  left:0;
+  right:0;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:3px;
+  box-shadow:0 16px 48px rgba(0,0,0,.55);
+  max-height:680px;           /* ← Increased from 480px */
+  overflow-y:auto;
+  z-index:500;
+  display:none;
+}
+
+/* Optional: Make it even taller on larger screens */
+@media (min-width: 768px) {
+  .results-panel {
+    max-height: 760px;
+  }
+}
+
+/* Better spacing inside dropdown */
+.rp-item {
+  padding: .85rem 1.1rem;     /* slightly more padding */
+}
+
+.rp-title {
+  font-size: .86rem;          /* slightly bigger text */
+  line-height: 1.4;
+}
+
+/* Smooth scrollbar */
+.results-panel::-webkit-scrollbar {
+  width: 6px;
+}
+.results-panel::-webkit-scrollbar-thumb {
+  background: var(--gold-dk);
+  border-radius: 3px;
+}
+
+
+.results-panel.show{display:block;}
+.rp-section-label{
+  padding:.5rem 1rem .3rem;
+  font-family:var(--f-label);font-size:.46rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--ink-mute);
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:.5rem;
+}
+.rp-item{
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.7rem 1rem;cursor:pointer;
+  text-decoration:none;color:inherit;
+  transition:background .15s;
+  border-bottom:1px solid var(--border2);
+}
+.rp-item:last-child{border-bottom:none;}
+.rp-item:hover{background:var(--result-hover);}
+.rp-thumb{
+  width:44px;height:44px;border-radius:2px;flex-shrink:0;
+  object-fit:cover;border:1px solid var(--border2);
+  background:var(--surface2);
+}
+.rp-thumb-ph{
+  width:44px;height:44px;border-radius:2px;flex-shrink:0;
+  background:var(--surface2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+}
+.rp-info{flex:1;min-width:0;}
+.rp-type{
+  font-family:var(--f-label);font-size:.44rem;letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:.2rem;
+}
+.rp-type.hadith{color:var(--gold-dk);}
+.rp-type.event{color:#6a9a7a;}
+.rp-title{
+  font-family:var(--f-bn);font-size:.82rem;
+  color:var(--ink);line-height:1.35;
+  display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.rp-title-en{font-family:var(--f-head);font-size:.82rem;}
+.rp-meta{
+  font-family:var(--f-label);font-size:.44rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-mute);margin-top:.25rem;
+}
+.rp-none{
+  padding:1.5rem 1rem;text-align:center;
+  font-family:var(--f-body);font-style:italic;color:var(--ink-sub);font-size:.95rem;
+}
+mark{background:rgba(196,154,48,.22);color:var(--gold);border-radius:1px;padding:0 1px;}
+
+/* search hint bar */
+.search-hint{
+  margin-top:.65rem;
+  font-family:var(--f-body);font-size:.8rem;font-style:italic;
+  color:var(--ink-sub);display:none;align-items:center;gap:.4rem;
+  justify-content:center;
+}
+.search-hint.show{display:flex;}
+.hint-count{color:var(--gold-dk);font-style:normal;font-family:var(--f-label);font-size:.7rem;letter-spacing:.1em;}
+
+/* ══ PAGE BODY ══ */
+.page{max-width:1200px;margin:0 auto;padding:0 1.5rem 5rem;}
+
+/* ══ EXPLORE BUTTONS ══ */
+.explore-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;
+  margin-bottom:3.5rem;
+}
+@media(max-width:600px){.explore-grid{grid-template-columns:1fr;}}
+
+.explore-btn{
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  padding:2rem 2rem 1.6rem;border-radius:4px;
+  border:1px solid var(--border);
+  text-decoration:none;color:inherit;
+  position:relative;overflow:hidden;
+  background:var(--surface);
+  box-shadow:var(--card-shadow);
+  min-height:160px;
+  transition:transform .28s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;
+}
+.explore-btn:hover{
+  transform:translateY(-5px);
+  border-color:var(--gold-dk);
+  box-shadow:0 14px 40px rgba(0,0,0,.5);
+}
+/* background glow */
+.explore-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-glow),transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.explore-btn:hover::before{opacity:1;}
+/* decorative large icon */
+.explore-btn::after{
+  position:absolute;right:-10px;bottom:-14px;
+  font-size:5.5rem;opacity:.06;pointer-events:none;
+  transition:transform .3s,opacity .3s;
+  font-family:var(--f-label);
+}
+.explore-btn:hover::after{transform:scale(1.1);opacity:.09;}
+.explore-btn.timeline::after{content:'⏳';}
+.explore-btn.hadith::after{content:'📖';}
+
+.explore-label{
+  font-family:var(--f-label);font-size:.6rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--gold-dk);margin-bottom:.55rem;
+  position:relative;
+}
+.explore-title{
+  font-family:var(--f-head);font-size:clamp(1.1rem,3vw,1.55rem);
+  font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:.5rem;
+  position:relative;
+  transition:color .2s;
+}
+.explore-btn:hover .explore-title{color:var(--gold);}
+.explore-desc{
+  font-family:var(--f-body);font-size:clamp(.85rem,1.8vw,.98rem);
+  color:var(--ink-sub);line-height:1.6;position:relative;
+}
+.explore-arrow{
+  position:absolute;top:1.3rem;right:1.4rem;
+  color:var(--gold-dk);transition:transform .25s,color .2s;
+}
+.explore-btn:hover .explore-arrow{transform:translate(4px,-4px);color:var(--gold);}
+
+/* ══ SECTION HEADING ══ */
+.sec-head{
+  display:flex;align-items:center;gap:.8rem;margin-bottom:1.4rem;
+}
+.sec-head::before,.sec-head::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+.sec-head span{
+  font-family:var(--f-label);font-size:.68rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--gold-dk);white-space:nowrap;
+}
+.sec-sub{
+  font-family:var(--f-body);font-size:.88rem;font-style:italic;
+  color:var(--ink-mute);text-align:center;margin-top:-.7rem;margin-bottom:1.4rem;
+}
+
+/* ══ HADITH CARDS (square compact) ══ */
+.hadith-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1rem;margin-bottom:3rem;
+}
+@media(max-width:960px){.hadith-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.hadith-grid{grid-template-columns:repeat(2,1fr);gap:.65rem;}}
+
+.h-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:3px;overflow:hidden;
+  display:flex;flex-direction:column;
+  text-decoration:none;color:inherit;
+  box-shadow:var(--card-shadow);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;
+  opacity:0;transform:translateY(14px);animation:cardIn .4s ease forwards;
+}
+@keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+.h-card:hover{transform:translateY(-4px);border-color:var(--gold-dk);box-shadow:0 10px 32px rgba(0,0,0,.5);}
+.h-cover-wrap{width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;background:var(--surface2);flex-shrink:0;}
+.h-cover{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease,filter .3s;}
+[data-theme="dark"] .h-cover{filter:brightness(.82) saturate(.72);}
+[data-theme="light"] .h-cover{filter:brightness(.9) saturate(.85);}
+.h-card:hover .h-cover{transform:scale(1.06);filter:brightness(1) saturate(1)!important;}
+.h-cover-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);color:var(--gold-dk);font-size:2rem;}
+.h-body{padding:.7rem .75rem .85rem;display:flex;flex-direction:column;gap:.28rem;flex:1;}
+.h-title{font-family:var(--f-bn);font-size:.78rem;font-weight:600;color:var(--ink);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.h-card:hover .h-title{color:var(--gold);}
+.h-book{font-family:var(--f-label);font-size:.44rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dk);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.h-footer{margin-top:auto;padding-top:.45rem;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.h-year{font-family:var(--f-label);font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);}
+.h-arrow{color:var(--gold-dk);transition:transform .2s;display:flex;align-items:center;}
+.h-card:hover .h-arrow{transform:translateX(3px);color:var(--gold);}
+.type-badge{
+  position:absolute;top:.4rem;left:.4rem;
+  font-family:var(--f-label);font-size:.4rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.12rem .42rem;border-radius:50px;
+  background:rgba(10,8,4,.72);border:1px solid var(--border);
+  color:var(--gold-dk);backdrop-filter:blur(4px);
+}
+
+/* ══ EVENT CARDS (horizontal) ══ */
+.event-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1rem;margin-bottom:3rem;
+}
+@media(max-width:640px){.event-grid{grid-template-columns:1fr;}}
+
+.ev-card{
+  display:flex;align-items:stretch;
+  text-decoration:none;color:inherit;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:3px;overflow:hidden;
+  box-shadow:var(--card-shadow);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;
+  opacity:0;transform:translateY(14px);animation:cardIn .4s ease forwards;
+}
+.ev-card:hover{transform:translateY(-3px);border-color:var(--gold-dk);box-shadow:0 10px 32px rgba(0,0,0,.5);}
+.ev-img-wrap{width:110px;flex-shrink:0;overflow:hidden;position:relative;}
+@media(max-width:480px){.ev-img-wrap{width:85px;}}
+.ev-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease,filter .3s;}
+[data-theme="dark"] .ev-img{filter:brightness(.75) saturate(.7);}
+[data-theme="light"] .ev-img{filter:brightness(.88) saturate(.85);}
+.ev-card:hover .ev-img{transform:scale(1.06);filter:brightness(1) saturate(1)!important;}
+.ev-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);color:var(--gold-dk);font-size:1.8rem;}
+.ev-body{padding:.85rem 1rem;display:flex;flex-direction:column;gap:.3rem;flex:1;}
+.ev-year{font-family:var(--f-label);font-size:.44rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);}
+.ev-title{font-family:var(--f-bn);font-size:.82rem;font-weight:600;color:var(--ink);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ev-card:hover .ev-title{color:var(--gold);}
+.ev-summary{font-family:var(--f-bn);font-size:.72rem;color:var(--ink-sub);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:.15rem;}
+.ev-footer{margin-top:auto;padding-top:.45rem;display:flex;align-items:center;justify-content:space-between;}
+.ev-source{font-family:var(--f-label);font-size:.4rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);}
+.ev-arrow{color:var(--gold-dk);transition:transform .2s;display:flex;}
+.ev-card:hover .ev-arrow{transform:translateX(3px);color:var(--gold);}
+
+/* ══ SHUFFLE BTN ══ */
+.shuffle-row{display:flex;justify-content:center;margin-bottom:1rem;}
+.shuffle-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--f-label);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold-dk);background:none;border:1px solid var(--border);
+  padding:.32rem .9rem;border-radius:50px;cursor:pointer;
+  transition:all .2s;
+}
+.shuffle-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.shuffle-btn svg{transition:transform .4s;}
+.shuffle-btn:hover svg{transform:rotate(180deg);}
+
+/* ══ FULL RESULTS PAGE ══ */
+.full-results{display:none;padding-top:1.5rem;}
+.full-results.show{display:block;}
+.fr-head{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:.5rem;margin-bottom:1.2rem;
+}
+.fr-title{font-family:var(--f-head);font-size:1.1rem;font-weight:700;color:var(--ink);}
+.fr-title span{color:var(--gold-dk);}
+.fr-close{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--f-label);font-size:.54rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-sub);background:none;border:1px solid var(--border);
+  padding:.26rem .75rem;border-radius:50px;cursor:pointer;
+  transition:all .2s;
+}
+.fr-close:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.fr-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:.75rem;
+}
+@media(max-width:640px){.fr-grid{grid-template-columns:1fr;}}
+.fr-item{
+  display:flex;align-items:flex-start;gap:.75rem;
+  padding:.85rem 1rem;
+  background:var(--surface);border:1px solid var(--border);border-radius:3px;
+  text-decoration:none;color:inherit;
+  transition:all .2s;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+.fr-item:hover{border-color:var(--gold-dk);transform:translateX(3px);box-shadow:0 4px 20px rgba(0,0,0,.4);}
+.fr-thumb{width:52px;height:52px;border-radius:2px;object-fit:cover;flex-shrink:0;border:1px solid var(--border2);background:var(--surface2);}
+.fr-thumb-ph{width:52px;height:52px;border-radius:2px;flex-shrink:0;background:var(--surface2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.fr-info{flex:1;min-width:0;}
+.fr-type{font-family:var(--f-label);font-size:.44rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.2rem;}
+.fr-type.h{color:var(--gold-dk);}
+.fr-type.e{color:#5a8a6a;}
+.fr-title2{font-family:var(--f-bn);font-size:.82rem;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.fr-title2:not(.bn){font-family:var(--f-head);}
+.fr-item:hover .fr-title2{color:var(--gold);}
+.fr-snippet{font-family:var(--f-bn);font-size:.72rem;color:var(--ink-sub);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.fr-snippet:not(.bn){font-family:var(--f-body);}
+.fr-meta{font-family:var(--f-label);font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);margin-top:.25rem;}
+.fr-none{
+  grid-column:1/-1;text-align:center;padding:3rem 1rem;
+  font-family:var(--f-body);font-style:italic;color:var(--ink-sub);font-size:1rem;
+}
+
+/* ══ SKELETON ══ */
+.skel{
+  background:linear-gradient(90deg,rgba(196,154,48,.06) 25%,rgba(196,154,48,.14) 50%,rgba(196,154,48,.06) 75%);
+  background-size:200% 100%;animation:shim 1.3s infinite;border-radius:2px;
+}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.rd1{transition-delay:.08s;} .rd2{transition-delay:.16s;} .rd3{transition-delay:.24s;} .rd4{transition-delay:.32s;}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="index.html" class="logo">Safeenah</a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-a active">Home</a>
+    <a href="timeline.html" class="nav-a">Timeline</a>
+    <a href="hadith.html" class="nav-a">Hadith</a>
+    <a href="about.html" class="nav-a">About</a>
+    <a href="submit.html" class="nav-a">Submit Issue</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <span id="themeLbl">Light</span>
+    </button>
+    <button id="ham" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<div id="mob">
+  <a href="index.html" class="nav-a" style="color:var(--gold);">Home</a>
+  <a href="timeline.html" class="nav-a">Timeline</a>
+  <a href="hadith.html" class="nav-a">Hadith</a>
+  <a href="about.html" class="nav-a">About</a>
+  <a href="submit.html" class="nav-a">Submit Issue</a>
+</div>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="hero-topline"></div>
+  <p class="hero-eyebrow">Safeenah — Islamic History Archive</p>
+
+  <div class="hero-arabic">مَثَلُ أَهْلِ بَيْتِي فِيكُمْ كَمَثَلِ سَفِينَةِ نُوحٍ</div>
+  <p class="hero-trans">"The example of my Ahlul Bayt among you is like Noah's Ark"</p>
+  <p class="hero-source">Hadith al-Safeenah · Al-Mustadrak · Narrated by Abu Dharr al-Ghifari</p>
+
+  <h1 class="hero-tagline">Seek the <em>Record.</em><br/>Advance Search Engine</h1>
+  <p class="hero-sub">A personal archive of Islamic history — hadith, events, and the questions Sunni education often leaves unanswered.</p>
+
+  <!-- SEARCH -->
+  <div class="search-section" id="searchSection">
+    <div class="search-box">
+      <span class="search-icon">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </span>
+      <input class="search-inp" id="searchInp"
+             placeholder="Search hadith, events, narrators, tags..."
+             autocomplete="off" spellcheck="false" aria-label="Search archive"/>
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" title="Clear">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <button class="search-btn" onclick="runSearch()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        
+      </button>
+    </div>
+
+
+
+    <!-- live dropdown -->
+    <div class="results-panel" id="resultsPanel"></div>
+
+    <!-- hint bar -->
+    <div class="search-hint" id="searchHint">
+      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold-dk);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="hintText"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ PAGE BODY ════════ -->
+<div class="page">
+
+  <!-- FULL RESULTS (Enter key / Search btn) -->
+  <div class="full-results" id="fullResults">
+    <div class="fr-head">
+      <div class="fr-title">Results for <span id="frQuery"></span></div>
+      <button class="fr-close" onclick="clearSearch()">
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Clear
+      </button>
+    </div>
+    <div class="fr-grid" id="frGrid"></div>
+  </div>
+
+  <!-- RANDOM ARCHIVE SECTION (hidden during search) -->
+  <div id="archiveSection">
+
+    <!-- EXPLORE BUTTONS -->
+    <div class="explore-grid reveal rd1">
+      <a href="timeline.html" class="explore-btn timeline">
+        <span class="explore-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </span>
+        <span class="explore-label">Browse Archive</span>
+        <div class="explore-title">Explore Timeline<br/>of Islamic Events</div>
+        <div class="explore-desc">Historical events documented with primary sources, multi-perspective analysis, and narrator chains.</div>
+      </a>
+      <a href="hadith.html" class="explore-btn hadith">
+        <span class="explore-arrow">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </span>
+        <span class="explore-label">Hadith Collection</span>
+        <div class="explore-title">Explore the<br/>Hadith Archive</div>
+        <div class="explore-desc">Hadith with Arabic text, Bengali translation, full isnad chains, and Sunni/Shia scholarly perspectives.</div>
+      </a>
+    </div>
+
+    <!-- RANDOM HADITH -->
+    <div class="reveal rd2">
+      <div class="sec-head"><span>◆ Randomly Selected from Archive ◆</span></div>
+      <p class="sec-sub">From the Hadith Collection</p>
+      <div class="shuffle-row">
+        <button class="shuffle-btn" onclick="reshuffleHadith()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          Shuffle Again
+        </button>
+      </div>
+      <div class="hadith-grid" id="hadithRandom"></div>
+    </div>
+
+    <!-- RANDOM EVENTS -->
+    <div class="reveal rd3" style="margin-top:1rem;">
+      <div class="sec-head"><span>◆ Randomly Selected from Archive ◆</span></div>
+      <p class="sec-sub">From the Events Timeline</p>
+      <div class="shuffle-row">
+        <button class="shuffle-btn" onclick="reshuffleEvents()">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          Shuffle Again
+        </button>
+      </div>
+      <div class="event-grid" id="eventRandom"></div>
+    </div>
+
+  </div><!-- /archiveSection -->
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   THEME
+══════════════════════════════════════════ */
+const savedTheme = localStorage.getItem('sf-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.getElementById('themeLbl').textContent = savedTheme==='dark' ? 'Light' : 'Dark';
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sf-theme', next);
+  document.getElementById('themeLbl').textContent = next==='dark' ? 'Light' : 'Dark';
+}
+
+/* ══════════════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════════════ */
+const ham = document.getElementById('ham');
+const mob = document.getElementById('mob');
+ham.addEventListener('click', e => { e.stopPropagation(); mob.classList.contains('show') ? closeMob() : openMob(); });
+function openMob()  { mob.classList.add('show'); ham.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+function closeMob() { mob.classList.remove('show'); ham.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+document.addEventListener('click', e => { if (!mob.contains(e.target) && !ham.contains(e.target)) closeMob(); });
+mob.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeMob(); hideDrop(); } });
+
+/* ══════════════════════════════════════════
+   DATA — ALL FILES
+══════════════════════════════════════════ */
+const HADITH_FILES = ['data/hadith/index.json','data/hadith/extrasample.json'];
+const EVENT_FILES  = ['data/events/index.json','data/events/more.json','data/events/more10.json'];
+
+let allHadith = [], allEvents = [], allItems = [];
+let fuseAll, fuseHadith, fuseEvents;
+let activeFilter = 'all';
+
+/* Fuse keys — exhaustive */
+const FUSE_KEYS_HADITH = [
+  {name:'title',weight:.22},{name:'subTitle',weight:.08},
+  {name:'bangla_script',weight:.14},{name:'arabic_script',weight:.1},
+  {name:'_narrators',weight:.12},{name:'book_name',weight:.1},
+  {name:'book_author',weight:.07},{name:'publication',weight:.04},
+  {name:'enlist_author',weight:.04},{name:'_details_text',weight:.08},
+  {name:'_tags',weight:.07},{name:'author_manhaj',weight:.03},
+  {name:'year',weight:.03},{name:'summary',weight:.06},
+];
+const FUSE_KEYS_EVENT = [
+  {name:'title',weight:.28},{name:'summary',weight:.18},
+  {name:'_desc_text',weight:.12},{name:'_tags',weight:.1},
+  {name:'year',weight:.06},{name:'era',weight:.04},
+  {name:'_sources_text',weight:.05},{name:'author',weight:.05},
+];
+const FUSE_OPTS = {
+  includeScore:true, includeMatches:true,
+  threshold:.42, ignoreLocation:true,
+  minMatchCharLength:2, useExtendedSearch:true,
+};
+
+function stripHtml(s){ return (s||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim(); }
+
+function normaliseHadith(raw){
+  return (Array.isArray(raw)?raw:[raw]).filter(h=>h&&(h.title||h.name)).map(h=>({
+    _type:'hadith',
+    slug: h.slug || String(h.id),
+    title: h.title||h.name||'',
+    subTitle: h.subTitle||'',
+    bangla_script: h.bangla_script||'',
+    arabic_script: h.arabic_script||'',
+    book_name: h.book_name||h.book||'',
+    book_author: h.book_author||'',
+    publication: h.publication||'',
+    enlist_author: h.enlist_author||'',
+    author_manhaj: h.author_manhaj||'',
+    year: h.year||'',
+    summary: h.summary||'',
+    thumb: h.thumb||(Array.isArray(h.images)&&h.images[0]?(typeof h.images[0]==='string'?h.images[0]:h.images[0].url):''),
+    banner: h.banner||'',
+    _narrators: Array.isArray(h.chain_of_narrator) ? h.chain_of_narrator.map(n=>n.name||n).join(' ') : '',
+    _details_text: stripHtml(h.details||''),
+    _tags: Array.isArray(h.tags) ? h.tags.join(' ') : (h.tags||''),
+    tags: Array.isArray(h.tags) ? h.tags : [],
+  }));
+}
+
+function normaliseEvent(raw){
+  return (Array.isArray(raw)?raw:[raw]).filter(e=>e&&e.title).map(e=>({
+    _type:'event',
+    slug: e.slug||e.id||'',
+    title: e.title||'',
+    summary: e.summary||e.excerpt||'',
+    year: e.year||'',
+    era: e.era||'',
+    thumb: e.thumb||e.thumbnail||'',
+    banner: e.banner||'',
+    author: e.author||'',
+    _desc_text: stripHtml(e.description||e.desc||''),
+    _tags: Array.isArray(e.tags) ? e.tags.join(' ') : (e.tags||''),
+    _sources_text: Array.isArray(e.sources) ? e.sources.map(s=>s.text||'').join(' ') : '',
+    tags: Array.isArray(e.tags) ? e.tags : [],
+  }));
+}
+
+async function loadAll(){
+  const hResults = await Promise.allSettled(
+    HADITH_FILES.map(async f => { const r=await fetch(f,{cache:'no-cache'}); if(!r.ok) throw 0; return normaliseHadith(await r.json()); })
+  );
+  const eResults = await Promise.allSettled(
+    EVENT_FILES.map(async f  => { const r=await fetch(f,{cache:'no-cache'}); if(!r.ok) throw 0; return normaliseEvent(await r.json()); })
+  );
+  allHadith = hResults.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);
+  allEvents = eResults.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);
+  allItems  = [...allHadith, ...allEvents];
+
+  fuseHadith = new Fuse(allHadith, {...FUSE_OPTS, keys:FUSE_KEYS_HADITH});
+  fuseEvents = new Fuse(allEvents, {...FUSE_OPTS, keys:FUSE_KEYS_EVENT});
+  fuseAll    = new Fuse(allItems,  {...FUSE_OPTS, keys:[
+    ...FUSE_KEYS_HADITH.map(k=>({...k,weight:k.weight*.5})),
+    ...FUSE_KEYS_EVENT.map(k=>({...k,weight:k.weight*.5})),
+  ]});
+
+  renderRandomHadith();
+  renderRandomEvents();
+}
+
+/* ══════════════════════════════════════════
+   SEARCH STATE
+══════════════════════════════════════════ */
+let currentQuery = '';
+let dropTimer;
+
+const searchInp    = document.getElementById('searchInp');
+const resultsPanel = document.getElementById('resultsPanel');
+const searchHint   = document.getElementById('searchHint');
+const hintText     = document.getElementById('hintText');
+
+searchInp.addEventListener('input', () => {
+  const q = searchInp.value.trim();
+  
+  // Toggle clear button
+  document.getElementById('searchClear').classList.toggle('show', q.length > 0);
+
+  // Hide full results when typing live
+  document.getElementById('fullResults').classList.remove('show');
+  
+  if (!q || q.length < 2) {
+    hideDrop();
+    showArchiveSection();        // ← Show body again
+    return;
+  }
+
+  // Hide archive section when user is typing
+  hideArchiveSection();          // ← NEW: Hide body
+
+  clearTimeout(dropTimer);
+  dropTimer = setTimeout(() => buildDrop(q), 180);
+});
+
+
+function hideArchiveSection() {
+  document.getElementById('archiveSection').style.display = 'none';
+}
+
+function showArchiveSection() {
+  document.getElementById('archiveSection').style.display = '';
+}
+
+searchInp.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    runSearch(); 
+  }
+  if (e.key === 'Escape') {
+    clearSearch();        // Clears everything and shows archive
+    searchInp.blur();
+  }
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#searchSection')) hideDrop();
+});
+
+function hideDrop(){ resultsPanel.classList.remove('show'); resultsPanel.innerHTML=''; }
+
+function setFilter(val, el){
+  activeFilter = val;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  if (currentQuery) runSearch();
+}
+
+function doFuse(q){
+  if (activeFilter==='hadith') return fuseHadith.search(q).map(r=>r.item);
+  if (activeFilter==='event')  return fuseEvents.search(q).map(r=>r.item);
+  let results = fuseAll.search(q).map(r=>r.item);
+  if (activeFilter==='sunni'){
+    results = results.filter(r =>
+      (r.author_manhaj||'').toLowerCase().includes('sunni') ||
+      (r.book_name||'').match(/بخاري|مسلم|bukhari|muslim|tirmidhi|tirmizi/i) ||
+      (r._tags||'').toLowerCase().includes('sunni') ||
+      (r._sources_text||'').toLowerCase().includes('bukhari')
+    );
+  }
+  if (activeFilter==='ahlulbayt'){
+    results = results.filter(r =>
+      (r.title+r.summary+r._tags+r._details_text+r._desc_text)
+        .toLowerCase().match(/ahlul bait|ahle bait|আহলে বাইত|আহলুল বাইত|ahl al-bayt|fatima|ali|hasan|husain/i)
+    );
+  }
+  return results;
+}
+
+/* ══ LIVE DROPDOWN ══ */
+function buildDrop(q){
+  if (!fuseAll) return;
+  const hits = doFuse(q).slice(0, 8);
+  if (!hits.length) { hideDrop(); return; }
+
+  let html = `<div class="rp-section-label">
+    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Suggestions
+  </div>`;
+
+  hits.forEach(item => {
+    const isH   = item._type === 'hadith';
+    const href  = isH ? `hadith/index.html?id=${encodeURIComponent(item.slug)}` : `event/index.html?id=${encodeURIComponent(item.slug)}`;
+    const img   = item.thumb || item.banner || '';
+    const label = isH ? 'Hadith' : 'Event';
+    const meta  = isH ? (item.book_name||item.year||'') : (item.year||'');
+    const titleBn = /[\u0980-\u09FF]/.test(item.title);
+    html += `<a class="rp-item" href="${xe(href)}">
+      ${img
+        ? `<img class="rp-thumb" src="${xe(img)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : `<div class="rp-thumb-ph">${isH?'📖':'📅'}</div>`}
+      <div class="rp-info">
+        <div class="rp-type ${isH?'hadith':'event'}">${label}</div>
+        <div class="rp-title${titleBn?'':' rp-title-en'}">${xe(item.title)}</div>
+        ${meta ? `<div class="rp-meta">${xe(meta)}</div>` : ''}
+      </div>
+    </a>`;
+  });
+
+  resultsPanel.innerHTML = html;
+  resultsPanel.classList.add('show');
+}
+
+/* ══ FULL RESULTS ══ */
+function runSearch(){
+  const q = searchInp.value.trim();
+  if (!q) { clearSearch(); return; }
+  currentQuery = q;
+  hideDrop();
+
+  const results = doFuse(q);
+
+  // show hint
+  searchHint.classList.add('show');
+  hintText.innerHTML = `<span class="hint-count">${results.length}</span> result${results.length!==1?'s':''} for "<em>${xe(q)}</em>"`;
+
+  // build full results
+  const grid = document.getElementById('frGrid');
+  document.getElementById('frQuery').textContent = `"${q}"`;
+
+  if (!results.length) {
+    grid.innerHTML = `<div class="fr-none">No matches found for "<em>${xe(q)}</em>". Try a different keyword or spelling.</div>`;
+  } else {
+    grid.innerHTML = results.slice(0, 40).map((item, i) => {
+      const isH   = item._type === 'hadith';
+      const href  = isH ? `hadith/index.html?id=${encodeURIComponent(item.slug)}` : `event/index.html?id=${encodeURIComponent(item.slug)}`;
+      const img   = item.thumb || item.banner || '';
+      const snippet = isH
+        ? (item.bangla_script || item.summary || item._details_text || '').slice(0, 120)
+        : (item.summary || item._desc_text || '').slice(0, 120);
+      const titleBn   = /[\u0980-\u09FF]/.test(item.title);
+      const snippetBn = /[\u0980-\u09FF]/.test(snippet);
+      const delay = Math.min(i * 30, 300);
+      return `<a class="fr-item" href="${xe(href)}" style="animation-delay:${delay}ms;opacity:0;transform:translateY(10px);animation:cardIn .35s ease forwards;">
+        ${img
+          ? `<img class="fr-thumb" src="${xe(img)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+          : `<div class="fr-thumb-ph">${isH?'📖':'📅'}</div>`}
+        <div class="fr-info">
+          <div class="fr-type ${isH?'h':'e'}">${isH?'Hadith':'Event'}</div>
+          <div class="fr-title2${titleBn?' bn':''}">${xe(item.title)}</div>
+          ${snippet ? `<div class="fr-snippet${snippetBn?' bn':''}">${xe(snippet)}…</div>` : ''}
+          ${item.year ? `<div class="fr-meta">${xe(item.year)}</div>` : ''}
+        </div>
+      </a>`;
+    }).join('');
+  }
+
+  document.getElementById('fullResults').classList.add('show');
+  document.getElementById('archiveSection').style.display = 'none';
+  document.getElementById('fullResults').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function clearSearch() {
+  searchInp.value = '';
+  currentQuery = '';
+  document.getElementById('searchClear').classList.remove('show');
+  searchHint.classList.remove('show');
+  hideDrop();
+  
+  document.getElementById('fullResults').classList.remove('show');
+  
+  // Important: Show the archive again
+  showArchiveSection();
+  
+  // Optional: focus back to input
+  // searchInp.focus();
+}
+
+/* ══════════════════════════════════════════
+   RANDOM CARDS
+══════════════════════════════════════════ */
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+function pick(arr, n){ return shuffle(arr).slice(0,n); }
+
+/* Hadith square card */
+function hadithCard(h, delay){
+  const img = h.thumb || h.banner || '';
+  const isBn = /[\u0980-\u09FF]/.test(h.title||'');
+  return `<a class="h-card" href="hadith/index.html?id=${encodeURIComponent(h.slug)}" style="animation-delay:${delay}ms;">
+    <div class="h-cover-wrap">
+      ${img
+        ? `<img class="h-cover" src="${xe(img)}" alt="${xe(h.title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="h-cover-ph" style="display:none;">📖</div>`
+        : `<div class="h-cover-ph">📖</div>`}
+      <span class="type-badge">Hadith</span>
+    </div>
+    <div class="h-body">
+      <div class="h-title${isBn?' bn':''}">${xe(h.title)}</div>
+      ${h.book_name ? `<div class="h-book">${xe(h.book_name)}</div>` : ''}
+      <div class="h-footer">
+        <span class="h-year">${xe(h.year||'')}</span>
+        <span class="h-arrow"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </div>
+    </div>
+  </a>`;
+}
+
+/* Event horizontal card */
+function eventCard(e, delay){
+  const img = e.thumb || e.banner || '';
+  const isBn = /[\u0980-\u09FF]/.test(e.title||'');
+  const summaryBn = /[\u0980-\u09FF]/.test(e.summary||'');
+  return `<a class="ev-card" href="event/index.html?id=${encodeURIComponent(e.slug)}" style="animation-delay:${delay}ms;">
+    <div class="ev-img-wrap">
+      ${img
+        ? `<img class="ev-img" src="${xe(img)}" alt="${xe(e.title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="ev-img-ph" style="display:none;">📅</div>`
+        : `<div class="ev-img-ph">📅</div>`}
+    </div>
+    <div class="ev-body">
+      ${e.year ? `<div class="ev-year">${xe(e.year)}</div>` : ''}
+      <div class="ev-title${isBn?' bn':''}">${xe(e.title)}</div>
+      ${e.summary ? `<div class="ev-summary${summaryBn?' bn':''}">${xe(e.summary)}</div>` : ''}
+      <div class="ev-footer">
+        <span class="ev-source">Event</span>
+        <span class="ev-arrow"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </div>
+    </div>
+  </a>`;
+}
+
+function renderRandomHadith(){
+  const el = document.getElementById('hadithRandom');
+  if (!allHadith.length) { el.innerHTML = skeletonH(); return; }
+  el.innerHTML = pick(allHadith, 4).map((h,i) => hadithCard(h, i*60)).join('');
+}
+function renderRandomEvents(){
+  const el = document.getElementById('eventRandom');
+  if (!allEvents.length) { el.innerHTML = skeletonEv(); return; }
+  el.innerHTML = pick(allEvents, 4).map((e,i) => eventCard(e, i*60)).join('');
+}
+function reshuffleHadith(){ renderRandomHadith(); }
+function reshuffleEvents(){ renderRandomEvents(); }
+
+/* skeleton placeholders */
+function skeletonH(){
+  return Array(4).fill(0).map(()=>`
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+      <div class="skel" style="aspect-ratio:1/1;"></div>
+      <div style="padding:.7rem .75rem;display:flex;flex-direction:column;gap:.4rem;">
+        <div class="skel" style="height:.75rem;width:85%;"></div>
+        <div class="skel" style="height:.55rem;width:55%;"></div>
+        <div class="skel" style="height:.55rem;width:70%;"></div>
+      </div>
+    </div>`).join('');
+}
+function skeletonEv(){
+  return Array(4).fill(0).map(()=>`
+    <div style="display:flex;background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;height:100px;">
+      <div class="skel" style="width:110px;flex-shrink:0;"></div>
+      <div style="padding:.85rem 1rem;flex:1;display:flex;flex-direction:column;gap:.4rem;">
+        <div class="skel" style="height:.55rem;width:40%;"></div>
+        <div class="skel" style="height:.8rem;width:90%;"></div>
+        <div class="skel" style="height:.65rem;width:75%;"></div>
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════ */
+function xe(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold:.07 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
+// Show skeletons immediately
+document.getElementById('hadithRandom').innerHTML = skeletonH();
+document.getElementById('eventRandom').innerHTML  = skeletonEv();
+
+loadAll();
+</script>
+</body>
+</html>

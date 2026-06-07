@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hadith — Safeenah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --f-head:    'Libre Baskerville', Georgia, serif;
+  --f-body:    'Cormorant Garamond', Georgia, serif;
+  --f-label:   'Cinzel', serif;
+  --f-bn:      'Hind Siliguri', sans-serif;
+}
+[data-theme="dark"] {
+  --bg:#0d0b09; --bg-grad:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(110,75,10,.14) 0%,transparent 65%);
+  --surface:#181410; --surface2:#211d15; --surface3:#272218;
+  --border:rgba(160,120,50,.17); --border2:rgba(160,120,50,.1);
+  --gold:#c49a30; --gold-lt:#e0b84a; --gold-dk:#8a6518; --gold-dim:rgba(196,154,48,.1);
+  --ink:#ede0c8; --ink-body:#d4c4a8; --ink-sub:#a89878; --ink-mute:#6a5a42;
+  --nav-bg:rgba(5,4,2,.97); --nav-border:rgba(140,100,30,.22);
+  --card-shadow:0 8px 40px rgba(0,0,0,.65);
+  --tag-bg:rgba(196,154,48,.08); --tag-border:rgba(138,101,24,.28);
+  --btn-icon:rgba(200,180,140,.65); --overlay:rgba(0,0,0,.88);
+  --chain-ok:#4a9e6a; --chain-warn:#c49a30; --chain-bad:#c0613a; --chain-crit:#8b3a8b; --chain-peak:#e0b84a;
+}
+[data-theme="light"] {
+  --bg:#f6ead0; --bg-grad:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(200,160,60,.1) 0%,transparent 65%);
+  --surface:#fdf6e8; --surface2:#f2e4c2; --surface3:#ece0b8;
+  --border:rgba(140,100,30,.22); --border2:rgba(140,100,30,.13);
+  --gold:#9a6e10; --gold-lt:#b88820; --gold-dk:#7a5208; --gold-dim:rgba(160,120,20,.1);
+  --ink:#1a1006; --ink-body:#2e1e08; --ink-sub:#5a3e18; --ink-mute:#9a7a48;
+  --nav-bg:rgba(240,228,198,.97); --nav-border:rgba(140,100,30,.22);
+  --card-shadow:0 6px 32px rgba(140,100,20,.12);
+  --tag-bg:rgba(140,100,20,.08); --tag-border:rgba(120,85,15,.28);
+  --btn-icon:rgba(80,55,20,.65); --overlay:rgba(0,0,0,.82);
+  --chain-ok:#2d7a4a; --chain-warn:#8a6518; --chain-bad:#a03820; --chain-crit:#6b2a6b; --chain-peak:#9a6e10;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background-color:var(--bg);background-image:var(--bg-grad);background-attachment:fixed;color:var(--ink-body);font-family:var(--f-body);font-size:18px;line-height:1.75;overflow-x:hidden;min-height:100vh;transition:background-color .3s,color .3s;}
+::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:var(--bg);} ::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
+.bn,[lang="bn"]{font-family:var(--f-bn);line-height:1.9;}
+svg{display:inline-block;vertical-align:middle;flex-shrink:0;}
+
+/* ── NAVBAR ── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:900;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--nav-border);display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;height:52px;transition:background .3s,border-color .3s;}
+.logo{font-family:var(--f-label);font-size:.88rem;letter-spacing:.18em;color:var(--gold);text-decoration:none;}
+.nav-links{display:flex;gap:1.8rem;align-items:center;}
+.nav-a{font-family:var(--f-label);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-sub);text-decoration:none;transition:color .2s;border-bottom:1px solid transparent;padding-bottom:1px;}
+.nav-a:hover{color:var(--gold);border-bottom-color:rgba(196,154,48,.4);}
+.nav-right{display:flex;align-items:center;gap:1rem;}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:50px;padding:.22rem .65rem;cursor:pointer;font-family:var(--f-label);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dk);transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:.35rem;}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold);}
+#ham{display:none;background:none;border:none;cursor:pointer;color:var(--btn-icon);padding:4px;}
+#mob{display:none;position:fixed;top:52px;left:0;right:0;background:var(--nav-bg);border-bottom:1px solid var(--nav-border);padding:1.4rem 1.75rem 2rem;flex-direction:column;gap:.6rem;box-shadow:0 10px 25px rgba(0,0,0,.5);z-index:950;opacity:0;transform:translateY(-15px);transition:all .32s cubic-bezier(.32,.72,0,1);max-height:calc(100vh - 52px);overflow-y:auto;}
+#mob.show{display:flex;opacity:1;transform:translateY(0);}
+#mob .nav-a{font-size:.8rem;padding:.65rem 0;border-bottom:1px solid var(--border2);color:var(--ink-sub);text-decoration:none;transition:color .2s;}
+#mob .nav-a:hover{color:var(--gold);}
+#mob .nav-a:last-child{border-bottom:none;}
+@media(max-width:640px){#ham{display:block;}.nav-links{display:none;}}
+
+/* ── BANNER ── */
+.banner-wrap{width:100%;height:clamp(200px,36vw,460px);position:relative;overflow:hidden;margin-top:52px;background:var(--surface2);}
+.banner-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .3s;}
+[data-theme="dark"] .banner-wrap img{filter:brightness(.7) saturate(.65);}
+[data-theme="light"] .banner-wrap img{filter:brightness(.88) saturate(.85);}
+.banner-arabic-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;pointer-events:none;padding:1.5rem;}
+.banner-arabic-text{font-family:var(--f-bn);font-size:clamp(1.1rem,3.5vw,2.2rem);color:rgba(237,224,200,.92);direction:rtl;text-align:center;line-height:2;text-shadow:0 2px 18px rgba(0,0,0,.8);}
+[data-theme="dark"] .banner-wrap::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,#0d0b09 0%,rgba(13,11,9,.1) 46%,transparent 100%),linear-gradient(to right,rgba(13,11,9,.3) 0%,transparent 18%,transparent 82%,rgba(13,11,9,.3) 100%);}
+[data-theme="light"] .banner-wrap::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,#f6ead0 0%,rgba(246,234,208,.06) 48%,transparent 100%);}
+.banner-placeholder{width:100%;height:100%;background:linear-gradient(135deg,var(--surface2) 0%,var(--surface3) 100%);display:flex;align-items:center;justify-content:center;}
+
+/* ── PAGE ── */
+.page-wrap{max-width:1080px;margin:0 auto;padding:0 1.5rem 5rem;margin-top:-4.5rem;position:relative;z-index:2;}
+.back-btn{color:var(--gold);background-color: var(--surface); display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-label);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);text-decoration:none;border:1px solid var(--border);padding:.28rem .75rem;border-radius:1px;transition:all .2s;margin-bottom:1.25rem;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:1fr 280px;gap:1.6rem;align-items:start;}
+@media(max-width:860px){.layout{grid-template-columns:1fr;}}
+
+/* ── CONTENT CARD ── */
+.content-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:clamp(1.4rem,4vw,2.4rem);box-shadow:var(--card-shadow);transition:background .3s,border-color .3s,box-shadow .3s;}
+
+/* ── META ROW ── */
+.hd-meta{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.9rem;}
+.year-badge{font-family:var(--f-label);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dk);border:1px solid var(--border);padding:.18rem .72rem;border-radius:50px;}
+@media(max-width:640px){.year-badge{font-size:.55rem;}}
+.meta-sep{color:var(--ink-mute);font-size:.65rem;line-height:1;user-select:none;}
+.meta-chip{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-label);font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-sub);}
+@media(max-width:640px){.meta-chip{font-size:.45rem;}}
+.meta-chip svg{color:var(--gold-dk);flex-shrink:0;}
+.meta-chip.author{color:var(--gold-dk);}
+.meta-chip-text{font-size:.8rem;}
+@media(max-width:640px){.meta-chip-text{font-size:.58rem;}}
+
+/* ── TITLE ── */
+.hd-title{font-family:var(--f-head);font-size:clamp(1.4rem,3.6vw,2.1rem);font-weight:700;color:var(--ink);line-height:1.2;letter-spacing:.005em;margin-bottom:.4rem;}
+.hd-title.bn{font-family:var(--f-bn);font-size:clamp(1.3rem,3vw,1.9rem);}
+.hd-subtitle{font-family:var(--f-body);font-size:1.05rem;font-style:italic;color:var(--ink-sub);line-height:1.5;margin-bottom:1rem;letter-spacing:.01em;}
+.hd-subtitle.bn{font-family:var(--f-bn);font-size:.8rem;font-style:normal;}
+@media(max-width:640px){.hd-subtitle{font-size:.85rem;}.hd-subtitle.bn{font-size:.65rem;}}
+
+/* ── ARABIC ── */
+.arabic-block{direction:rtl;text-align:right;font-size:clamp(1.2rem,3vw,1.7rem);line-height:2.2;color:var(--gold-lt);margin:1.2rem 0 .6rem;font-family:var(--f-bn);padding:1rem 1.25rem;background:var(--gold-dim);border-right:3px solid var(--gold);border-radius:0 2px 2px 0;}
+
+/* ── BANGLA ── */
+.bangla-block{font-family:var(--f-bn);font-size:.8rem;line-height:1.95;color:var(--ink);margin:0 0 1.2rem;padding:.75rem 1.1rem;border-left:2px solid var(--border);background:var(--surface2);border-radius:0 2px 2px 0;}
+@media(max-width:640px){.bangla-block{font-size:.6rem;}}
+
+/* ── RULE ── */
+.rule{display:flex;align-items:center;gap:.75rem;margin:1.5rem 0;}
+.rule::before,.rule::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+.rule span{font-size:.6rem;color:var(--ink-mute);}
+
+/* ── BODY PROSE ── */
+.hd-body{font-family:var(--f-body);color:var(--ink-body);}
+.hd-body p{font-size:1.08rem;line-height:1.88;color:var(--ink-body);margin-bottom:1.15rem;letter-spacing:.01em;}
+.hd-body p:last-child{margin-bottom:0;}
+.hd-body.bn p{font-family:var(--f-bn);font-size:.8rem;line-height:1.95;}
+@media(max-width:640px){.hd-body p{font-size:.85rem;}.hd-body.bn p{font-size:.6rem;}}
+.hd-body blockquote{border-left:2.5px solid var(--gold);margin:1.5rem 0;padding:.8rem 1.35rem;background:var(--gold-dim);border-radius:0 2px 2px 0;}
+.hd-body blockquote p,.hd-body blockquote{font-family:var(--f-head);font-style:italic;font-size:1.05rem;line-height:1.75;color:var(--ink);margin-bottom:0;}
+.hd-body h2{font-family:var(--f-head);font-size:1.1rem;font-weight:700;color:var(--ink);letter-spacing:.01em;margin:1.8rem 0 .55rem;line-height:1.3;}
+.hd-body h3{font-family:var(--f-label);font-size:.7rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin:1.5rem 0 .45rem;}
+.hd-body em{font-style:italic;color:var(--ink);}
+.hd-body strong{font-weight:700;color:var(--ink);}
+.hd-body a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(196,154,48,.3);transition:border-color .2s;}
+.hd-body a:hover{border-bottom-color:var(--gold);}
+
+/* ── SECTION HEADING ── */
+.sec-head{font-family:var(--f-label);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:.9rem;}
+
+/* ── PERSPECTIVES (HTML) ── */
+.persp-wrap{display:flex;flex-direction:column;gap:.85rem;}
+.persp-item{border-left:2px solid var(--gold-dk);border-radius:0 3px 3px 0;overflow:hidden;}
+.persp-label{font-family:var(--f-label);font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);padding:.5rem .9rem .4rem;background:var(--surface2);display:block;border-bottom:1px solid var(--border2);}
+@media(max-width:640px){.persp-label{font-size:.45rem;}}
+.persp-body{padding:.7rem .9rem;font-family:var(--f-bn);font-size:.8rem;line-height:1.88;color:var(--ink-body);}
+@media(max-width:640px){.persp-body{font-size:.6rem;}}
+.persp-body p{margin-bottom:.6rem;font-family:var(--f-bn);font-size:.8rem;line-height:1.88;color:var(--ink-body);}
+.persp-body p:last-child{margin-bottom:0;}
+@media(max-width:640px){.persp-body p{font-size:.6rem;}}
+
+/* ── DIALOGUE (HTML) ── */
+.dialogue-wrap{display:flex;flex-direction:column;gap:.7rem;}
+.dlg-row{display:flex;align-items:flex-start;gap:.65rem;}
+.dlg-label{display: none; font-family:var(--f-label);font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);white-space:nowrap;padding-top:.28rem;min-width:1.8rem;font-weight:600;}
+@media(max-width:640px){.dlg-label{font-size:.42rem;}}
+.dlg-bubble{font-family:var(--f-bn);font-size:.8rem;line-height:1.85;color:var(--ink-body);background:var(--surface2);border:1px solid var(--border2);padding:.55rem .85rem;border-radius:0 5px 5px 5px;flex:1;transition:border-color .2s;}
+.dlg-row:nth-child(even) .dlg-bubble{background:var(--gold-dim);border-color:rgba(196,154,48,.18);border-radius:5px 0 5px 5px;}
+.dlg-bubble:hover{border-color:var(--gold-dk);}
+.dlg-bubble p{font-family:var(--f-bn);font-size:.8rem;line-height:1.85;margin-bottom:.4rem;}
+.dlg-bubble p:last-child{margin-bottom:0;}
+@media(max-width:640px){.dlg-bubble{font-size:.6rem;}.dlg-bubble p{font-size:.6rem;}}
+
+/* ── TAGS ── */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.25rem;}
+.tag-chip{font-family:var(--f-label);font-size:.47rem;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .65rem;border-radius:50px;border:1px solid var(--tag-border);color:var(--ink-sub);background:var(--tag-bg);transition:all .2s;}
+.tag-chip:hover{border-color:var(--gold);color:var(--gold);}
+@media(max-width:640px){.tag-chip{font-size:.4rem;}}
+
+/* ── SIDEBAR ── */
+.side-col{display:flex;flex-direction:column;gap:1rem;position:sticky;top:calc(52px + 1.25rem);}
+.widget{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.1);transition:background .3s,border-color .3s;}
+.widget-head{display:flex;align-items:center;gap:.45rem;padding:.52rem .95rem;background:var(--surface2);border-bottom:1px solid var(--border2);font-family:var(--f-label);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);transition:background .3s;}
+@media(max-width:640px){.widget-head{font-size:.55rem;}}
+.widget-body{padding:.75rem .95rem;}
+
+/* ── BOOK TABLE ── */
+.book-table{width:100%;border-collapse:collapse;}
+.book-table tr{border-bottom:1px solid var(--border2);}
+.book-table tr:last-child{border-bottom:none;}
+.book-table td{padding:.42rem .3rem;vertical-align:top;}
+.book-table td:first-child{font-family:var(--f-label);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap;padding-right:.7rem;width:40%;}
+@media(max-width:640px){.book-table td:first-child{font-size:.6rem;}}
+.book-table td:last-child{font-family:var(--f-bn);font-size:.8rem;color:var(--ink-body);line-height:1.4;}
+@media(max-width:640px){.book-table td:last-child{font-size:.6rem;}}
+.book-table td.en{font-family:var(--f-body);font-size:.88rem;}
+@media(max-width:640px){.book-table td.en{font-size:.65rem;}}
+
+/* ── CHAIN ── */
+.chain-toggle-btn{width:100%;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-family:var(--f-label);font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-dk);padding:.5rem 0;transition:color .2s;}
+.chain-toggle-btn:hover{color:var(--gold);}
+.chain-toggle-btn svg{transition:transform .3s;}
+.chain-toggle-btn.open svg{transform:rotate(180deg);}
+.chain-body{overflow:hidden;max-height:0;transition:max-height .4s cubic-bezier(.4,0,.2,1);}
+.chain-body.open{max-height:600px;}
+.chain-wrap{display:flex;flex-direction:column;gap:0;padding-top:.3rem;}
+.chain-item{display:flex;align-items:stretch;gap:0;cursor:pointer;border-radius:2px;transition:background .15s;}
+.chain-item:hover{background:var(--gold-dim);}
+.chain-line-col{display:flex;flex-direction:column;align-items:center;width:22px;flex-shrink:0;}
+.chain-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:5px;border:2px solid;transition:transform .2s;}
+.chain-item:hover .chain-dot{transform:scale(1.2);}
+.chain-line{flex:1;width:1.5px;background:var(--border);min-height:18px;}
+.chain-item:last-child .chain-line{display:none;}
+.chain-info{flex:1;padding:.15rem .5rem .9rem .3rem;}
+.chain-name{font-family:var(--f-bn);font-size:.8rem;color:var(--ink-body);line-height:1.5;}
+@media(max-width:640px){.chain-name{font-size:.6rem;}}
+.chain-weight-bar{height:2px;border-radius:1px;margin-top:.25rem;width:0;transition:width .6s ease;}
+/* weight colors */
+.w-peak  .chain-dot{background:var(--chain-peak);border-color:var(--chain-peak);}
+.w-peak  .chain-weight-bar{background:var(--chain-peak);}
+.w-ok    .chain-dot{background:var(--chain-ok);border-color:var(--chain-ok);}
+.w-ok    .chain-weight-bar{background:var(--chain-ok);}
+.w-warn  .chain-dot{background:var(--chain-warn);border-color:var(--chain-warn);}
+.w-warn  .chain-weight-bar{background:var(--chain-warn);}
+.w-bad   .chain-dot{background:var(--chain-bad);border-color:var(--chain-bad);}
+.w-bad   .chain-weight-bar{background:var(--chain-bad);}
+.w-crit  .chain-dot{background:var(--chain-crit);border-color:var(--chain-crit);}
+.w-crit  .chain-weight-bar{background:var(--chain-crit);}
+/* note tooltip */
+.chain-note-popup{display:none;position:fixed;z-index:2000;max-width:260px;padding:.6rem .85rem;background:var(--surface3);border:1px solid var(--border);border-radius:3px;box-shadow:0 8px 28px rgba(0,0,0,.55);font-family:var(--f-bn);font-size:.72rem;color:var(--ink-body);line-height:1.6;pointer-events:none;}
+.chain-note-popup.show{display:block;}
+
+/* ── IMAGES ── */
+.img-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;padding:.5rem;}
+.img-thumb{aspect-ratio:1;border-radius:2px;overflow:hidden;border:1px solid var(--border2);cursor:pointer;transition:transform .2s,border-color .2s;position:relative;}
+.img-thumb:hover{transform:scale(1.04);border-color:var(--gold);}
+.img-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .3s;}
+[data-theme="dark"] .img-thumb img{filter:brightness(.82) saturate(.75);}
+[data-theme="light"] .img-thumb img{filter:brightness(.92) saturate(.9);}
+.img-thumb:hover img{filter:brightness(1) saturate(1)!important;}
+.img-cap{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.72);color:rgba(232,220,200,.9);font-family:var(--f-bn);font-size:.55rem;padding:.3rem .45rem;line-height:1.3;opacity:0;transition:opacity .2s;}
+.img-thumb:hover .img-cap{opacity:1;}
+.img-more-btn{display:block;width:100%;padding:.4rem;background:none;border:none;border-top:1px solid var(--border2);cursor:pointer;font-family:var(--f-label);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-dk);transition:color .2s;text-align:center;}
+.img-more-btn:hover{color:var(--gold);}
+
+/* ── EVENTS / LINKS ── */
+.ev-item,.link-item{display:flex;align-items:flex-start;gap:.45rem;padding:.5rem 0;border-bottom:1px solid var(--border2);text-decoration:none;transition:all .2s;border-radius:2px;}
+.ev-item:last-child,.link-item:last-child{border-bottom:none;}
+.ev-item:hover,.link-item:hover{padding-left:.35rem;}
+.ev-text,.link-text{font-family:var(--f-bn);font-size:.8rem;color:var(--ink-sub);line-height:1.45;flex:1;transition:color .2s;}
+@media(max-width:640px){.ev-text,.link-text{font-size:.6rem;}}
+.ev-item:hover .ev-text,.link-item:hover .link-text{color:var(--gold);}
+
+/* ── ACTIONS ── */
+.action-row{display:flex;flex-direction:column;gap:.5rem;}
+.action-btn{display:flex;align-items:center;gap:.5rem;padding:.45rem .75rem;border-radius:2px;cursor:pointer;font-family:var(--f-label);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--border);color:var(--ink-sub);background:none;text-decoration:none;transition:all .2s;}
+.action-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);transform:translateX(2px);}
+.copy-ok{font-family:var(--f-body);font-size:.8rem;color:var(--gold);display:none;padding:.2rem 0;}
+
+/* ── MORE HADITH GRID ── */
+.more-section{margin-top:2.5rem;}
+.more-head{display:flex;align-items:center;gap:.8rem;margin-bottom:1.2rem;}
+.more-head::before,.more-head::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+.more-head span{font-family:var(--f-label);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-dk);white-space:nowrap;}
+.more-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;}
+@media(max-width:1100px){.more-grid{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:860px){.more-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:560px){.more-grid{grid-template-columns:repeat(2,1fr);gap:.65rem;}}
+@media(max-width:360px){.more-grid{grid-template-columns:1fr;}}
+
+.h-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;display:flex;flex-direction:column;text-decoration:none;color:inherit;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35);transition:transform .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,box-shadow .25s;opacity:0;transform:translateY(14px);animation:cardIn .4s ease forwards;}
+@keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+.h-card:hover{transform:translateY(-4px);border-color:var(--gold-dk);box-shadow:0 10px 32px rgba(0,0,0,.5);}
+.h-cover-wrap{width:100%;aspect-ratio:1/1;overflow:hidden;position:relative;background:var(--surface2);flex-shrink:0;}
+.h-cover{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease,filter .3s;}
+[data-theme="dark"] .h-cover{filter:brightness(.82) saturate(.72);}
+[data-theme="light"] .h-cover{filter:brightness(.9) saturate(.85);}
+.h-card:hover .h-cover{transform:scale(1.06);filter:brightness(1) saturate(1)!important;}
+.h-cover-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--surface3);color:var(--gold-dk);font-size:1.8rem;}
+.h-body{padding:.7rem .75rem .85rem;display:flex;flex-direction:column;gap:.3rem;flex:1;}
+.h-title{font-family:var(--f-head);font-size:.8rem;font-weight:700;color:var(--ink);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.h-title.bn{font-family:var(--f-bn);font-size:.75rem;}
+.h-card:hover .h-title{color:var(--gold);}
+.h-book{font-family:var(--f-label);font-size:.46rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-dk);line-height:1.2;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+.h-footer{margin-top:auto;padding-top:.5rem;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.h-year{font-family:var(--f-label);font-size:.44rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);}
+.h-arrow{color:var(--gold-dk);transition:transform .2s;display:flex;align-items:center;}
+.h-card:hover .h-arrow{transform:translateX(3px);color:var(--gold);}
+
+/* ── LIGHTBOX ── */
+#lightbox{display:none;position:fixed;inset:0;z-index:9000;background:var(--overlay);align-items:center;justify-content:center;flex-direction:column;gap:.75rem;backdrop-filter:blur(8px);}
+#lightbox.open{display:flex;}
+#lightbox img{max-width:min(90vw,960px);max-height:80vh;object-fit:contain;border-radius:2px;box-shadow:0 16px 64px rgba(0,0,0,.8);}
+#lb-cap{font-family:var(--f-bn);font-size:.85rem;color:rgba(232,220,200,.75);text-align:center;max-width:600px;line-height:1.5;}
+.lb-actions{display:flex;gap:.65rem;}
+.lb-btn{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--f-label);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.38rem .85rem;border-radius:1px;cursor:pointer;text-decoration:none;transition:all .2s;border:1px solid rgba(232,220,200,.3);color:rgba(232,220,200,.8);background:rgba(255,255,255,.06);}
+.lb-btn:hover{border-color:var(--gold-lt);color:var(--gold-lt);background:rgba(196,154,48,.1);}
+
+/* ── SKELETON ── */
+.skel{background:linear-gradient(90deg,rgba(196,154,48,.06) 25%,rgba(196,154,48,.14) 50%,rgba(196,154,48,.06) 75%);background-size:200% 100%;animation:shim 1.3s infinite;border-radius:2px;}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;}
+
+/* ── 404 ── */
+.s404{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:1rem;text-align:center;padding:2rem;}
+.s404 h2{font-family:var(--f-head);font-size:1.8rem;color:var(--ink);}
+.s404 p{font-family:var(--f-body);font-size:1rem;color:var(--ink-sub);}
+
+/* ── ANIMATIONS ── */
+.fade-in{opacity:0;transform:translateY(16px);animation:fadeUp .5s ease forwards;}
+.d1{animation-delay:.06s;} .d2{animation-delay:.13s;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<!-- NARRATOR NOTE POPUP -->
+<div class="chain-note-popup" id="notePopup"></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <div class="lb-actions">
+    <a id="lb-dl" href="#" download class="lb-btn">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download
+    </a>
+    <button class="lb-btn" onclick="closeLB()">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Close
+    </button>
+  </div>
+  <img id="lb-img" src="" alt=""/>
+  <div id="lb-cap"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="../index.html" class="logo">Safeenah</a>
+  <div class="nav-links">
+    <a href="../home.html" class="nav-a">Home</a>
+    <a href="../timeline.html" class="nav-a">Timeline</a>
+    <a href="../hadith.html" class="nav-a">Hadith</a>
+    <a href="../about.html" class="nav-a">About</a>
+    <a href="../submit.html" class="nav-a">Submit Issue</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <span id="themeLbl">Light</span>
+    </button>
+    <button id="ham" aria-label="Menu" aria-expanded="false">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<div id="mob">
+  <a href="../home.html" class="nav-a">Home</a>
+  <a href="../timeline.html" class="nav-a">Timeline</a>
+  <a href="../hadith.html" class="nav-a">Hadith</a>
+  <a href="../about.html" class="nav-a">About</a>
+  <a href="../submit.html" class="nav-a">Submit Issue</a>
+</div>
+
+<main style="min-height:100vh;">
+
+  <!-- SKELETON -->
+  <div id="st-load">
+    <div class="skel" style="width:100%;height:clamp(200px,34vw,440px);margin-top:52px;border-radius:0;"></div>
+    <div style="max-width:1080px;margin:-4.5rem auto 0;padding:0 1.5rem;position:relative;z-index:2;">
+      <div class="skel" style="height:1.3rem;width:6rem;margin-bottom:1.4rem;border-radius:1px;"></div>
+      <div style="display:grid;grid-template-columns:1fr 280px;gap:1.6rem;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:2rem;">
+          <div class="skel" style="height:.6rem;width:5rem;margin-bottom:.9rem;border-radius:50px;"></div>
+          <div class="skel" style="height:2.2rem;width:78%;margin-bottom:.7rem;"></div>
+          <div class="skel" style="height:.85rem;width:55%;margin-bottom:1.2rem;"></div>
+          <div class="skel" style="height:2.5rem;width:100%;margin-bottom:.8rem;"></div>
+          <div class="skel" style="height:1rem;width:100%;margin-bottom:.45rem;"></div>
+          <div class="skel" style="height:1rem;width:96%;margin-bottom:.45rem;"></div>
+          <div class="skel" style="height:1rem;width:88%;"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div class="skel" style="height:180px;border-radius:3px;"></div>
+          <div class="skel" style="height:120px;border-radius:3px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HADITH DETAIL -->
+  <div id="st-hd" style="display:none;">
+    <div class="banner-wrap" id="bannerWrap">
+      <img id="bannerImg" src="" alt=""/>
+      <div class="banner-arabic-overlay" id="arabicOverlay" style="display:none;">
+        <div class="banner-arabic-text" id="arabicOverlayText"></div>
+      </div>
+    </div>
+
+    <div class="page-wrap">
+      <a href="../hadith.html" class="back-btn fade-in">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Hadith Collection
+      </a>
+
+      <div class="layout">
+        <!-- LEFT -->
+        <div class="fade-in">
+          <div class="content-card">
+            <!-- Meta -->
+            <div class="hd-meta">
+              <span class="year-badge" id="yearBadge"></span>
+              <span class="meta-sep" id="sepAuthor" style="display:none;">·</span>
+              <span class="meta-chip author" id="metaAuthor" style="display:none;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span class="meta-chip-text" id="metaAuthorText"></span>
+              </span>
+              <span class="meta-sep" id="sepDate" style="display:none;">·</span>
+              <span class="meta-chip" id="metaDate" style="display:none;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                <span class="meta-chip-text" id="metaDateText"></span>
+              </span>
+              <span class="meta-sep" id="sepManhaj" style="display:none;">·</span>
+              <span class="meta-chip" id="metaManhaj" style="display:none;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span class="meta-chip-text" id="metaManhajText"></span>
+              </span>
+            </div>
+
+            <h1 class="hd-title" id="hdTitle"></h1>
+            <p class="hd-subtitle" id="hdSubtitle" style="display:none;"></p>
+            <div class="arabic-block" id="arabicBlock" style="display:none;"></div>
+            <div class="bangla-block bn" id="banglaBlock" style="display:none;"></div>
+            <div class="rule" id="ruleMain" style="display:none;"><span>◆</span></div>
+            <div class="hd-body" id="hdBody"></div>
+
+            <!-- Perspectives -->
+            <div id="perspSection" style="display:none;">
+              <div class="rule"><span>◆</span></div>
+              <p class="sec-head">Scholarly Perspectives</p>
+              <div class="persp-wrap" id="perspWrap"></div>
+            </div>
+
+            <!-- Dialogue -->
+            <div id="dialogueSection" style="display:none;">
+              <div class="rule"><span>◆</span></div>
+              <p class="sec-head">Simulated Artificial Dialogue</p>
+              <div class="dialogue-wrap" id="dialogueWrap"></div>
+            </div>
+
+            <div class="tags-wrap" id="tagsWrap"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="side-col fade-in d1">
+
+          <!-- Book Information -->
+          <div class="widget" id="wBook">
+            <div class="widget-head">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Book Information
+            </div>
+            <div class="widget-body" style="padding:.5rem .95rem;">
+              <table class="book-table" id="bookTable"></table>
+            </div>
+          </div>
+
+          <!-- Chain of Narrators -->
+          <div class="widget" id="wChain" style="display:none;">
+            <div class="widget-head">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="14"/><circle cx="12" cy="17" r="3"/></svg>
+              Chain of Narrators
+            </div>
+            <div class="widget-body">
+              <button class="chain-toggle-btn" id="chainToggle" onclick="toggleChain()">
+                <span id="chainToggleLabel">Show narrators</span>
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="chain-body" id="chainBody">
+                <div class="chain-wrap" id="chainList"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Images -->
+          <div class="widget" id="wImg" style="display:none;">
+            <div class="widget-head">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Images
+            </div>
+            <div class="img-grid" id="imgGrid"></div>
+            <div id="imgMore" style="display:none;">
+              <div class="img-grid" id="imgGridMore" style="display:none;"></div>
+              <button class="img-more-btn" id="imgMoreBtn" onclick="toggleMoreImgs()">Show more images ▾</button>
+            </div>
+          </div>
+
+          <!-- Related Events -->
+          <div class="widget" id="wEvents" style="display:none;">
+            <div class="widget-head">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Related Events
+            </div>
+            <div class="widget-body" id="eventsList"></div>
+          </div>
+
+          <!-- Further Reading -->
+          <div class="widget" id="wLinks" style="display:none;">
+            <div class="widget-head">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Further Reading
+            </div>
+            <div class="widget-body" id="linksList"></div>
+          </div>
+
+          <!-- Actions -->
+          <div class="widget">
+            <div class="widget-body">
+              <div class="action-row">
+                <button class="action-btn" onclick="copyLink()">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                  Copy Page Link
+                </button>
+                <p class="copy-ok" id="copyOk">Link copied ✓</p>
+                <a href="https://github.com/Irshad-11/Safeenah/issues" class="action-btn">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                  Submit an Issue
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- MORE HADITH -->
+      <div class="more-section fade-in d2" id="moreSection" style="display:none;">
+        <div class="more-head"><span>More Hadith</span></div>
+        <div class="more-grid" id="moreGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 404 -->
+  <div id="st-404" style="display:none;" class="s404">
+    <p style="font-family:var(--f-label);font-size:2.5rem;color:var(--gold-dk);">✦</p>
+    <h2>Hadith Not Found</h2>
+    <p>The record you seek does not exist in this archive.</p>
+    <a href="../hadith.html" class="back-btn" style="margin-top:.5rem;">← Return to Hadith Collection</a>
+  </div>
+</main>
+
+<script>
+/* THEME */
+const savedTheme = localStorage.getItem('sf-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+updateThemeBtn(savedTheme);
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('sf-theme', next);
+  updateThemeBtn(next);
+}
+function updateThemeBtn(t) {
+  const l = document.getElementById('themeLbl');
+  if (l) l.textContent = t === 'dark' ? 'Light' : 'Dark';
+}
+
+/* MOBILE MENU */
+const ham = document.getElementById('ham');
+const mob = document.getElementById('mob');
+function openMob()  { mob.classList.add('show'); ham.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; }
+function closeMob() { mob.classList.remove('show'); ham.setAttribute('aria-expanded','false'); document.body.style.overflow=''; }
+ham.addEventListener('click', e => { e.stopPropagation(); mob.classList.contains('show') ? closeMob() : openMob(); });
+document.addEventListener('click', e => { if (!mob.contains(e.target) && !ham.contains(e.target)) closeMob(); });
+mob.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+document.addEventListener('keydown', e => { if (e.key==='Escape') { closeMob(); closeLB(); closeNote(); } });
+
+/* LIGHTBOX */
+function openLB(src, cap) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-img').alt = cap || '';
+  document.getElementById('lb-cap').textContent = cap || '';
+  document.getElementById('lb-dl').href = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('lightbox').addEventListener('click', e => { if (e.target === document.getElementById('lightbox')) closeLB(); });
+
+/* CHAIN TOGGLE */
+let chainOpen = false;
+function toggleChain() {
+  chainOpen = !chainOpen;
+  const body = document.getElementById('chainBody');
+  const btn  = document.getElementById('chainToggle');
+  const lbl  = document.getElementById('chainToggleLabel');
+  body.classList.toggle('open', chainOpen);
+  btn.classList.toggle('open', chainOpen);
+  lbl.textContent = chainOpen ? 'Hide narrators' : 'Show narrators';
+  if (chainOpen) {
+    document.querySelectorAll('.chain-weight-bar').forEach(b => {
+      const w = parseInt(b.dataset.w || 0);
+      setTimeout(() => { b.style.width = (w * 10) + '%'; }, 50);
+    });
+  }
+}
+
+/* NARRATOR NOTE POPUP */
+const notePopup = document.getElementById('notePopup');
+function showNote(e, note) {
+  if (!note) return;
+  notePopup.textContent = note;
+  notePopup.classList.add('show');
+  posNote(e);
+}
+function posNote(e) {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  let x = e.clientX + 14, y = e.clientY + 14;
+  notePopup.style.left = x + 'px'; notePopup.style.top = y + 'px';
+  requestAnimationFrame(() => {
+    const r = notePopup.getBoundingClientRect();
+    if (r.right > vw - 10) notePopup.style.left = (e.clientX - r.width - 10) + 'px';
+    if (r.bottom > vh - 10) notePopup.style.top  = (e.clientY - r.height - 10) + 'px';
+  });
+}
+function closeNote() { notePopup.classList.remove('show'); }
+
+/* IMAGES */
+const SHOW_FIRST = 4;
+let imgMoreOpen = false;
+function toggleMoreImgs() {
+  imgMoreOpen = !imgMoreOpen;
+  document.getElementById('imgGridMore').style.display = imgMoreOpen ? 'grid' : 'none';
+  document.getElementById('imgMoreBtn').textContent = imgMoreOpen ? 'Show fewer ▴' : 'Show more images ▾';
+}
+function buildImages(images) {
+  if (!images || !images.length) return;
+  document.getElementById('wImg').style.display = '';
+  const grid  = document.getElementById('imgGrid');
+  const mGrid = document.getElementById('imgGridMore');
+  const mBtn  = document.getElementById('imgMoreBtn');
+  const prim  = images.slice(0, SHOW_FIRST);
+  const sec   = images.slice(SHOW_FIRST);
+  prim.forEach(img => grid.appendChild(makeThumb(img)));
+  if (sec.length) {
+    document.getElementById('imgMore').style.display = '';
+    sec.forEach(img => mGrid.appendChild(makeThumb(img)));
+    mBtn.textContent = `Show ${sec.length} more image${sec.length>1?'s':''} ▾`;
+  }
+}
+function makeThumb(src) {
+  const url = typeof src === 'string' ? src : (src.url || '');
+  const cap = typeof src === 'object' ? (src.text || src.description || src.caption || '') : '';
+  const div = document.createElement('div');
+  div.className = 'img-thumb';
+  div.onclick   = () => openLB(url, cap);
+  const im = document.createElement('img');
+  im.src = url; im.alt = cap; im.loading = 'lazy';
+  div.appendChild(im);
+  if (cap) {
+    const cd = document.createElement('div');
+    cd.className = 'img-cap'; cd.textContent = cap;
+    div.appendChild(cd);
+  }
+  return div;
+}
+
+/* COPY */
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(() => {
+    const el = document.getElementById('copyOk');
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 2400);
+  });
+}
+
+/* UTILS */
+function qp(k) { return new URLSearchParams(location.search).get(k) || ''; }
+function isBn(s) { return /[\u0980-\u09FF]/.test(s || ''); }
+function x(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* CHAIN WEIGHT CLASS */
+function weightClass(w) {
+  const n = Number(w);
+  if (n === 10) return 'w-peak';
+  if (n >= 7)   return 'w-ok';
+  if (n >= 5)   return 'w-warn';
+  if (n >= 3)   return 'w-bad';
+  return 'w-crit';
+}
+
+/* DATA */
+const DATA_BASE    = '../data/hadith/';
+const HADITH_FILES = ['index.json', 'extrasample.json'];
+
+async function loadAll() {
+  const res = await Promise.allSettled(
+    HADITH_FILES.map(async f => {
+      const r = await fetch(DATA_BASE + f, { cache:'no-cache' });
+      if (!r.ok) throw 0;
+      const d = await r.json();
+      return Array.isArray(d) ? d : [d];
+    })
+  );
+  const all = res.filter(r => r.status==='fulfilled').flatMap(r => r.value);
+  if (all.length) return all;
+
+  /* demo fallback */
+  return [{
+    id:1, slug:'importance-of-intention-niyyah',
+    title:'নিয়ত বা সংকল্পের গুরুত্ব', subTitle:'The Hadith of Intention',
+    banner:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=500&fit=crop',
+    year:'622 CE', enlist_author:'হাফেজ আবদুল্লাহ', enlist_date:'2026-06-07',
+    book_name:'সহীহ বুখারী', book_author:'ইমাম বুখারী', author_manhaj:'Sunni',
+    book_year:'846 CE', publication:'ইসলামিক ফাউন্ডেশন', edition:'২য় সংস্করণ',
+    arabic_script:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى',
+    bangla_script:'কাজ পরিচালিত হয় নিয়তের ওপর এবং প্রত্যেক ব্যক্তি তার নিয়ত অনুযায়ী প্রতিফল পাবে।',
+    details:'<p>এই হাদীসটি ইসলামের অন্যতম মৌলিক ভিত্তি। ইমাম শাফেয়ী (র.)-এর মতে, এটি দ্বীনের এক-তৃতীয়াংশ জ্ঞান ধারণ করে।</p>',
+    chain_of_narrator:[
+      { name:'হযরত উমর ইবনুল খাত্তাব (রা.)', weight:10, Note:'সর্বোচ্চ বিশ্বস্ত সাহাবী।' },
+      { name:'আলকামা ইবনে ওয়াক্কাস', weight:7, Note:'নির্ভরযোগ্য তাবেয়ী।' },
+      { name:'মুহাম্মদ ইবনে ইব্রাহিম আল-তাইমি', weight:4, Note:'কিছু দুর্বলতা রয়েছে।' },
+      { name:'ইয়াহইয়া ইবনে সাঈদ আল-আনসারী', weight:2, Note:'বর্ণনায় সমস্যা আছে।' }
+    ],
+    images:[
+      { url:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=600&fit=crop', text:'মদীনার ঐতিহাসিক দৃশ্য' },
+      { url:'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&h=600&fit=crop', text:'পুরনো পাণ্ডুলিপি' }
+    ],
+    events:[{ text:'হিজরতের ঐতিহাসিক প্রেক্ষাপট এবং উম্মে কায়স নামক এক মহিলাকে বিয়ে করার ঘটনা', url:'#' }],
+    prespective_explanation:{
+      sunni:'<p>সুন্নী আলেমদের মতে, এটি সমস্ত ইবাদতের মূল চাবিকাঠি। সালাত, যাকাত ও সিয়ামের মতো বাহ্যিক আমলসমূহ নিয়ত ছাড়া আল্লাহর নিকট গ্রহণযোগ্য হবে না।</p>',
+      shiya:'<p>শিয়া ফিকহেও নিয়তের গুরুত্ব সমভাবে স্বীকৃত। তাদের মতে, <em>নিয়ত হচ্ছে আমলের রূহ বা আত্মা</em>। নিয়তহীন আমল একটি মৃতদেহের সমতুল্য।</p>'
+    },
+    simulated_dialogue:'<p><strong>A:</strong> যদি কেউ সমাজসেবার উদ্দেশ্যে দান করে কিন্তু আল্লাহর সন্তুষ্টির নিয়ত না থাকে, তবে কি সে সওয়াব পাবে?</p><p><strong>B:</strong> হাদীসের আলোকেই স্পষ্ট যে, সে দুনিয়াবি প্রশংসা পাবে কিন্তু আখিরাতে কোনো প্রতিদান পাবে না।</p>',
+    links:[{ text:'সূক্ষ্ম রিয়া ও নিয়তের পরিশুদ্ধি', url:'#' }],
+    tags:['নিয়ত','ইখলাস','আমল','বুখারী']
+  }];
+}
+
+/* RENDER */
+async function init() {
+  const slug = qp('id') || qp('slug');
+  const all  = await loadAll();
+  const hd   = all.find(h => (h.slug && h.slug===slug) || String(h.id)===slug) || (slug ? null : all[0]);
+
+  document.getElementById('st-load').style.display = 'none';
+  if (!hd) { document.getElementById('st-404').style.display = 'flex'; return; }
+  document.title = (hd.title || 'Hadith') + ' — Safeenah';
+
+  /* BANNER */
+  const bi = document.getElementById('bannerImg');
+  if (hd.banner) { bi.src = hd.banner; bi.alt = hd.title || ''; }
+  else {
+    bi.style.display = 'none';
+    document.getElementById('bannerWrap').insertAdjacentHTML('afterbegin','<div class="banner-placeholder"></div>');
+    if (hd.arabic_script) {
+      document.getElementById('arabicOverlay').style.display = 'flex';
+      document.getElementById('arabicOverlayText').textContent = hd.arabic_script;
+    }
+  }
+
+  /* META */
+  document.getElementById('yearBadge').textContent = hd.year || '';
+  if (hd.enlist_author) { document.getElementById('metaAuthorText').textContent=hd.enlist_author; document.getElementById('metaAuthor').style.display=''; document.getElementById('sepAuthor').style.display=''; }
+  if (hd.enlist_date)   { document.getElementById('metaDateText').textContent=hd.enlist_date;    document.getElementById('metaDate').style.display='';    document.getElementById('sepDate').style.display=''; }
+  if (hd.author_manhaj) { document.getElementById('metaManhajText').textContent=hd.author_manhaj; document.getElementById('metaManhaj').style.display=''; document.getElementById('sepManhaj').style.display=''; }
+
+  /* TITLE */
+  const te = document.getElementById('hdTitle');
+  te.textContent = hd.title || '';
+  if (isBn(hd.title)) te.classList.add('bn');
+
+  /* SUBTITLE */
+  if (hd.subTitle) { const st=document.getElementById('hdSubtitle'); st.textContent=hd.subTitle; st.style.display=''; if(isBn(hd.subTitle)) st.classList.add('bn'); }
+
+  /* ARABIC */
+  if (hd.arabic_script) { const ab=document.getElementById('arabicBlock'); ab.textContent=hd.arabic_script; ab.style.display=''; }
+
+  /* BANGLA */
+  if (hd.bangla_script) { const bb=document.getElementById('banglaBlock'); bb.textContent=hd.bangla_script; bb.style.display=''; }
+
+  /* DETAILS */
+  if (hd.details) { document.getElementById('ruleMain').style.display=''; const b=document.getElementById('hdBody'); b.innerHTML=hd.details; if(isBn(hd.details)) b.classList.add('bn'); }
+
+  /* PERSPECTIVES — HTML rendered */
+  const persp = hd.prespective_explanation || hd.perspective_explanation;
+  if (persp && Object.keys(persp).length) {
+    document.getElementById('perspSection').style.display = '';
+    const pw = document.getElementById('perspWrap');
+    const labels = { sunni:'Sunni Perspective', shiya:'Shia Perspective', shia:'Shia Perspective' };
+    Object.entries(persp).forEach(([key, val]) => {
+      const d = document.createElement('div');
+      d.className = 'persp-item';
+      d.innerHTML = `<span class="persp-label">${x(labels[key.toLowerCase()]||key)}</span><div class="persp-body">${val}</div>`;
+      pw.appendChild(d);
+    });
+  }
+
+  /* DIALOGUE — HTML rendered, A/B rows */
+  const dlg = hd.simulated_dialogue;
+  if (dlg && typeof dlg === 'string' && dlg.trim()) {
+    document.getElementById('dialogueSection').style.display = '';
+    /* wrap each <p> as a labelled row A, B, A, B... */
+    const tmp = document.createElement('div');
+    tmp.innerHTML = dlg;
+    const paras = tmp.querySelectorAll('p');
+    const dw = document.getElementById('dialogueWrap');
+    if (paras.length) {
+      paras.forEach((p, i) => {
+        const row = document.createElement('div');
+        row.className = 'dlg-row';
+        const lbl = document.createElement('span');
+        lbl.className = 'dlg-label';
+        lbl.textContent = String.fromCharCode(65 + (i % 26)) + ':';
+        const bub = document.createElement('div');
+        bub.className = 'dlg-bubble';
+        bub.innerHTML = p.innerHTML;
+        row.appendChild(lbl); row.appendChild(bub);
+        dw.appendChild(row);
+      });
+    } else {
+      /* raw HTML with no <p> */
+      const row = document.createElement('div');
+      row.className = 'dlg-row';
+      const lbl = document.createElement('span'); lbl.className='dlg-label'; lbl.textContent='A:';
+      const bub = document.createElement('div');  bub.className='dlg-bubble'; bub.innerHTML=dlg;
+      row.appendChild(lbl); row.appendChild(bub);
+      dw.appendChild(row);
+    }
+  } else if (dlg && typeof dlg === 'object') {
+    /* legacy PersonA / PersonB object */
+    if (dlg.PersonA || dlg.PersonB) {
+      document.getElementById('dialogueSection').style.display = '';
+      const dw = document.getElementById('dialogueWrap');
+      const entries = Object.entries(dlg);
+      entries.forEach(([, val], i) => {
+        const row = document.createElement('div'); row.className='dlg-row';
+        const lbl = document.createElement('span'); lbl.className='dlg-label'; lbl.textContent=String.fromCharCode(65+i)+':';
+        const bub = document.createElement('div');  bub.className='dlg-bubble'; bub.textContent=val;
+        row.appendChild(lbl); row.appendChild(bub);
+        dw.appendChild(row);
+      });
+    }
+  }
+
+  /* TAGS */
+  if (hd.tags && hd.tags.length) {
+    const tw = document.getElementById('tagsWrap');
+    hd.tags.forEach(t => { const s=document.createElement('span'); s.className='tag-chip'; s.textContent=t; tw.appendChild(s); });
+  }
+
+  /* BOOK TABLE */
+  const fields = [
+    ['Book Name',   hd.book_name,    true],
+    ['Book Author', hd.book_author,  true],
+    ['Manhaj',      hd.author_manhaj,false],
+    ['Publication', hd.publication,  true],
+    ['Edition',     hd.edition,      true],
+    ['Book Year',   hd.book_year,    false],
+    ['Enlisting By',hd.enlist_author,true],
+    ['Enlisted On', hd.enlist_date,  false],
+  ].filter(f => f[1]);
+  const bt = document.getElementById('bookTable');
+  fields.forEach(([label, val, bn]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${x(label)}</td><td class="${bn?'':'en'}">${x(val)}</td>`;
+    bt.appendChild(tr);
+  });
+
+  /* CHAIN OF NARRATORS */
+  if (hd.chain_of_narrator && hd.chain_of_narrator.length) {
+    document.getElementById('wChain').style.display = '';
+    document.getElementById('chainToggleLabel').textContent = `Show ${hd.chain_of_narrator.length} narrator${hd.chain_of_narrator.length>1?'s':''}`;
+    const cl = document.getElementById('chainList');
+    hd.chain_of_narrator.forEach(n => {
+      const w   = Number(n.weight ?? 10);
+      const wc  = weightClass(w);
+      const div = document.createElement('div');
+      div.className = `chain-item ${wc}`;
+      div.title     = n.Note ? n.Note : '';
+      if (n.Note) {
+        div.addEventListener('click', e => { e.stopPropagation(); showNote(e, n.Note); });
+        div.addEventListener('mousemove', e => { if (notePopup.classList.contains('show')) posNote(e); });
+        div.addEventListener('mouseleave', closeNote);
+      }
+      div.innerHTML = `
+        <div class="chain-line-col">
+          <div class="chain-dot"></div>
+          <div class="chain-line"></div>
+        </div>
+        <div class="chain-info">
+          <div class="chain-name">${x(n.name||n)}</div>
+          <div class="chain-weight-bar" data-w="${w}" style="width:0"></div>
+        </div>`;
+      cl.appendChild(div);
+    });
+  }
+
+  /* IMAGES */
+  const imgs = hd.images;
+  if (imgs && imgs.length) {
+    const norm = imgs.map(i => typeof i==='string' ? {url:i} : i).filter(i => i.url);
+    if (norm.length) buildImages(norm);
+  }
+
+  /* EVENTS */
+  if (hd.events && hd.events.length) {
+    document.getElementById('wEvents').style.display = '';
+    const el = document.getElementById('eventsList');
+    hd.events.forEach(ev => {
+      const a = document.createElement('a');
+      a.href = ev.url||'#'; a.target='_blank'; a.rel='noopener noreferrer'; a.className='ev-item';
+      a.innerHTML = `<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold-dk);margin-top:3px;flex-shrink:0;transition:transform .2s;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span class="ev-text">${x(ev.text)}</span>`;
+      el.appendChild(a);
+    });
+  }
+
+  /* LINKS */
+  if (hd.links && hd.links.length) {
+    document.getElementById('wLinks').style.display = '';
+    const ll = document.getElementById('linksList');
+    hd.links.forEach(lk => {
+      const a = document.createElement('a');
+      a.href = lk.url||'#'; a.target='_blank'; a.rel='noopener noreferrer'; a.className='link-item';
+      a.innerHTML = `<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold-dk);margin-top:3px;flex-shrink:0;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span class="link-text">${x(lk.text)}</span>`;
+      ll.appendChild(a);
+    });
+  }
+
+  /* MORE HADITH — compact cards */
+  const others = all.filter(h => (h.slug||String(h.id)) !== (hd.slug||String(hd.id))).slice(0,10);
+  if (others.length) {
+    document.getElementById('moreSection').style.display = '';
+    const mg = document.getElementById('moreGrid');
+    others.forEach((r, i) => {
+      const imgSrc = r.banner || (Array.isArray(r.images) && r.images[0] ? (typeof r.images[0]==='string' ? r.images[0] : r.images[0].url) : '');
+      const a = document.createElement('a');
+      a.href = `index.html?id=${encodeURIComponent(r.slug||r.id)}`;
+      a.className = 'h-card';
+      a.style.animationDelay = (i * 40) + 'ms';
+      const titleBn = isBn(r.title||'');
+      a.innerHTML = `
+        <div class="h-cover-wrap">
+          ${imgSrc
+            ? `<img class="h-cover" src="${x(imgSrc)}" alt="${x(r.title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="h-cover-placeholder" style="display:none;">📖</div>`
+            : `<div class="h-cover-placeholder">📖</div>`}
+        </div>
+        <div class="h-body">
+          <div class="h-title${titleBn?' bn':''}">${x(r.title||'')}</div>
+          ${r.book_name ? `<div class="h-book">${x(r.book_name)}</div>` : ''}
+          <div class="h-footer">
+            <span class="h-year">${x(r.year||'')}</span>
+            <span class="h-arrow"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </div>
+        </div>`;
+      mg.appendChild(a);
+    });
+  }
+
+  document.getElementById('st-hd').style.display = '';
+}
+
+init();
+</script>
+</body>
+</html>
