@@ -1,1087 +1,1401 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Generate JSON — Safeenah</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JSON Generator — Safeenah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-/* ═══════════════════════════════ TOKENS ═══════════════════════════════ */
-:root {
-  --f-head:  'Libre Baskerville', Georgia, serif;
-  --f-body:  'Cormorant Garamond', Georgia, serif;
-  --f-label: 'Cinzel', serif;
-  --f-mono:  'JetBrains Mono', monospace;
-  --f-bn:    'Hind Siliguri', sans-serif;
-}
+:root { --f-display:'Playfair Display',Georgia,serif; --f-bn:'Hind Siliguri',sans-serif; --f-mono:'JetBrains Mono',monospace; }
 [data-theme="dark"] {
-  --bg:        #0c0a08;
-  --bg2:       #131009;
-  --surface:   #181410;
-  --surface2:  #1f1b13;
-  --surface3:  #252018;
-  --border:    rgba(180,140,60,0.16);
-  --border2:   rgba(180,140,60,0.09);
-  --gold:      #c49a30;
-  --gold-lt:   #e0b84a;
-  --gold-dk:   #8a6518;
-  --gold-dim:  rgba(196,154,48,0.09);
-  --gold-glow: rgba(196,154,48,0.15);
-  --ink:       #ede0c8;
-  --ink-2:     #cdbf9f;
-  --ink-3:     #8a7a5f;
-  --ink-4:     #4e4232;
-  --danger:    #c06040;
-  --success:   #5a9060;
-  --nav-bg:    rgba(5,4,2,0.97);
+  --bg:#0d0b08; --surface:#1a1610; --surface2:#221e14; --surface3:#2a2518;
+  --border:rgba(180,135,45,.2); --border2:rgba(180,135,45,.1);
+  --gold:#c49a30; --gold-lt:#e0b84a; --gold-dk:#8a6518; --gold-dim:rgba(196,154,48,.1);
+  --ink:#f0e4cc; --ink-body:#d8c8a8; --ink-sub:#a89878; --ink-mute:#6a5a42;
+  --card:rgba(26,22,16,.95); --input-bg:rgba(34,30,20,.8);
+  --shadow:0 8px 40px rgba(0,0,0,.7); --code-bg:#111009;
 }
 [data-theme="light"] {
-  --bg:        #f4ead0;
-  --bg2:       #ede0bc;
-  --surface:   #fdf6e6;
-  --surface2:  #f5e8ca;
-  --surface3:  #edddba;
-  --border:    rgba(140,100,30,0.2);
-  --border2:   rgba(140,100,30,0.11);
-  --gold:      #9a6e10;
-  --gold-lt:   #b88820;
-  --gold-dk:   #7a5208;
-  --gold-dim:  rgba(140,100,20,0.08);
-  --gold-glow: rgba(140,100,20,0.12);
-  --ink:       #1a1006;
-  --ink-2:     #2e1e08;
-  --ink-3:     #5a3e18;
-  --ink-4:     #9a7a48;
-  --danger:    #b04030;
-  --success:   #3a7040;
-  --nav-bg:    rgba(244,234,208,0.97);
+  --bg:#f8f0dc; --surface:#fffbf0; --surface2:#f5e8c8; --surface3:#ede0b0;
+  --border:rgba(120,90,20,.22); --border2:rgba(120,90,20,.12);
+  --gold:#8a6010; --gold-lt:#a87820; --gold-dk:#6a4808; --gold-dim:rgba(138,96,16,.1);
+  --ink:#1a1006; --ink-body:#2a1c08; --ink-sub:#5a3e18; --ink-mute:#9a7a48;
+  --card:rgba(255,251,240,.98); --input-bg:rgba(248,240,220,.9);
+  --shadow:0 6px 28px rgba(120,90,20,.15); --code-bg:#f0e8d0;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background-color: var(--bg);
-  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(120,85,15,0.12) 0%, transparent 65%);
-  background-attachment: fixed;
-  color: var(--ink-2);
-  font-family: var(--f-body);
-  font-size: 16px;
-  line-height: 1.65;
-  overflow-x: hidden;
-  min-height: 100vh;
-  transition: background-color 0.3s, color 0.3s;
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink-body);font-family:var(--f-display);font-size:17px;line-height:1.7;min-height:100vh;transition:background .3s,color .3s;}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--gold-dk); border-radius: 3px; }
+/* ── TYPOGRAPHY ── */
+.f-display{font-family:var(--f-display);}
+.f-mono{font-family:var(--f-mono);}
 
-/* ═══════════════════════════════ NAVBAR ═══════════════════════════════ */
-.navbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
-  background: var(--nav-bg); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 1.75rem; height: 50px;
-  transition: background 0.3s;
-}
-.logo { font-family: var(--f-label); font-size: 1rem; letter-spacing: 0.18em; color: var(--gold); text-decoration: none; }
-.nav-a { font-family: var(--f-label); font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-3); text-decoration: none; transition: color 0.2s; }
-.nav-a:hover { color: var(--gold); }
-.theme-btn {
-  background: none; border: 1px solid var(--border); border-radius: 50px;
-  padding: 0.2rem 0.6rem; cursor: pointer; font-family: var(--f-label);
-  font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--gold-dk); transition: all 0.2s;
-}
-.theme-btn:hover { border-color: var(--gold); color: var(--gold); }
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;backdrop-filter:blur(16px);}
+.topbar-logo{font-family:var(--f-display);font-size:1.1rem;font-weight:700;color:var(--gold);letter-spacing:.05em;text-decoration:none;}
+.theme-toggle{display:flex;align-items:center;gap:.5rem;cursor:pointer;background:none;border:1px solid var(--border);border-radius:50px;padding:.3rem .8rem;color:var(--ink-sub);font-family:var(--f-display);font-size:.85rem;transition:all .2s;}
+.theme-toggle:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ═══════════════════════════════ PROGRESS TRACK ═══════════════════════ */
-.step-track {
-  display: flex; align-items: center; justify-content: center;
-  gap: 0; padding: 0 1rem;
-}
-.step-node {
-  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-  cursor: pointer; position: relative; z-index: 1;
-}
-.step-circle {
-  width: 34px; height: 34px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--f-label); font-size: 0.62rem; letter-spacing: 0.05em;
-  border: 1.5px solid var(--border);
-  background: var(--surface2); color: var(--ink-3);
-  transition: all 0.3s;
-}
-.step-node.active .step-circle {
-  border-color: var(--gold); background: var(--gold-dim); color: var(--gold);
-  box-shadow: 0 0 0 4px var(--gold-glow);
-}
-.step-node.done .step-circle {
-  border-color: var(--success); background: rgba(90,144,96,0.12); color: var(--success);
-}
-.step-label {
-  font-family: var(--f-label); font-size: 0.46rem; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--ink-3); text-align: center;
-  white-space: nowrap; transition: color 0.3s;
-}
-.step-node.active .step-label { color: var(--gold); }
-.step-node.done  .step-label  { color: var(--success); }
-.step-connector {
-  flex: 1; height: 1px; max-width: 48px; min-width: 12px;
-  background: var(--border); transition: background 0.4s;
-  margin-bottom: 18px;
-}
-.step-connector.done { background: var(--success); }
+/* ── WELCOME SCREEN ── */
+#screen-welcome{min-height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;text-align:center;}
+.welcome-title{font-family:var(--f-display);font-size:clamp(2rem,6vw,3.8rem);font-weight:900;color:var(--ink);line-height:1.1;margin-bottom:.75rem;letter-spacing:-.01em;}
+.welcome-title span{color:var(--gold);}
+.welcome-sub{font-family:var(--f-display);font-size:clamp(1rem,2.5vw,1.25rem);color:var(--ink-sub);max-width:560px;line-height:1.75;margin-bottom:3rem;font-style:italic;}
 
-/* ═══════════════════════════════ STEP PANELS ══════════════════════════ */
-.step-panel {
-  display: none; animation: slideIn 0.35s ease forwards;
+/* type selector */
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:680px;width:100%;margin-bottom:3.5rem;}
+@media(max-width:540px){.type-grid{grid-template-columns:1fr;}}
+.type-card{
+  border:2px solid var(--border);border-radius:12px;padding:2rem 1.75rem;cursor:pointer;
+  background:var(--surface);text-align:left;transition:all .25s;position:relative;overflow:hidden;
 }
-.step-panel.active { display: block; }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.type-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-dim),transparent);opacity:0;transition:opacity .3s;}
+.type-card:hover{border-color:var(--gold-dk);transform:translateY(-3px);box-shadow:var(--shadow);}
+.type-card:hover::before{opacity:1;}
+.type-card.selected{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,48,.15),var(--shadow);}
+.type-card.selected::before{opacity:1;}
+.type-card-icon{font-size:2.2rem;margin-bottom:.85rem;display:block;}
+.type-card-title{font-family:var(--f-display);font-size:1.25rem;font-weight:700;color:var(--ink);margin-bottom:.4rem;}
+.type-card-desc{font-size:.9rem;color:var(--ink-sub);line-height:1.6;}
+.type-check{position:absolute;top:1rem;right:1rem;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;display:none;align-items:center;justify-content:center;font-size:.75rem;}
+.type-card.selected .type-check{display:flex;}
 
-/* ═══════════════════════════════ FORM ELEMENTS ═══════════════════════ */
-.field-group { margin-bottom: 1.4rem; }
-.field-label {
-  display: block; font-family: var(--f-label); font-size: 0.56rem;
-  letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold-dk);
-  margin-bottom: 0.45rem;
-}
-.field-label .req { color: var(--danger); margin-left: 2px; font-size: 0.7em; }
-.field-hint {
-  font-family: var(--f-body); font-size: 0.78rem; color: var(--ink-3);
-  margin-top: 0.25rem; font-style: italic; line-height: 1.4;
-}
-.field-error {
-  font-family: var(--f-label); font-size: 0.5rem; letter-spacing: 0.12em;
-  color: var(--danger); margin-top: 0.3rem; display: none;
-}
-.field-error.show { display: block; }
+/* sample preview */
+.sample-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;width:100%;text-align:left;margin-bottom:3rem;}
+@media(max-width:640px){.sample-grid{grid-template-columns:1fr;}}
+.sample-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.sample-head{padding:.75rem 1.1rem;background:var(--surface2);border-bottom:1px solid var(--border2);font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-dk);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;}
+.sample-body{padding:.85rem 1.1rem;display:flex;flex-direction:column;gap:.45rem;}
+.skel-row{display:flex;align-items:center;gap:.6rem;}
+.skel-key{font-family:var(--f-mono);font-size:.72rem;color:var(--gold-dk);min-width:120px;flex-shrink:0;}
+.skel-val{height:10px;border-radius:3px;flex:1;background:linear-gradient(90deg,rgba(196,154,48,.1) 0%,rgba(196,154,48,.2) 50%,rgba(196,154,48,.1) 100%);background-size:200% 100%;animation:shim 1.6s infinite;}
+.skel-val.short{flex:0 0 60px;}
+.skel-val.medium{flex:0 0 130px;}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-.inp, .ta, .sel {
-  width: 100%; background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 2px; color: var(--ink); font-family: var(--f-body);
-  font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s;
-  outline: none; appearance: none;
-}
-.inp { padding: 0.6rem 0.85rem; }
-.ta  { padding: 0.65rem 0.85rem; resize: vertical; min-height: 100px; line-height: 1.6; }
-.sel { padding: 0.6rem 0.85rem; cursor: pointer; }
-.inp::placeholder, .ta::placeholder { color: var(--ink-4); font-style: italic; }
-.inp:focus, .ta:focus, .sel:focus {
-  border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow);
-}
-.inp.error, .ta.error { border-color: var(--danger); }
+/* resume option */
+.resume-btn{display:inline-flex;align-items:center;gap:.6rem;padding:.65rem 1.4rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:none;color:var(--ink-sub);font-family:var(--f-display);font-size:.95rem;transition:all .2s;margin-bottom:1.5rem;}
+.resume-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
 
-/* radio group */
-.radio-group { display: flex; gap: 0.65rem; flex-wrap: wrap; }
-.radio-card {
-  flex: 1; min-width: 90px;
-  display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
-  padding: 0.7rem 0.5rem; border: 1.5px solid var(--border);
-  border-radius: 3px; cursor: pointer;
-  background: var(--surface2); transition: all 0.2s;
-}
-.radio-card:hover { border-color: var(--gold-dk); }
-.radio-card input { display: none; }
-.radio-card.checked { border-color: var(--gold); background: var(--gold-dim); }
-.radio-card-icon { font-size: 1.3rem; line-height: 1; }
-.radio-card-label {
-  font-family: var(--f-label); font-size: 0.52rem;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3);
-}
-.radio-card.checked .radio-card-label { color: var(--gold); }
+/* primary btn */
+.btn-primary{display:inline-flex;align-items:center;gap:.6rem;padding:.75rem 2.2rem;background:var(--gold);color:#0d0b08;border:none;border-radius:8px;font-family:var(--f-display);font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.02em;}
+.btn-primary:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 6px 20px rgba(196,154,48,.3);}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+.btn-secondary{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.8rem;background:none;color:var(--ink-sub);border:1px solid var(--border);border-radius:8px;font-family:var(--f-display);font-size:.95rem;cursor:pointer;transition:all .2s;}
+.btn-secondary:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:none;color:var(--ink-mute);border:none;font-family:var(--f-display);font-size:.88rem;cursor:pointer;transition:color .2s;border-radius:6px;}
+.btn-ghost:hover{color:var(--gold-dk);background:var(--gold-dim);}
 
-/* dynamic list (sources / images / hadiths / tags) */
-.dyn-list { display: flex; flex-direction: column; gap: 0.65rem; }
-.dyn-row {
-  display: flex; gap: 0.5rem; align-items: flex-start;
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 2px; padding: 0.65rem;
-  transition: border-color 0.2s;
-}
-.dyn-row:focus-within { border-color: var(--gold-dk); }
-.dyn-row-fields { flex: 1; display: flex; flex-direction: column; gap: 0.45rem; }
-.dyn-row-fields .inp { background: var(--surface3); font-size: 0.9rem; padding: 0.45rem 0.65rem; }
-.dyn-remove {
-  background: none; border: 1px solid var(--border); border-radius: 2px;
-  padding: 0.3rem; cursor: pointer; color: var(--ink-3);
-  transition: all 0.2s; flex-shrink: 0; margin-top: 2px;
-}
-.dyn-remove:hover { border-color: var(--danger); color: var(--danger); background: rgba(192,96,64,0.08); }
-.add-btn {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  margin-top: 0.5rem; padding: 0.38rem 0.85rem;
-  background: none; border: 1px dashed var(--border);
-  border-radius: 2px; cursor: pointer;
-  font-family: var(--f-label); font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--gold-dk); transition: all 0.2s;
-}
-.add-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+/* ── WIZARD ── */
+#screen-wizard{display:none;min-height:calc(100vh - 60px);}
 
-/* tag input */
-.tag-input-wrap { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.55rem 0.75rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 2px; min-height: 46px; align-items: center; cursor: text; transition: border-color 0.2s; }
-.tag-input-wrap:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
-.tag-pill {
-  display: inline-flex; align-items: center; gap: 0.3rem;
-  background: var(--gold-dim); border: 1px solid var(--border);
-  border-radius: 50px; padding: 0.12rem 0.55rem 0.12rem 0.65rem;
-  font-family: var(--f-label); font-size: 0.5rem; letter-spacing: 0.1em; color: var(--gold-dk);
-}
-.tag-remove { cursor: pointer; color: var(--ink-3); font-size: 0.8em; line-height: 1; transition: color 0.2s; }
-.tag-remove:hover { color: var(--danger); }
-.tag-text-inp {
-  background: none; border: none; outline: none; color: var(--ink);
-  font-family: var(--f-body); font-size: 0.88rem; min-width: 80px; flex: 1;
-}
-.tag-text-inp::placeholder { color: var(--ink-4); font-style: italic; font-size: 0.85rem; }
+/* progress bar */
+.progress-bar-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:1.1rem 2rem;}
+.progress-steps{display:flex;align-items:center;gap:0;max-width:860px;margin:0 auto;}
+.prog-step{display:flex;align-items:center;gap:.5rem;flex:1;position:relative;}
+.prog-step:last-child{flex:0;}
+.prog-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:.75rem;font-weight:700;color:var(--ink-mute);transition:all .3s;flex-shrink:0;cursor:pointer;}
+.prog-step.active .prog-dot{border-color:var(--gold);background:var(--gold);color:#0d0b08;}
+.prog-step.done .prog-dot{border-color:var(--gold-dk);background:var(--gold-dk);color:#fff;}
+.prog-label{font-family:var(--f-display);font-size:.72rem;color:var(--ink-mute);font-weight:600;white-space:nowrap;}
+.prog-step.active .prog-label{color:var(--gold);}
+.prog-step.done .prog-label{color:var(--gold-dk);}
+.prog-line{flex:1;height:2px;background:var(--border);margin:0 .25rem;transition:background .3s;}
+.prog-step.done + .prog-step .prog-line,.prog-step.done .prog-line{background:var(--gold-dk);}
+@media(max-width:640px){.prog-label{display:none;}.prog-step{flex:0;}}
 
-/* nav buttons */
-.nav-btns { display: flex; align-items: center; justify-content: space-between; margin-top: 1.75rem; gap: 0.75rem; }
-.btn-prev, .btn-next, .btn-generate {
-  display: inline-flex; align-items: center; gap: 0.45rem;
-  font-family: var(--f-label); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 0.55rem 1.1rem; border-radius: 2px; cursor: pointer; transition: all 0.22s;
-}
-.btn-prev {
-  background: none; border: 1px solid var(--border); color: var(--ink-3);
-}
-.btn-prev:hover { border-color: var(--gold-dk); color: var(--gold-dk); }
-.btn-next {
-  background: linear-gradient(135deg, var(--gold-lt), var(--gold)); color: #1a1006;
-  border: none; box-shadow: 0 3px 14px var(--gold-glow);
-}
-.btn-next:hover { opacity: 0.88; box-shadow: 0 5px 22px var(--gold-glow); }
-.btn-generate {
-  background: linear-gradient(135deg, var(--gold-lt), var(--gold)); color: #1a1006;
-  border: none; box-shadow: 0 3px 14px var(--gold-glow);
-}
-.btn-generate:hover { opacity: 0.88; }
+/* wizard body */
+.wizard-body{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 6rem;}
 
-/* section heading inside form */
-.sec-heading {
-  font-family: var(--f-head); font-size: 1.12rem; font-weight: 700;
-  color: var(--ink); margin-bottom: 0.3rem; line-height: 1.25;
-}
-.sec-sub {
-  font-family: var(--f-body); font-size: 0.9rem; color: var(--ink-3);
-  margin-bottom: 1.5rem; font-style: italic;
-}
+/* step pane */
+.step-pane{display:none;animation:stepIn .3s ease both;}
+.step-pane.active{display:block;}
+@keyframes stepIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-/* card wrapper */
-.form-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 4px; padding: clamp(1.25rem,4vw,2rem);
-  box-shadow: 0 6px 32px rgba(0,0,0,0.35);
-  transition: background 0.3s, border-color 0.3s;
-}
+.step-title{font-family:var(--f-display);font-size:clamp(1.4rem,4vw,1.9rem);font-weight:700;color:var(--ink);margin-bottom:.35rem;}
+.step-desc{font-family:var(--f-display);font-size:1rem;color:var(--ink-sub);font-style:italic;margin-bottom:2rem;}
 
-/* ═══════════════════════════════ JSON OUTPUT ══════════════════════════ */
-.json-output-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 4px; overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.45);
-}
-.json-toolbar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0.6rem 1rem; background: var(--surface2);
-  border-bottom: 1px solid var(--border2); flex-wrap: wrap; gap: 0.5rem;
-}
-.json-toolbar-title {
-  font-family: var(--f-label); font-size: 0.55rem; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--gold-dk);
-}
-.json-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
-.jbtn {
-  display: inline-flex; align-items: center; gap: 0.35rem;
-  font-family: var(--f-label); font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 0.3rem 0.7rem; border-radius: 1px; cursor: pointer; transition: all 0.2s;
-  border: 1px solid var(--border); color: var(--ink-3); background: none;
-}
-.jbtn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-.jbtn.primary { background: var(--gold-dim); border-color: var(--gold-dk); color: var(--gold); }
-.jbtn.primary:hover { background: rgba(196,154,48,0.2); }
+/* form fields */
+.field-group{margin-bottom:1.6rem;}
+.field-label{display:block;font-family:var(--f-display);font-size:.92rem;font-weight:700;color:var(--ink);margin-bottom:.35rem;}
+.field-hint{font-family:var(--f-display);font-size:.8rem;color:var(--ink-mute);margin-bottom:.45rem;font-style:italic;}
+.field-required{color:var(--gold);margin-left:2px;}
 
-pre#jsonOut {
-  font-family: var(--f-mono); font-size: 0.78rem; line-height: 1.65;
-  color: var(--ink-2); background: var(--bg2);
-  padding: 1.25rem 1.5rem; overflow-x: auto; white-space: pre; tab-size: 2;
-  max-height: 520px; overflow-y: auto;
+.field-input{
+  width:100%;background:var(--input-bg);border:1.5px solid var(--border);
+  border-radius:8px;padding:.75rem 1rem;
+  font-family:var(--f-display);font-size:.97rem;color:var(--ink);
+  transition:border-color .2s,box-shadow .2s;outline:none;
 }
-/* syntax highlight */
-.jk { color: #c49a30; }  /* key */
-.js { color: #8ab8a0; }  /* string */
-.jn { color: #a080d8; }  /* number */
-.jb { color: #d87060; }  /* bool/null */
-.jp { color: #6a8a6a; }  /* punctuation */
+.field-input:focus{border-color:var(--gold-dk);box-shadow:0 0 0 3px rgba(196,154,48,.1);}
+.field-input::placeholder{color:var(--ink-mute);}
+.field-textarea{resize:vertical;min-height:100px;line-height:1.65;}
+.field-textarea.tall{min-height:180px;}
+.field-textarea.xtall{min-height:280px;}
 
-/* ═══════════════════════════════ TOAST ════════════════════════════════ */
-#toast {
-  position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px);
-  background: var(--surface); border: 1px solid var(--border); border-radius: 50px;
-  padding: 0.5rem 1.25rem; display: flex; align-items: center; gap: 0.5rem;
-  font-family: var(--f-label); font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--ink-2); z-index: 9999; box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-  transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.3s;
-  opacity: 0; pointer-events: none;
-}
-#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-#toast.success { border-color: var(--success); color: var(--success); }
-#toast.error   { border-color: var(--danger);  color: var(--danger); }
+/* two col */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+@media(max-width:580px){.field-row{grid-template-columns:1fr;}}
 
-/* ═══════════════════════════════ RESPONSIVE GRID ══════════════════════ */
-.two-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-@media(max-width:580px) { .two-grid { grid-template-columns: 1fr; } }
-@media(max-width:480px) {
-  .step-label { display: none; }
-  .step-connector { max-width: 20px; }
+/* dynamic list (narrator chain, images, events, links) */
+.dyn-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:.65rem;}
+.dyn-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;position:relative;transition:border-color .2s;}
+.dyn-item:hover{border-color:var(--border2);}
+.dyn-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;}
+.dyn-item-label{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-dk);letter-spacing:.05em;text-transform:uppercase;}
+.dyn-remove{background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:.9rem;padding:.2rem .4rem;border-radius:4px;transition:all .2s;}
+.dyn-remove:hover{color:#c0613a;background:rgba(192,97,58,.1);}
+.add-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border:1.5px dashed var(--border);border-radius:8px;background:none;cursor:pointer;color:var(--ink-sub);font-family:var(--f-display);font-size:.88rem;transition:all .2s;width:100%;justify-content:center;}
+.add-btn:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+
+/* weight slider */
+.weight-wrap{display:flex;align-items:center;gap:.75rem;}
+.weight-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none;}
+.weight-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--gold-lt);}
+.weight-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:.8rem;font-weight:700;flex-shrink:0;border:2px solid;}
+
+/* tab selector (sunni / shia) */
+.tab-bar{display:flex;gap:.5rem;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem;}
+.tab-btn{padding:.45rem 1.1rem;border:none;background:none;cursor:pointer;font-family:var(--f-display);font-size:.9rem;color:var(--ink-sub);border-radius:6px 6px 0 0;transition:all .2s;}
+.tab-btn.active{color:var(--gold);background:var(--gold-dim);font-weight:700;}
+
+/* ── REVIEW / OUTPUT ── */
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+@media(max-width:700px){.review-grid{grid-template-columns:1fr;}}
+.review-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
+.review-section-title{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-dk);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
+.review-row{display:flex;flex-direction:column;gap:.15rem;margin-bottom:.7rem;padding-bottom:.7rem;border-bottom:1px solid var(--border2);}
+.review-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.review-key{font-family:var(--f-mono);font-size:.72rem;color:var(--ink-mute);}
+.review-val{font-family:var(--f-display);font-size:.9rem;color:var(--ink);line-height:1.5;word-break:break-word;}
+.review-val.empty{color:var(--ink-mute);font-style:italic;font-size:.82rem;}
+
+/* code output */
+.code-block{
+  background:var(--code-bg);border:1px solid var(--border);border-radius:10px;
+  padding:1.25rem;overflow-x:auto;max-height:480px;overflow-y:auto;
+  font-family:var(--f-mono);font-size:.8rem;line-height:1.7;color:var(--ink-body);
+  white-space:pre;
 }
+.code-actions{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem;}
+.code-action-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;border-radius:8px;cursor:pointer;font-family:var(--f-display);font-size:.9rem;font-weight:600;transition:all .2s;}
+.btn-copy{background:var(--surface2);border:1px solid var(--border);color:var(--ink-sub);}
+.btn-copy:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
+.btn-download{background:var(--gold);border:1px solid var(--gold);color:#0d0b08;}
+.btn-download:hover{background:var(--gold-lt);}
+.copied-toast{display:none;font-size:.8rem;color:var(--gold);align-items:center;gap:.3rem;padding:.45rem .8rem;background:var(--gold-dim);border-radius:6px;border:1px solid var(--border);}
+.copied-toast.show{display:inline-flex;}
+
+/* nav footer */
+.wizard-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:50;gap:1rem;}
+.nav-left{display:flex;align-items:center;gap:.75rem;}
+.nav-right-btns{display:flex;align-items:center;gap:.75rem;}
+.step-counter{font-family:var(--f-display);font-size:.85rem;color:var(--ink-mute);}
+
+/* skip notice */
+.skip-notice{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-display);font-size:.8rem;color:var(--ink-mute);font-style:italic;margin-top:.5rem;}
+
+/* draft badge */
+.draft-saved{display:none;align-items:center;gap:.4rem;font-size:.8rem;color:var(--gold-dk);font-family:var(--f-display);}
+.draft-saved.show{display:inline-flex;}
+
+/* resume modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;max-width:560px;width:100%;box-shadow:var(--shadow);}
+.modal-title{font-family:var(--f-display);font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;}
+.modal-desc{font-family:var(--f-display);font-size:.95rem;color:var(--ink-sub);margin-bottom:1.5rem;font-style:italic;line-height:1.65;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:1.1rem;transition:color .2s;}
+.modal-close:hover{color:var(--ink);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.anim-1{animation:fadeUp .5s .05s ease both;}
+.anim-2{animation:fadeUp .5s .15s ease both;}
+.anim-3{animation:fadeUp .5s .25s ease both;}
+.anim-4{animation:fadeUp .5s .35s ease both;}
+.anim-5{animation:fadeUp .5s .45s ease both;}
+
+/* color by weight */
+.w-peak{background:#e0b84a22;border-color:#e0b84a66;}.w-peak .weight-badge{background:#e0b84a22;border-color:#e0b84a;color:#e0b84a;}
+.w-ok{background:#4a9e6a22;border-color:#4a9e6a66;}.w-ok .weight-badge{background:#4a9e6a22;border-color:#4a9e6a;color:#4a9e6a;}
+.w-warn{background:#c49a3022;border-color:#c49a3066;}.w-warn .weight-badge{background:#c49a3022;border-color:#c49a30;color:#c49a30;}
+.w-bad{background:#c0613a22;border-color:#c0613a66;}.w-bad .weight-badge{background:#c0613a22;border-color:#c0613a;color:#c0613a;}
+.w-crit{background:#8b3a8b22;border-color:#8b3a8b66;}.w-crit .weight-badge{background:#8b3a8b22;border-color:#8b3a8b;color:#8b3a8b;}
 </style>
 </head>
 <body>
 
-<!-- TOAST -->
-<div id="toast">
-  <svg id="toast-icon" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-  <span id="toast-msg">Done</span>
+<!-- TOPBAR -->
+<header class="topbar">
+  <a href="index.html" class="topbar-logo">⛵ Safeenah</a>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <span id="draftSaved" class="draft-saved"><i class="fa fa-check-circle"></i> Draft saved</span>
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <i class="fa fa-sun" id="themeIcon"></i>
+      <span id="themeLbl">Light</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════ WELCOME SCREEN ══════════════ -->
+<div id="screen-welcome">
+
+  <div class="anim-1" style="margin-bottom:.5rem;">
+    <span style="font-family:var(--f-display);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dk);">Safeenah Archive Tools</span>
+  </div>
+
+  <h1 class="welcome-title anim-2">JSON <span>Generator</span></h1>
+  <p class="welcome-sub anim-3">Generate structured JSON records for the Safeenah archive — step by step, field by field. No data is sent anywhere. Everything stays in your browser.</p>
+
+  <!-- Resume option -->
+  <div class="anim-3" style="margin-bottom:1rem;">
+    <button class="resume-btn" onclick="openResumeModal()">
+      <i class="fa fa-upload"></i> Resume an unfinished JSON file
+    </button>
+  </div>
+
+  <!-- Type selector -->
+  <p style="font-family:var(--f-display);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:1rem;" class="anim-3">Choose what to generate:</p>
+  <div class="type-grid anim-4">
+    <div class="type-card" id="card-hadith" onclick="selectType('hadith')">
+      <span class="type-card-icon">📖</span>
+      <div class="type-card-title">Hadith Record</div>
+      <div class="type-card-desc">Arabic text, Bangla translation, narrator chain with weights, scholarly perspectives, dialogue, images, links.</div>
+      <span class="type-check"><i class="fa fa-check"></i></span>
+    </div>
+    <div class="type-card" id="card-event" onclick="selectType('event')">
+      <span class="type-card-icon">📅</span>
+      <div class="type-card-title">Historical Event</div>
+      <div class="type-card-desc">Timeline event with description, sources, related hadith, images, tags, and scholarly context.</div>
+      <span class="type-check"><i class="fa fa-check"></i></span>
+    </div>
+  </div>
+
+  <!-- Sample preview -->
+  <p style="font-family:var(--f-display);font-size:.9rem;color:var(--ink-mute);margin-bottom:1rem;font-style:italic;" class="anim-4">Sample JSON structure for each type:</p>
+  <div class="sample-grid anim-5">
+    <!-- Hadith sample -->
+    <div class="sample-card">
+      <div class="sample-head"><i class="fa fa-book"></i> Hadith JSON</div>
+      <div class="sample-body">
+        <div class="skel-row"><span class="skel-key">"id":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"slug":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"title":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"subTitle":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"year":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"book_name":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"arabic_script":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"bangla_script":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"details":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"chain_of_narrator":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"prespective_explanation":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"simulated_dialogue":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"images":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"tags":</span><div class="skel-val"></div></div>
+      </div>
+    </div>
+    <!-- Event sample -->
+    <div class="sample-card">
+      <div class="sample-head"><i class="fa fa-calendar"></i> Event JSON</div>
+      <div class="sample-body">
+        <div class="skel-row"><span class="skel-key">"id":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"slug":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"title":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"subTitle":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"year":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"yearNumeric":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"era":</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"author":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"summary":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"description":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"sources":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"hadiths":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"images":</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"tags":</span><div class="skel-val"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-primary anim-5" onclick="startWizard()" id="startBtn" disabled>
+    Start Generating <i class="fa fa-arrow-right"></i>
+  </button>
 </div>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <a href="../index.html" class="logo">Safeenah</a>
-  <div style="display:flex;gap:1.6rem;align-items:center;">
-    <a href="../index.html" class="nav-a hidden sm:inline">Landing</a>
-    <a href="../home.html"    class="nav-a hidden sm:inline">Home</a>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">Light</button>
-  </div>
-</nav>
+<!-- ══════════════ WIZARD ══════════════ -->
+<div id="screen-wizard">
 
-<!-- PAGE HEADER -->
-<div style="padding:5.5rem 1.5rem 1.5rem;text-align:center;position:relative;z-index:2;">
-  <p style="font-family:var(--f-label);font-size:0.55rem;letter-spacing:0.28em;color:var(--gold-dk);text-transform:uppercase;margin-bottom:0.5rem;">Safeenah Archive</p>
-  <h1 style="font-family:var(--f-head);font-size:clamp(1.5rem,4vw,2.3rem);color:var(--ink);font-weight:700;line-height:1.15;margin-bottom:0.4rem;">Generate JSON</h1>
-  <p style="font-family:var(--f-body);font-style:italic;color:var(--ink-3);font-size:1rem;">Fill in the fields. Export a valid JSON entry for the archive.</p>
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar-wrap">
+    <div class="progress-steps" id="progressSteps"></div>
+  </div>
+
+  <!-- STEP BODY -->
+  <div class="wizard-body" id="wizardBody"></div>
+
+  <!-- NAV FOOTER -->
+  <div class="wizard-nav">
+    <div class="nav-left">
+      <button class="btn-secondary" id="btnBack" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+      <span class="step-counter" id="stepCounter"></span>
+    </div>
+    <div class="nav-right-btns">
+      <button class="btn-ghost" onclick="saveDraft()"><i class="fa fa-save"></i> Save Draft</button>
+      <button class="btn-primary" id="btnNext" onclick="goNext()">Next <i class="fa fa-arrow-right"></i></button>
+    </div>
+  </div>
 </div>
 
-<!-- STEP TRACK -->
-<div style="max-width:720px;margin:0 auto;padding:0 1rem 1.5rem;">
-  <div class="step-track" id="stepTrack"></div>
+<!-- RESUME MODAL -->
+<div class="modal-overlay" id="resumeModal">
+  <div class="modal" style="position:relative;">
+    <button class="modal-close" onclick="closeResumeModal()"><i class="fa fa-times"></i></button>
+    <div class="modal-title">Resume Unfinished JSON</div>
+    <div class="modal-desc">Select the type of your unfinished record, then paste or upload the JSON file. Filled fields will be pre-loaded; empty fields will be ready for you to complete.</div>
+    <div style="display:flex;gap:.75rem;margin-bottom:1.25rem;">
+      <button class="type-card" style="flex:1;padding:1rem;" id="res-hadith" onclick="resumeSelectType('hadith')">
+        <div class="type-card-title" style="font-size:1rem;">📖 Hadith</div>
+        <span class="type-check"><i class="fa fa-check"></i></span>
+      </button>
+      <button class="type-card" style="flex:1;padding:1rem;" id="res-event" onclick="resumeSelectType('event')">
+        <div class="type-card-title" style="font-size:1rem;">📅 Event</div>
+        <span class="type-check"><i class="fa fa-check"></i></span>
+      </button>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Paste JSON content</label>
+      <textarea class="field-input field-textarea" id="resumePaste" placeholder='{ "id": 1, "title": "...", ... }' style="min-height:130px;font-family:var(--f-mono);font-size:.8rem;"></textarea>
+    </div>
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+      <span style="font-family:var(--f-display);font-size:.88rem;color:var(--ink-mute);">or upload file:</span>
+      <input type="file" id="resumeFile" accept=".json" style="font-family:var(--f-display);font-size:.85rem;color:var(--ink-sub);" onchange="loadResumeFile(event)"/>
+    </div>
+    <div style="display:flex;gap:.75rem;">
+      <button class="btn-primary" onclick="applyResume()"><i class="fa fa-check"></i> Load & Continue</button>
+      <button class="btn-secondary" onclick="closeResumeModal()">Cancel</button>
+    </div>
+  </div>
 </div>
-
-<!-- FORM -->
-<div style="max-width:720px;margin:0 auto;padding:0 1rem 4rem;">
-
-  <!-- STEP 1: BASICS -->
-  <div class="step-panel active form-card" id="panel-0">
-    <div class="sec-heading">Basics</div>
-    <div class="sec-sub">Core identity fields for this entry.</div>
-
-    <!-- Category -->
-    <div class="field-group">
-      <label class="field-label">Category <span class="req">✦</span></label>
-      <div class="radio-group" id="catGroup">
-        <label class="radio-card checked" data-val="event">
-          <input type="radio" name="category" value="event" checked/>
-          <span class="radio-card-icon">📜</span>
-          <span class="radio-card-label">Event</span>
-        </label>
-        <label class="radio-card" data-val="hadith">
-          <input type="radio" name="category" value="hadith"/>
-          <span class="radio-card-icon">📖</span>
-          <span class="radio-card-label">Hadith</span>
-        </label>
-        <label class="radio-card" data-val="biography">
-          <input type="radio" name="category" value="biography"/>
-          <span class="radio-card-icon">🧭</span>
-          <span class="radio-card-label">Biography</span>
-        </label>
-        <label class="radio-card" data-val="book">
-          <input type="radio" name="category" value="book"/>
-          <span class="radio-card-icon">📚</span>
-          <span class="radio-card-label">Book</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Title -->
-    <div class="field-group">
-      <label class="field-label" for="f-title">Title <span class="req">✦</span></label>
-      <input class="inp" id="f-title" placeholder="e.g. The Declaration at Ghadir Khum" maxlength="220"/>
-      <div class="field-error" id="err-title">Title is required.</div>
-    </div>
-
-    <!-- Subtitle -->
-    <div class="field-group">
-      <label class="field-label" for="f-subtitle">Subtitle <span style="color:var(--ink-3);font-size:0.85em;">(optional)</span></label>
-      <input class="inp" id="f-subtitle" placeholder="Short subtitle shown on detail page"/>
-    </div>
-
-    <!-- Slug -->
-    <div class="field-group">
-      <label class="field-label" for="f-slug">Slug <span class="req">✦</span></label>
-      <input class="inp" id="f-slug" placeholder="ghadir-khum" pattern="[a-z0-9\-]+" maxlength="100"/>
-      <div class="field-hint">URL-safe, lowercase, hyphens only. Auto-generated from title.</div>
-      <div class="field-error" id="err-slug">Slug is required (lowercase, hyphens only).</div>
-    </div>
-
-    <div class="two-grid">
-      <!-- Author -->
-      <div class="field-group">
-        <label class="field-label" for="f-author">Author <span class="req">✦</span></label>
-        <input class="inp" id="f-author" placeholder="Your name"/>
-        <div class="field-error" id="err-author">Author is required.</div>
-      </div>
-      <!-- Published -->
-      <div class="field-group">
-        <label class="field-label" for="f-published">Published Date <span class="req">✦</span></label>
-        <input class="inp" id="f-published" placeholder="20 June, 2026"/>
-        <div class="field-error" id="err-published">Published date is required.</div>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <span></span>
-      <button class="btn-next" onclick="goNext()">
-        Next
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- STEP 2: DATE & MEDIA -->
-  <div class="step-panel form-card" id="panel-1">
-    <div class="sec-heading">Date &amp; Media</div>
-    <div class="sec-sub">When did this happen? Provide images for the entry.</div>
-
-    <div class="two-grid">
-      <!-- Year -->
-      <div class="field-group">
-        <label class="field-label" for="f-year">Year Label <span class="req">✦</span></label>
-        <input class="inp" id="f-year" placeholder="e.g. 10 AH or 570 CE"/>
-        <div class="field-hint">How it displays on the timeline.</div>
-        <div class="field-error" id="err-year">Year label is required.</div>
-      </div>
-      <!-- Era -->
-      <div class="field-group">
-        <label class="field-label" for="f-era">Era</label>
-        <select class="sel inp" id="f-era">
-          <option value="AH">AH (After Hijra)</option>
-          <option value="BH">BH (Before Hijra)</option>
-          <option value="CE">CE (Common Era)</option>
-          <option value="BCE">BCE</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="two-grid">
-      <!-- yearNumeric -->
-      <div class="field-group">
-        <label class="field-label" for="f-yearnum">Year (Numeric) <span class="req">✦</span></label>
-        <input class="inp" id="f-yearnum" type="number" placeholder="e.g. 10 or -1 for BH"/>
-        <div class="field-hint">Negative for BH/BCE. Used for sorting.</div>
-        <div class="field-error" id="err-yearnum">Numeric year is required.</div>
-      </div>
-      <!-- empty placeholder for grid alignment -->
-      <div></div>
-    </div>
-
-    <!-- Thumb URL -->
-    <div class="field-group">
-      <label class="field-label" for="f-thumb">Thumbnail URL <span class="req">✦</span></label>
-      <input class="inp" id="f-thumb" placeholder="https://…?w=200&h=200&fit=crop"/>
-      <div class="field-hint">Used in timeline grid (square crop recommended).</div>
-      <div class="field-error" id="err-thumb">Thumbnail URL is required.</div>
-    </div>
-
-    <!-- Banner URL -->
-    <div class="field-group">
-      <label class="field-label" for="f-banner">Banner URL <span class="req">✦</span></label>
-      <input class="inp" id="f-banner" placeholder="https://…?w=1200&h=500&fit=crop"/>
-      <div class="field-hint">Wide banner image shown at top of detail page.</div>
-      <div class="field-error" id="err-banner">Banner URL is required.</div>
-    </div>
-
-    <!-- Additional Images -->
-    <div class="field-group">
-      <label class="field-label">Additional Images <span style="color:var(--ink-3);font-size:0.85em;">(optional)</span></label>
-      <div class="dyn-list" id="list-images"></div>
-      <button class="add-btn" onclick="addRow('images')">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Image
-      </button>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn-prev" onclick="goPrev()">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="goNext()">
-        Next
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- STEP 3: CONTENT -->
-  <div class="step-panel form-card" id="panel-2">
-    <div class="sec-heading">Content</div>
-    <div class="sec-sub">Summary and full description for this entry.</div>
-
-    <!-- Summary -->
-    <div class="field-group">
-      <label class="field-label" for="f-summary">Summary <span class="req">✦</span></label>
-      <textarea class="ta inp" id="f-summary" rows="4" placeholder="A 2–3 sentence overview. Appears in timeline cards and as a pull-quote on the detail page."></textarea>
-      <div class="field-error" id="err-summary">Summary is required.</div>
-    </div>
-
-    <!-- Description -->
-    <div class="field-group">
-      <label class="field-label" for="f-desc">Description (HTML) <span class="req">✦</span></label>
-      <textarea class="ta inp" id="f-desc" rows="10" style="font-family:var(--f-mono);font-size:0.82rem;" placeholder="<p>Full narrative…</p>&#10;<blockquote>Quoted text…</blockquote>&#10;<p class=&quot;bn&quot;>বাংলা টেক্সট…</p>"></textarea>
-      <div class="field-hint">Raw HTML. Use <code style="color:var(--gold-dk);">&lt;p&gt;</code>, <code style="color:var(--gold-dk);">&lt;blockquote&gt;</code>, <code style="color:var(--gold-dk);">&lt;em&gt;</code>. Add <code style="color:var(--gold-dk);">class="bn"</code> for Bangla paragraphs.</div>
-      <div class="field-error" id="err-desc">Description is required.</div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn-prev" onclick="goPrev()">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="goNext()">
-        Next
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- STEP 4: REFERENCES -->
-  <div class="step-panel form-card" id="panel-3">
-    <div class="sec-heading">References</div>
-    <div class="sec-sub">Primary sources, related hadiths, and tags.</div>
-
-    <!-- Sources -->
-    <div class="field-group">
-      <label class="field-label">Primary Sources <span class="req">✦</span></label>
-      <div class="dyn-list" id="list-sources"></div>
-      <button class="add-btn" onclick="addRow('sources')">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Source
-      </button>
-      <div class="field-error" id="err-sources">At least one source is required.</div>
-    </div>
-
-    <!-- Hadiths -->
-    <div class="field-group">
-      <label class="field-label">Related Hadiths <span style="color:var(--ink-3);font-size:0.85em;">(optional)</span></label>
-      <div class="dyn-list" id="list-hadiths"></div>
-      <button class="add-btn" onclick="addRow('hadiths')">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Hadith
-      </button>
-    </div>
-
-    <!-- Tags -->
-    <div class="field-group">
-      <label class="field-label">Tags <span style="color:var(--ink-3);font-size:0.85em;">(optional — press Enter or comma to add)</span></label>
-      <div class="tag-input-wrap" id="tagWrap" onclick="document.getElementById('tagInput').focus()">
-        <input class="tag-text-inp" id="tagInput" placeholder="early-islam, ali, 10AH…" autocomplete="off"/>
-      </div>
-    </div>
-
-    <div class="nav-btns">
-      <button class="btn-prev" onclick="goPrev()">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        Back
-      </button>
-      <button class="btn-generate" onclick="generate()">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        Generate JSON
-      </button>
-    </div>
-  </div>
-
-  <!-- STEP 5: OUTPUT -->
-  <div class="step-panel" id="panel-4">
-    <div class="json-output-card">
-      <div class="json-toolbar">
-        <span class="json-toolbar-title" id="json-filename">output.json</span>
-        <div class="json-actions">
-          <button class="jbtn primary" onclick="copyJSON()">
-            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Copy JSON
-          </button>
-          <button class="jbtn" onclick="downloadJSON()">
-            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download
-          </button>
-          <button class="jbtn" onclick="resetForm()">
-            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.93"/></svg>
-            Start Over
-          </button>
-        </div>
-      </div>
-      <pre id="jsonOut"></pre>
-    </div>
-
-    <div style="margin-top:1rem;display:flex;justify-content:flex-start;">
-      <button class="btn-prev" onclick="goPrev()">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        Edit
-      </button>
-    </div>
-  </div>
-
-</div><!-- /max-width wrapper -->
 
 <script>
-/* ═══════════════════════════════════════════════════
+/* ════════════════════════════════════════
    THEME
-═══════════════════════════════════════════════════ */
-const saved = localStorage.getItem('sf-theme') || 'dark';
-document.documentElement.setAttribute('data-theme', saved);
-document.getElementById('themeBtn').textContent = saved === 'dark' ? 'Light' : 'Dark';
-
-function toggleTheme() {
-  const cur  = document.documentElement.getAttribute('data-theme');
-  const next = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('sf-theme', next);
-  document.getElementById('themeBtn').textContent = next === 'dark' ? 'Light' : 'Dark';
+════════════════════════════════════════ */
+let currentTheme = localStorage.getItem('sf-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', currentTheme);
+updateThemeUI();
+function toggleTheme(){
+  currentTheme = currentTheme==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  localStorage.setItem('sf-theme', currentTheme);
+  updateThemeUI();
+}
+function updateThemeUI(){
+  document.getElementById('themeLbl').textContent = currentTheme==='dark' ? 'Light' : 'Dark';
+  document.getElementById('themeIcon').className = currentTheme==='dark' ? 'fa fa-sun' : 'fa fa-moon';
 }
 
-/* ═══════════════════════════════════════════════════
-   STEP CONFIG
-═══════════════════════════════════════════════════ */
-const STEPS = [
-  { label: 'Basics' },
-  { label: 'Date & Media' },
-  { label: 'Content' },
-  { label: 'References' },
-  { label: 'Export' },
-];
-let current = 0;
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let selectedType = null;   // 'hadith' | 'event'
+let currentStep = 0;
+let formData = {};
+const DRAFT_KEY = 'safeenah_json_draft';
 
-/* Build step track */
-const track = document.getElementById('stepTrack');
-STEPS.forEach((s, i) => {
-  if (i > 0) {
-    const conn = document.createElement('div');
-    conn.className = 'step-connector';
-    conn.id = `conn-${i}`;
-    track.appendChild(conn);
+/* ════════════════════════════════════════
+   WELCOME
+════════════════════════════════════════ */
+function selectType(t){
+  selectedType = t;
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('card-'+t).classList.add('selected');
+  document.getElementById('startBtn').disabled = false;
+}
+
+function startWizard(){
+  if(!selectedType) return;
+  formData = {};
+  currentStep = 0;
+  buildWizard();
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-wizard').style.display = 'block';
+}
+
+/* ════════════════════════════════════════
+   STEP DEFINITIONS
+════════════════════════════════════════ */
+function getSteps(){
+  if(selectedType==='hadith') return [
+    { id:'basic',   label:'Basic Info',    icon:'fa-info-circle' },
+    { id:'book',    label:'Book & Source', icon:'fa-book' },
+    { id:'text',    label:'Arabic & Text', icon:'fa-font' },
+    { id:'details', label:'Details',       icon:'fa-align-left' },
+    { id:'chain',   label:'Narrators',     icon:'fa-link' },
+    { id:'media',   label:'Images',        icon:'fa-image' },
+    { id:'persp',   label:'Perspectives',  icon:'fa-balance-scale' },
+    { id:'dlg',     label:'Dialogue',      icon:'fa-comments' },
+    { id:'events',  label:'Events & Links',icon:'fa-external-link' },
+    { id:'tags',    label:'Tags',          icon:'fa-tags' },
+    { id:'review',  label:'Review & Export',icon:'fa-check-circle' },
+  ];
+  return [
+    { id:'basic',   label:'Basic Info',    icon:'fa-info-circle' },
+    { id:'meta',    label:'Meta',          icon:'fa-user' },
+    { id:'content', label:'Description',   icon:'fa-align-left' },
+    { id:'sources', label:'Sources',       icon:'fa-book-open' },
+    { id:'hadiths', label:'Hadiths',       icon:'fa-book' },
+    { id:'media',   label:'Images',        icon:'fa-image' },
+    { id:'tags',    label:'Tags',          icon:'fa-tags' },
+    { id:'review',  label:'Review & Export',icon:'fa-check-circle' },
+  ];
+}
+
+/* ════════════════════════════════════════
+   BUILD WIZARD
+════════════════════════════════════════ */
+function buildWizard(){
+  const steps = getSteps();
+  // Progress bar
+  const pSteps = document.getElementById('progressSteps');
+  pSteps.innerHTML = steps.map((s,i) =>
+    `<div class="prog-step" id="prog-${i}">
+      <div class="prog-dot" onclick="jumpToStep(${i})" title="${s.label}">
+        <i class="fa ${s.icon}" style="font-size:.65rem;"></i>
+      </div>
+      <span class="prog-label">${s.label}</span>
+      ${i < steps.length-1 ? '<div class="prog-line"></div>' : ''}
+    </div>`
+  ).join('');
+
+  renderStep();
+}
+
+function renderStep(){
+  const steps = getSteps();
+  // Update progress
+  steps.forEach((_,i) => {
+    const el = document.getElementById('prog-'+i);
+    if(!el) return;
+    el.className = 'prog-step' + (i===currentStep?' active':i<currentStep?' done':'');
+  });
+
+  document.getElementById('stepCounter').textContent = `Step ${currentStep+1} of ${steps.length}`;
+
+  const isLast = currentStep === steps.length - 1;
+  const btnNext = document.getElementById('btnNext');
+  btnNext.innerHTML = isLast ? '<i class="fa fa-check"></i> Finish' : 'Next <i class="fa fa-arrow-right"></i>';
+  document.getElementById('btnBack').disabled = currentStep === 0;
+
+  // Render step content
+  const wb = document.getElementById('wizardBody');
+  const step = steps[currentStep];
+  wb.innerHTML = buildStepHTML(step.id);
+
+  // Restore values
+  restoreStepValues(step.id);
+
+  // Scroll to top
+  wb.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ════════════════════════════════════════
+   STEP HTML BUILDERS
+════════════════════════════════════════ */
+function buildStepHTML(stepId){
+  if(selectedType==='hadith') return buildHadithStep(stepId);
+  return buildEventStep(stepId);
+}
+
+/* ── HADITH STEPS ── */
+function buildHadithStep(id){
+  switch(id){
+    case 'basic': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Basic Information</h2>
+        <p class="step-desc">The core identifiers of this hadith record.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">ID <span class="field-required">*</span></label>
+            <div class="field-hint">A unique number or short identifier (e.g. 1, 2, 42)</div>
+            <input class="field-input" id="f-id" placeholder="e.g. 1" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Slug <span class="field-required">*</span></label>
+            <div class="field-hint">URL-friendly identifier (e.g. hadith-thaqalayn)</div>
+            <input class="field-input" id="f-slug" placeholder="e.g. hadith-thaqalayn" oninput="autoSlug()" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Title (Bengali) <span class="field-required">*</span></label>
+          <div class="field-hint">Full title of the hadith in Bengali</div>
+          <input class="field-input" id="f-title" placeholder="হাদীসের শিরোনাম..." oninput="autoSlugFromTitle(this.value)" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Subtitle</label>
+          <div class="field-hint">A secondary title or brief description</div>
+          <input class="field-input" id="f-subTitle" placeholder="সংক্ষিপ্ত বিবরণ বা উপশিরোনাম..." />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Year</label>
+            <div class="field-hint">e.g. ১০ হিজরি / ৬৩২ খ্রিস্টাব্দ</div>
+            <input class="field-input" id="f-year" placeholder="৬৩২ CE" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Banner Image URL</label>
+            <div class="field-hint">Header image URL for this hadith</div>
+            <input class="field-input" id="f-banner" placeholder="https://..." />
+          </div>
+        </div>
+        <p class="skip-notice"><i class="fa fa-info-circle"></i> All non-required fields can be left blank and filled later.</p>
+      </div>`;
+
+    case 'book': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Book & Source Details</h2>
+        <p class="step-desc">Information about the hadith collection this record appears in.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Book Name</label>
+            <input class="field-input" id="f-book_name" placeholder="সহীহ বুখারী, সহীহ মুসলিম..." />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Book Author</label>
+            <input class="field-input" id="f-book_author" placeholder="ইমাম বুখারী..." />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Author Manhaj</label>
+            <div class="field-hint">Scholarly tradition (Sunni, Shia, Multi-Perspective…)</div>
+            <input class="field-input" id="f-author_manhaj" placeholder="Sunni, Multi-Perspective..." />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Book Year</label>
+            <input class="field-input" id="f-book_year" placeholder="২৬১ হিজরি" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Publication</label>
+            <input class="field-input" id="f-publication" placeholder="ইসলামিক ফাউন্ডেশন..." />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Edition</label>
+            <input class="field-input" id="f-edition" placeholder="২য় সংস্করণ" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Enlisting Author</label>
+            <div class="field-hint">Who is adding this to the archive</div>
+            <input class="field-input" id="f-enlist_author" placeholder="ইরশাদ হোসাইন" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Enlist Date</label>
+            <input class="field-input" id="f-enlist_date" placeholder="YYYY-MM-DD" />
+          </div>
+        </div>
+      </div>`;
+
+    case 'text': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Arabic Text & Bengali Translation</h2>
+        <p class="step-desc">The core hadith text in Arabic script and its Bengali meaning.</p>
+        <div class="field-group">
+          <label class="field-label">Arabic Script</label>
+          <div class="field-hint">The original Arabic text of the hadith. Use RTL direction.</div>
+          <textarea class="field-input field-textarea" id="f-arabic_script" dir="rtl" style="font-size:1.2rem;line-height:2.1;" placeholder="إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ..."></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Bengali Translation (Bangla Script)</label>
+          <div class="field-hint">The meaning of the hadith in Bengali</div>
+          <textarea class="field-input field-textarea" id="f-bangla_script" style="font-family:var(--f-bn);" placeholder="কাজ পরিচালিত হয় নিয়তের ওপর..."></textarea>
+        </div>
+      </div>`;
+
+    case 'details': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Details & Analysis</h2>
+        <p class="step-desc">Full explanation and historical context. HTML is supported.</p>
+        <div class="field-group">
+          <label class="field-label">Details (HTML supported)</label>
+          <div class="field-hint">Use &lt;p&gt;, &lt;h2&gt;, &lt;blockquote&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ol&gt;, &lt;ul&gt; etc.</div>
+          <textarea class="field-input field-textarea xtall" id="f-details" placeholder="&lt;p&gt;এই হাদীসটি ইসলামের...&lt;/p&gt;"></textarea>
+        </div>
+      </div>`;
+
+    case 'chain': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Chain of Narrators</h2>
+        <p class="step-desc">Add each narrator in the chain. Weight 0–10 indicates reliability. Click a narrator to expand/add note.</p>
+        <div class="dyn-list" id="chain-list"></div>
+        <button class="add-btn" onclick="addChainItem()"><i class="fa fa-plus"></i> Add Narrator</button>
+      </div>`;
+
+    case 'media': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Images</h2>
+        <p class="step-desc">Add image URLs with descriptive captions for this hadith.</p>
+        <div class="dyn-list" id="images-list"></div>
+        <button class="add-btn" onclick="addImageItem()"><i class="fa fa-plus"></i> Add Image</button>
+      </div>`;
+
+    case 'persp': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Scholarly Perspectives</h2>
+        <p class="step-desc">Add Sunni and Shia scholarly interpretations. HTML is supported.</p>
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchPerspTab(this,'sunni')">☀️ Sunni</button>
+          <button class="tab-btn" onclick="switchPerspTab(this,'shiya')">🌙 Shia</button>
+        </div>
+        <div id="persp-sunni">
+          <div class="field-hint">Write or paste Sunni scholarly analysis. HTML tags supported.</div>
+          <textarea class="field-input field-textarea xtall" id="f-persp-sunni" placeholder="&lt;p&gt;সুন্নী আলেমদের মতে...&lt;/p&gt;"></textarea>
+        </div>
+        <div id="persp-shiya" style="display:none;">
+          <div class="field-hint">Write or paste Shia scholarly analysis. HTML tags supported.</div>
+          <textarea class="field-input field-textarea xtall" id="f-persp-shiya" placeholder="&lt;p&gt;শিয়া ফিকহে...&lt;/p&gt;"></textarea>
+        </div>
+      </div>`;
+
+    case 'dlg': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Simulated Dialogue</h2>
+        <p class="step-desc">A dialogue illustrating the scholarly debate around this hadith. HTML supported — use &lt;p&gt; tags for each turn.</p>
+        <div class="field-hint">Each &lt;p&gt; will render as a separate speech bubble. Label speakers with &lt;strong&gt;A:&lt;/strong&gt; or character names.</div>
+        <textarea class="field-input field-textarea xtall" id="f-simulated_dialogue" placeholder="&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; প্রশ্ন...&lt;/p&gt;&#10;&lt;p&gt;&lt;strong&gt;B:&lt;/strong&gt; উত্তর...&lt;/p&gt;"></textarea>
+      </div>`;
+
+    case 'events': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Related Events & Links</h2>
+        <p class="step-desc">Link to related historical events and further reading resources.</p>
+        <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.75rem;">Related Events</p>
+        <div class="dyn-list" id="events-list"></div>
+        <button class="add-btn" onclick="addEventItem()" style="margin-bottom:1.5rem;"><i class="fa fa-plus"></i> Add Event Link</button>
+        <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.75rem;">Further Reading Links</p>
+        <div class="dyn-list" id="links-list"></div>
+        <button class="add-btn" onclick="addLinkItem()"><i class="fa fa-plus"></i> Add Reading Link</button>
+      </div>`;
+
+    case 'tags': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Tags</h2>
+        <p class="step-desc">Add searchable tags separated by commas or pressing Enter.</p>
+        <div class="field-group">
+          <label class="field-label">Tags</label>
+          <div class="field-hint">e.g. আহলে-বাইত, সাক্বালাইন, সহীহ-মুসলিম, গাদীর-খুম</div>
+          <input class="field-input" id="f-tags" placeholder="নিয়ত, ইখলাস, বুখারী..." />
+          <div id="tag-preview" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem;"></div>
+        </div>
+      </div>`;
+
+    case 'review': return buildReviewStep();
+
+    default: return `<div class="step-pane active"><p>Step not found.</p></div>`;
   }
-  const node = document.createElement('div');
-  node.className = 'step-node' + (i === 0 ? ' active' : '');
-  node.id = `node-${i}`;
-  node.onclick = () => jumpTo(i);
-  node.innerHTML = `
-    <div class="step-circle" id="circle-${i}">
-      <span id="circle-lbl-${i}">${i + 1}</span>
+}
+
+/* ── EVENT STEPS ── */
+function buildEventStep(id){
+  switch(id){
+    case 'basic': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Basic Information</h2>
+        <p class="step-desc">Core identifiers for this historical event.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">ID <span class="field-required">*</span></label>
+            <input class="field-input" id="f-id" placeholder="e.g. ghadir-khum" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Slug <span class="field-required">*</span></label>
+            <input class="field-input" id="f-slug" placeholder="e.g. ghadir-khum" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Title <span class="field-required">*</span></label>
+          <input class="field-input" id="f-title" placeholder="Event title..." oninput="autoSlugFromTitle(this.value)" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Subtitle</label>
+          <input class="field-input" id="f-subTitle" placeholder="Secondary title or short description..." />
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Year</label>
+            <input class="field-input" id="f-year" placeholder="e.g. 10 AH / 632 CE" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Year Numeric</label>
+            <div class="field-hint">Negative for BH (e.g. -1 for 1 BH)</div>
+            <input class="field-input" id="f-yearNumeric" placeholder="e.g. 10 or -1" type="number" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Era</label>
+            <div class="field-hint">AH, BH, CE, BCE</div>
+            <input class="field-input" id="f-era" placeholder="AH" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Thumbnail URL</label>
+            <input class="field-input" id="f-thumb" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Banner Image URL</label>
+          <input class="field-input" id="f-banner" placeholder="https://..." />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Summary <span class="field-required">*</span></label>
+          <div class="field-hint">A 2–3 sentence overview shown on the timeline and cards</div>
+          <textarea class="field-input field-textarea" id="f-summary" placeholder="Brief summary of the event..."></textarea>
+        </div>
+      </div>`;
+
+    case 'meta': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Author & Publication</h2>
+        <p class="step-desc">Who documented this event and when.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Author</label>
+            <input class="field-input" id="f-author" placeholder="Irshad" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Published Date</label>
+            <input class="field-input" id="f-published" placeholder="20 June, 2026" />
+          </div>
+        </div>
+      </div>`;
+
+    case 'content': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Description</h2>
+        <p class="step-desc">Full description of the event. HTML is fully supported.</p>
+        <div class="field-hint">Use &lt;p&gt;, &lt;blockquote&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt; etc.</div>
+        <textarea class="field-input field-textarea xtall" id="f-description" placeholder="&lt;p&gt;Early in the prophetic mission...&lt;/p&gt;"></textarea>
+      </div>`;
+
+    case 'sources': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Primary Sources</h2>
+        <p class="step-desc">Reference books, classical texts, and URLs that document this event.</p>
+        <div class="dyn-list" id="sources-list"></div>
+        <button class="add-btn" onclick="addSourceItem()"><i class="fa fa-plus"></i> Add Source</button>
+      </div>`;
+
+    case 'hadiths': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Related Hadith</h2>
+        <p class="step-desc">Hadith narrations that relate to or support this event.</p>
+        <div class="dyn-list" id="hadiths-list"></div>
+        <button class="add-btn" onclick="addHadithLink()"><i class="fa fa-plus"></i> Add Hadith Reference</button>
+      </div>`;
+
+    case 'media': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Images</h2>
+        <p class="step-desc">Add image URLs with descriptive captions.</p>
+        <div class="dyn-list" id="images-list"></div>
+        <button class="add-btn" onclick="addImageItem()"><i class="fa fa-plus"></i> Add Image</button>
+      </div>`;
+
+    case 'tags': return `
+      <div class="step-pane active">
+        <h2 class="step-title">Tags</h2>
+        <p class="step-desc">Add searchable tags.</p>
+        <div class="field-group">
+          <label class="field-label">Tags</label>
+          <div class="field-hint">e.g. early-islam, ali, ghadir-khum, 10AH</div>
+          <input class="field-input" id="f-tags" placeholder="early-islam, ali, prophethood..." />
+          <div id="tag-preview" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem;"></div>
+        </div>
+      </div>`;
+
+    case 'review': return buildReviewStep();
+
+    default: return `<div class="step-pane active"><p>Step not found.</p></div>`;
+  }
+}
+
+/* ════════════════════════════════════════
+   REVIEW STEP
+════════════════════════════════════════ */
+function buildReviewStep(){
+  collectCurrentStep();
+  const json = buildJSON();
+  const pretty = JSON.stringify(json, null, 2);
+
+  return `<div class="step-pane active">
+    <h2 class="step-title">Review & Export</h2>
+    <p class="step-desc">Your JSON record is ready. Preview, copy, or download it below.</p>
+
+    <div class="review-grid" style="margin-bottom:1.5rem;">
+      ${Object.entries(json).filter(([k,v])=>v && typeof v !== 'object').slice(0,10).map(([k,v])=>`
+        <div class="review-section">
+          <div class="review-section-title"><i class="fa fa-check-circle"></i> ${k}</div>
+          <div class="review-row">
+            <span class="review-key">${k}</span>
+            <span class="review-val">${String(v).slice(0,120)}${String(v).length>120?'…':''}</span>
+          </div>
+        </div>`).join('')}
     </div>
-    <span class="step-label">${s.label}</span>
-  `;
-  track.appendChild(node);
-});
 
-function updateTrack() {
-  STEPS.forEach((_, i) => {
-    const node   = document.getElementById(`node-${i}`);
-    const circle = document.getElementById(`circle-${i}`);
-    const lbl    = document.getElementById(`circle-lbl-${i}`);
-    if (i < current) {
-      node.className = 'step-node done';
-      lbl.innerHTML  = `<svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`;
-      if (i > 0) document.getElementById(`conn-${i}`).className = 'step-connector done';
-    } else if (i === current) {
-      node.className = 'step-node active';
-      lbl.textContent = i + 1;
-      if (i > 0) document.getElementById(`conn-${i}`).className = 'step-connector';
-    } else {
-      node.className = 'step-node';
-      lbl.textContent = i + 1;
-    }
-  });
+    <div style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+      <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);">Generated JSON</p>
+      <div style="display:flex;gap:.5rem;align-items:center;">
+        <span class="copied-toast" id="copiedToast"><i class="fa fa-check"></i> Copied!</span>
+      </div>
+    </div>
+
+    <div class="code-block" id="jsonOutput">${escHtml(pretty)}</div>
+
+    <div class="code-actions">
+      <button class="code-action-btn btn-copy" onclick="copyJSON()">
+        <i class="fa fa-copy"></i> Copy JSON
+      </button>
+      <button class="code-action-btn btn-download" onclick="downloadJSON()">
+        <i class="fa fa-download"></i> Download .json
+      </button>
+      <button class="btn-ghost" onclick="startOver()" style="margin-left:.5rem;">
+        <i class="fa fa-redo"></i> Start New
+      </button>
+    </div>
+    <p class="skip-notice" style="margin-top:1rem;"><i class="fa fa-info-circle"></i> You can go back to any step and make changes, then return here to refresh the output.</p>
+  </div>`;
 }
 
-function showPanel(idx) {
-  document.querySelectorAll('.step-panel').forEach((p, i) => {
-    p.classList.toggle('active', i === idx);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function jumpTo(idx) {
-  if (idx > current) return; /* can only go back via track */
-  current = idx;
-  updateTrack();
-  showPanel(current);
-}
-
-/* ═══════════════════════════════════════════════════
-   RADIO CARDS
-═══════════════════════════════════════════════════ */
-document.querySelectorAll('#catGroup .radio-card').forEach(card => {
-  card.addEventListener('click', () => {
-    document.querySelectorAll('#catGroup .radio-card').forEach(c => c.classList.remove('checked'));
-    card.classList.add('checked');
-    card.querySelector('input').checked = true;
-  });
-});
-
-/* ═══════════════════════════════════════════════════
-   SLUG AUTO-GENERATE
-═══════════════════════════════════════════════════ */
-document.getElementById('f-title').addEventListener('input', function () {
-  const slug = this.value
-    .toLowerCase().trim()
-    .replace(/[^\w\s-]/g,'')
-    .replace(/[\s_]+/g,'-')
-    .replace(/^-+|-+$/g,'');
-  document.getElementById('f-slug').value = slug;
-});
-
-/* yearNumeric auto from year + era */
-function autoYearNum() {
-  const yr  = parseFloat(document.getElementById('f-year').value) || 0;
-  const era = document.getElementById('f-era').value;
-  if (!document.getElementById('f-yearnum').value) {
-    document.getElementById('f-yearnum').value =
-      (era === 'BH' || era === 'BCE') ? -Math.abs(yr) : yr;
-  }
-}
-document.getElementById('f-year').addEventListener('blur', autoYearNum);
-document.getElementById('f-era').addEventListener('change', autoYearNum);
-
-/* ═══════════════════════════════════════════════════
-   DYNAMIC LISTS (sources / images / hadiths)
-═══════════════════════════════════════════════════ */
-const listConfig = {
-  sources: {
-    fields: [
-      { key:'text', ph:'Source title — e.g. Sahih Bukhari — Book of Knowledge, Hadith 114', label:'Source name' },
-      { key:'url',  ph:'https://sunnah.com/…', label:'URL' },
-    ]
-  },
-  images: {
-    fields: [
-      { key:'url',  ph:'https://…', label:'Image URL' },
-      { key:'text', ph:'Caption or description', label:'Caption' },
-    ]
-  },
-  hadiths: {
-    fields: [
-      { key:'text', ph:'Hadith description', label:'Hadith text' },
-      { key:'url',  ph:'https://sunnah.com/…', label:'URL' },
-    ]
-  },
-};
-
-function addRow(type) {
-  const container = document.getElementById(`list-${type}`);
-  const conf      = listConfig[type];
-  const row       = document.createElement('div');
-  row.className   = 'dyn-row';
-  row.dataset.type = type;
-
-  const fields = document.createElement('div');
-  fields.className = 'dyn-row-fields';
-  conf.fields.forEach(f => {
-    const inp = document.createElement('input');
-    inp.className   = 'inp';
-    inp.placeholder = f.ph;
-    inp.dataset.key = f.key;
-    inp.setAttribute('aria-label', f.label);
-    fields.appendChild(inp);
-  });
-
-  const del = document.createElement('button');
-  del.className = 'dyn-remove';
-  del.title = 'Remove';
-  del.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-  del.onclick = () => {
-    row.style.opacity = '0';
-    row.style.transform = 'translateX(10px)';
-    row.style.transition = 'all 0.2s';
-    setTimeout(() => row.remove(), 200);
-  };
-
-  row.appendChild(fields);
-  row.appendChild(del);
-  container.appendChild(row);
-
-  /* focus first field */
-  fields.querySelector('input').focus();
-}
-
-/* Add one source row by default */
-addRow('sources');
-
-/* ═══════════════════════════════════════════════════
-   TAG INPUT
-═══════════════════════════════════════════════════ */
-const tags = [];
-const tagWrap  = document.getElementById('tagWrap');
-const tagInput = document.getElementById('tagInput');
-
-function addTag(val) {
-  const clean = val.trim().toLowerCase().replace(/[^a-z0-9\-]/g,'-').replace(/^-+|-+$/g,'');
-  if (!clean || tags.includes(clean)) return;
-  tags.push(clean);
-  const pill = document.createElement('span');
-  pill.className = 'tag-pill';
-  pill.innerHTML = `${clean}<span class="tag-remove" data-tag="${clean}" title="Remove">✕</span>`;
-  pill.querySelector('.tag-remove').addEventListener('click', () => {
-    const idx = tags.indexOf(clean);
-    if (idx > -1) tags.splice(idx, 1);
-    pill.remove();
-  });
-  tagWrap.insertBefore(pill, tagInput);
-}
-
-tagInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter' || e.key === ',') {
-    e.preventDefault();
-    addTag(tagInput.value);
-    tagInput.value = '';
-  } else if (e.key === 'Backspace' && !tagInput.value && tags.length) {
-    const last = tags[tags.length - 1];
-    const pills = tagWrap.querySelectorAll('.tag-pill');
-    if (pills.length) {
-      pills[pills.length - 1].remove();
-      tags.pop();
-    }
-  }
-});
-tagInput.addEventListener('blur', () => {
-  if (tagInput.value.trim()) { addTag(tagInput.value); tagInput.value = ''; }
-});
-
-/* ═══════════════════════════════════════════════════
-   VALIDATION
-═══════════════════════════════════════════════════ */
-const validators = [
-  /* Step 0 */
-  [
-    { id:'f-title',     err:'err-title',     check: v => v.trim().length > 0 },
-    { id:'f-slug',      err:'err-slug',      check: v => /^[a-z0-9\-]+$/.test(v.trim()) },
-    { id:'f-author',    err:'err-author',    check: v => v.trim().length > 0 },
-    { id:'f-published', err:'err-published', check: v => v.trim().length > 0 },
-  ],
-  /* Step 1 */
-  [
-    { id:'f-year',    err:'err-year',    check: v => v.trim().length > 0 },
-    { id:'f-yearnum', err:'err-yearnum', check: v => v.trim() !== '' && !isNaN(parseFloat(v)) },
-    { id:'f-thumb',   err:'err-thumb',   check: v => v.trim().length > 0 },
-    { id:'f-banner',  err:'err-banner',  check: v => v.trim().length > 0 },
-  ],
-  /* Step 2 */
-  [
-    { id:'f-summary', err:'err-summary', check: v => v.trim().length > 10 },
-    { id:'f-desc',    err:'err-desc',    check: v => v.trim().length > 10 },
-  ],
-  /* Step 3 */
-  [
-    {
-      id: null,
-      err: 'err-sources',
-      check: () => {
-        const rows = document.querySelectorAll('#list-sources .dyn-row');
-        return rows.length > 0 && Array.from(rows).some(r => {
-          const inps = r.querySelectorAll('input');
-          return inps[0]?.value.trim().length > 0;
-        });
-      }
-    }
-  ],
-];
-
-function validateStep(idx) {
-  let ok = true;
-  validators[idx]?.forEach(rule => {
-    const val = rule.id ? (document.getElementById(rule.id)?.value || '') : '';
-    const pass = rule.check(val);
-    const errEl = document.getElementById(rule.err);
-    const inpEl = rule.id ? document.getElementById(rule.id) : null;
-    if (errEl) errEl.classList.toggle('show', !pass);
-    if (inpEl) inpEl.classList.toggle('error', !pass);
-    if (!pass) ok = false;
-  });
-  return ok;
-}
-
-/* ═══════════════════════════════════════════════════
+/* ════════════════════════════════════════
    NAVIGATION
-═══════════════════════════════════════════════════ */
-function goNext() {
-  if (!validateStep(current)) {
-    showToast('Please fill all required fields', 'error');
-    return;
-  }
-  current++;
-  updateTrack();
-  showPanel(current);
-}
-function goPrev() {
-  if (current > 0) {
-    current--;
-    updateTrack();
-    showPanel(current);
+════════════════════════════════════════ */
+function goNext(){
+  collectCurrentStep();
+  saveDraftSilent();
+  const steps = getSteps();
+  if(currentStep < steps.length - 1){
+    currentStep++;
+    renderStep();
+    // Re-init dynamic lists after render
+    setTimeout(initDynLists, 50);
   }
 }
 
-/* ═══════════════════════════════════════════════════
-   COLLECT DATA
-═══════════════════════════════════════════════════ */
-function collectList(type) {
-  const rows = document.querySelectorAll(`#list-${type} .dyn-row`);
-  const result = [];
-  rows.forEach(row => {
-    const inps = row.querySelectorAll('input');
-    const obj  = {};
-    inps.forEach(i => { if (i.value.trim()) obj[i.dataset.key] = i.value.trim(); });
-    if (Object.keys(obj).length) result.push(obj);
-  });
-  return result;
+function goBack(){
+  collectCurrentStep();
+  if(currentStep > 0){
+    currentStep--;
+    renderStep();
+    setTimeout(initDynLists, 50);
+  } else {
+    // back to welcome
+    document.getElementById('screen-wizard').style.display='none';
+    document.getElementById('screen-welcome').style.display='flex';
+  }
 }
 
-function buildJSON() {
-  const cat       = document.querySelector('input[name="category"]:checked')?.value || 'event';
-  const title     = document.getElementById('f-title').value.trim();
-  const yearLabel = document.getElementById('f-year').value.trim();
+function jumpToStep(i){
+  collectCurrentStep();
+  currentStep = i;
+  renderStep();
+  setTimeout(initDynLists, 50);
+}
 
-  const obj = {
-    id:          document.getElementById('f-slug').value.trim(),
-    slug:        document.getElementById('f-slug').value.trim(),
-    category:    cat,
-    title,
-    subTitle:    document.getElementById('f-subtitle').value.trim() || undefined,
-    author:      document.getElementById('f-author').value.trim(),
-    published:   document.getElementById('f-published').value.trim(),
-    year:        yearLabel,
-    yearNumeric: parseFloat(document.getElementById('f-yearnum').value) || 0,
-    era:         document.getElementById('f-era').value,
-    thumb:       document.getElementById('f-thumb').value.trim(),
-    banner:      document.getElementById('f-banner').value.trim(),
-    summary:     document.getElementById('f-summary').value.trim(),
-    description: document.getElementById('f-desc').value.trim(),
-    images:      collectList('images'),
-    sources:     collectList('sources'),
-    hadiths:     collectList('hadiths'),
-    tags:        [...tags],
-  };
+/* ════════════════════════════════════════
+   COLLECT STEP VALUES
+════════════════════════════════════════ */
+function collectCurrentStep(){
+  const steps = getSteps();
+  const sid = steps[currentStep]?.id;
+  if(!sid || sid==='review') return;
 
-  /* strip undefined & empty arrays */
-  Object.keys(obj).forEach(k => {
-    if (obj[k] === undefined) delete obj[k];
-    if (Array.isArray(obj[k]) && obj[k].length === 0) delete obj[k];
+  // Simple inputs / textareas
+  document.querySelectorAll('[id^="f-"]').forEach(el => {
+    const key = el.id.replace('f-', '');
+    formData[key] = el.value.trim();
   });
 
-  return obj;
-}
-
-function makeFilename(data) {
-  const slug = (data.slug || 'entry').slice(0, 40);
-  const year = (data.year || '').replace(/\s/g, '-').replace(/[^\w\-]/g,'');
-  const cat  = data.category || 'event';
-  return `${cat}_${slug}_${year}.json`;
-}
-
-/* ═══════════════════════════════════════════════════
-   SYNTAX HIGHLIGHT
-═══════════════════════════════════════════════════ */
-function highlight(json) {
-  return json
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
-      let cls = 'jn';
-      if (/^"/.test(match)) {
-        cls = /:$/.test(match) ? 'jk' : 'js';
-      } else if (/true|false/.test(match)) {
-        cls = 'jb';
-      } else if (/null/.test(match)) {
-        cls = 'jb';
-      }
-      return `<span class="${cls}">${match}</span>`;
-    });
-}
-
-/* ═══════════════════════════════════════════════════
-   GENERATE
-═══════════════════════════════════════════════════ */
-let lastJSON = null;
-let lastFilename = 'output.json';
-
-function generate() {
-  if (!validateStep(current)) {
-    showToast('Please fill all required fields', 'error');
-    return;
+  // Tags
+  const tagsEl = document.getElementById('f-tags');
+  if(tagsEl){
+    formData.tags = tagsEl.value.split(',').map(t=>t.trim()).filter(Boolean);
   }
 
-  lastJSON     = buildJSON();
-  lastFilename = makeFilename(lastJSON);
-  const pretty = JSON.stringify(lastJSON, null, 2);
+  // Perspectives
+  const ps = document.getElementById('f-persp-sunni');
+  const ph = document.getElementById('f-persp-shiya');
+  if(ps || ph){
+    formData.prespective_explanation = {};
+    if(ps) formData.prespective_explanation.sunni = ps.value.trim();
+    if(ph) formData.prespective_explanation.shiya = ph.value.trim();
+  }
 
-  document.getElementById('jsonOut').innerHTML = highlight(pretty);
-  document.getElementById('json-filename').textContent = lastFilename;
+  // Chain of narrators
+  const chainItems = document.querySelectorAll('.chain-item-data');
+  if(chainItems.length){
+    formData.chain_of_narrator = Array.from(chainItems).map(el => ({
+      name:   el.querySelector('[data-key="name"]')?.value?.trim() || '',
+      weight: parseInt(el.querySelector('[data-key="weight"]')?.value) || 5,
+      Note:   el.querySelector('[data-key="note"]')?.value?.trim() || '',
+    })).filter(n=>n.name);
+  }
 
-  current = 4;
-  updateTrack();
-  showPanel(4);
-  showToast('JSON generated ✓', 'success');
+  // Images
+  const imgItems = document.querySelectorAll('.img-item-data');
+  if(imgItems.length){
+    formData.images = Array.from(imgItems).map(el => ({
+      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
+    })).filter(i=>i.url);
+  }
+
+  // Event links
+  const evItems = document.querySelectorAll('.ev-link-data');
+  if(evItems.length){
+    formData.events = Array.from(evItems).map(el => ({
+      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+    })).filter(e=>e.text||e.url);
+  }
+
+  // Links
+  const linkItems = document.querySelectorAll('.link-item-data');
+  if(linkItems.length){
+    formData.links = Array.from(linkItems).map(el => ({
+      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+    })).filter(l=>l.text||l.url);
+  }
+
+  // Sources (event)
+  const srcItems = document.querySelectorAll('.src-item-data');
+  if(srcItems.length){
+    formData.sources = Array.from(srcItems).map(el => ({
+      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+    })).filter(s=>s.text||s.url);
+  }
+
+  // Hadith links (event)
+  const hLinkItems = document.querySelectorAll('.hlink-item-data');
+  if(hLinkItems.length){
+    formData.hadiths = Array.from(hLinkItems).map(el => ({
+      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+    })).filter(h=>h.text||h.url);
+  }
 }
 
-/* ═══════════════════════════════════════════════════
-   COPY / DOWNLOAD
-═══════════════════════════════════════════════════ */
-function copyJSON() {
-  if (!lastJSON) return;
-  navigator.clipboard.writeText(JSON.stringify(lastJSON, null, 2)).then(() => {
-    showToast('JSON copied to clipboard ✓', 'success');
+/* ════════════════════════════════════════
+   RESTORE STEP VALUES
+════════════════════════════════════════ */
+function restoreStepValues(sid){
+  // Restore simple fields
+  Object.entries(formData).forEach(([k,v]) => {
+    const el = document.getElementById('f-'+k);
+    if(el && typeof v === 'string') el.value = v;
+  });
+
+  // Tags
+  const tagsEl = document.getElementById('f-tags');
+  if(tagsEl && formData.tags) {
+    tagsEl.value = Array.isArray(formData.tags) ? formData.tags.join(', ') : formData.tags;
+  }
+
+  // Perspectives
+  const ps = document.getElementById('f-persp-sunni');
+  const ph = document.getElementById('f-persp-shiya');
+  if(ps && formData.prespective_explanation?.sunni) ps.value = formData.prespective_explanation.sunni;
+  if(ph && formData.prespective_explanation?.shiya) ph.value = formData.prespective_explanation.shiya;
+
+  // Init dynamic lists with saved data
+  initDynLists();
+}
+
+function initDynLists(){
+  // Chain
+  const cList = document.getElementById('chain-list');
+  if(cList && cList.children.length === 0 && formData.chain_of_narrator?.length){
+    formData.chain_of_narrator.forEach(n => addChainItem(n));
+  }
+  // Images
+  const iList = document.getElementById('images-list');
+  if(iList && iList.children.length === 0 && formData.images?.length){
+    formData.images.forEach(img => addImageItem(img));
+  }
+  // Events
+  const evList = document.getElementById('events-list');
+  if(evList && evList.children.length === 0 && formData.events?.length){
+    formData.events.forEach(ev => addEventItem(ev));
+  }
+  // Links
+  const lList = document.getElementById('links-list');
+  if(lList && lList.children.length === 0 && formData.links?.length){
+    formData.links.forEach(lk => addLinkItem(lk));
+  }
+  // Sources
+  const sList = document.getElementById('sources-list');
+  if(sList && sList.children.length === 0 && formData.sources?.length){
+    formData.sources.forEach(s => addSourceItem(s));
+  }
+  // Hadith links
+  const hList = document.getElementById('hadiths-list');
+  if(hList && hList.children.length === 0 && formData.hadiths?.length){
+    formData.hadiths.forEach(h => addHadithLink(h));
+  }
+}
+
+/* ════════════════════════════════════════
+   DYNAMIC LIST HELPERS
+════════════════════════════════════════ */
+let dynCounter = 0;
+
+function addChainItem(data={}){
+  const list = document.getElementById('chain-list');
+  if(!list) return;
+  const id = ++dynCounter;
+  const w = data.weight ?? 5;
+  const wc = weightClass(w);
+  const div = document.createElement('div');
+  div.className = `dyn-item chain-item-data ${wc}`;
+  div.innerHTML = `
+    <div class="dyn-item-head">
+      <span class="dyn-item-label">Narrator ${list.children.length+1}</span>
+      <button class="dyn-remove" onclick="this.closest('.dyn-item').remove()"><i class="fa fa-trash"></i></button>
+    </div>
+    <div class="field-group" style="margin-bottom:.75rem;">
+      <label class="field-label" style="font-size:.82rem;">Name</label>
+      <input class="field-input" data-key="name" placeholder="Narrator name in Bengali or Arabic..." value="${escAttr(data.name||'')}"/>
+    </div>
+    <div class="field-group" style="margin-bottom:.75rem;">
+      <label class="field-label" style="font-size:.82rem;">Weight <span id="wlbl-${id}">${w}</span>/10</label>
+      <div class="field-hint">0=not reliable · 5=moderate · 7+=reliable · 10=highest</div>
+      <div class="weight-wrap">
+        <input type="range" class="weight-slider" data-key="weight" min="0" max="10" value="${w}"
+          oninput="updateWeight(this,${id})" />
+        <div class="weight-badge" id="wbadge-${id}">${w}</div>
+      </div>
+    </div>
+    <div class="field-group" style="margin-bottom:0;">
+      <label class="field-label" style="font-size:.82rem;">Note (shown on click)</label>
+      <textarea class="field-input field-textarea" data-key="note" placeholder="সর্বোচ্চ নির্ভরযোগ্য..." style="min-height:70px;">${escAttr(data.Note||'')}</textarea>
+    </div>`;
+  list.appendChild(div);
+}
+
+function updateWeight(el, id){
+  const v = el.value;
+  document.getElementById('wlbl-'+id).textContent = v;
+  document.getElementById('wbadge-'+id).textContent = v;
+  const item = el.closest('.dyn-item');
+  item.className = 'dyn-item chain-item-data ' + weightClass(parseInt(v));
+}
+
+function weightClass(w){
+  if(w===10) return 'w-peak';
+  if(w>=7)   return 'w-ok';
+  if(w>=5)   return 'w-warn';
+  if(w>=3)   return 'w-bad';
+  return 'w-crit';
+}
+
+function addImageItem(data={}){
+  const list = document.getElementById('images-list');
+  if(!list) return;
+  const div = document.createElement('div');
+  div.className = 'dyn-item img-item-data';
+  div.innerHTML = `
+    <div class="dyn-item-head">
+      <span class="dyn-item-label">Image ${list.children.length+1}</span>
+      <button class="dyn-remove" onclick="this.closest('.dyn-item').remove()"><i class="fa fa-trash"></i></button>
+    </div>
+    <div class="field-row">
+      <div class="field-group" style="margin-bottom:0;">
+        <label class="field-label" style="font-size:.82rem;">Image URL</label>
+        <input class="field-input" data-key="url" placeholder="https://..." value="${escAttr(data.url||'')}"/>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label class="field-label" style="font-size:.82rem;">Caption / Description</label>
+        <input class="field-input" data-key="text" placeholder="Description of this image..." value="${escAttr(data.text||'')}"/>
+      </div>
+    </div>`;
+  list.appendChild(div);
+}
+
+function addEventItem(data={}){
+  const list = document.getElementById('events-list');
+  if(!list) return;
+  addTextUrlItem(list,'ev-link-data','Event',data);
+}
+
+function addLinkItem(data={}){
+  const list = document.getElementById('links-list');
+  if(!list) return;
+  addTextUrlItem(list,'link-item-data','Link',data);
+}
+
+function addSourceItem(data={}){
+  const list = document.getElementById('sources-list');
+  if(!list) return;
+  addTextUrlItem(list,'src-item-data','Source',data);
+}
+
+function addHadithLink(data={}){
+  const list = document.getElementById('hadiths-list');
+  if(!list) return;
+  addTextUrlItem(list,'hlink-item-data','Hadith Reference',data);
+}
+
+function addTextUrlItem(list, cls, label, data){
+  const div = document.createElement('div');
+  div.className = `dyn-item ${cls}`;
+  div.innerHTML = `
+    <div class="dyn-item-head">
+      <span class="dyn-item-label">${label} ${list.children.length+1}</span>
+      <button class="dyn-remove" onclick="this.closest('.dyn-item').remove()"><i class="fa fa-trash"></i></button>
+    </div>
+    <div class="field-row">
+      <div class="field-group" style="margin-bottom:0;">
+        <label class="field-label" style="font-size:.82rem;">Text</label>
+        <input class="field-input" data-key="text" placeholder="Display text..." value="${escAttr(data.text||'')}"/>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label class="field-label" style="font-size:.82rem;">URL</label>
+        <input class="field-input" data-key="url" placeholder="https://..." value="${escAttr(data.url||'')}"/>
+      </div>
+    </div>`;
+  list.appendChild(div);
+}
+
+/* ════════════════════════════════════════
+   PERSPECTIVES TAB
+════════════════════════════════════════ */
+function switchPerspTab(btn, tab){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('persp-sunni').style.display = tab==='sunni' ? 'block' : 'none';
+  document.getElementById('persp-shiya').style.display = tab==='shiya' ? 'block' : 'none';
+}
+
+/* ════════════════════════════════════════
+   SLUG AUTO-GENERATION
+════════════════════════════════════════ */
+function autoSlugFromTitle(val){
+  const slugEl = document.getElementById('f-slug');
+  if(!slugEl || slugEl.value) return;
+  slugEl.value = val.toLowerCase()
+    .replace(/[\u0980-\u09FF\u0600-\u06FF]/g,'')
+    .replace(/[^a-z0-9\s-]/g,'')
+    .trim().replace(/\s+/g,'-').slice(0,60);
+}
+function autoSlug(){
+  const el = document.getElementById('f-slug');
+  if(el) el.value = el.value.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+}
+
+/* ════════════════════════════════════════
+   BUILD JSON OUTPUT
+════════════════════════════════════════ */
+function buildJSON(){
+  const d = {...formData};
+  const out = {};
+
+  if(selectedType==='hadith'){
+    if(d.id)   out.id = isNaN(+d.id) ? d.id : +d.id;
+    if(d.title) out.title = d.title;
+    if(d.subTitle) out.subTitle = d.subTitle;
+    if(d.slug)  out.slug = d.slug;
+    if(d.banner) out.banner = d.banner;
+    if(d.year)  out.year = d.year;
+    if(d.enlist_author) out.enlist_author = d.enlist_author;
+    if(d.enlist_date)   out.enlist_date   = d.enlist_date;
+    if(d.book_name)     out.book_name     = d.book_name;
+    if(d.book_author)   out.book_author   = d.book_author;
+    if(d.author_manhaj) out.author_manhaj = d.author_manhaj;
+    if(d.book_year)     out.book_year     = d.book_year;
+    if(d.publication)   out.publication   = d.publication;
+    if(d.edition)       out.edition       = d.edition;
+    if(d.arabic_script) out.arabic_script = d.arabic_script;
+    if(d.bangla_script) out.bangla_script = d.bangla_script;
+    if(d.details)       out.details       = d.details;
+    if(d.chain_of_narrator?.length) out.chain_of_narrator = d.chain_of_narrator;
+    if(d.images?.length)            out.images            = d.images;
+    if(d.events?.length)            out.events            = d.events;
+    if(d.prespective_explanation && Object.values(d.prespective_explanation).some(v=>v))
+      out.prespective_explanation = d.prespective_explanation;
+    if(d.simulated_dialogue)        out.simulated_dialogue = d.simulated_dialogue;
+    if(d.links?.length)             out.links              = d.links;
+    if(d.tags?.length)              out.tags               = d.tags;
+  } else {
+    if(d.id)   out.id = d.id;
+    if(d.slug) out.slug = d.slug;
+    if(d.title) out.title = d.title;
+    if(d.subTitle) out.subTitle = d.subTitle;
+    if(d.author) out.author = d.author;
+    if(d.published) out.published = d.published;
+    if(d.year) out.year = d.year;
+    if(d.yearNumeric !== undefined && d.yearNumeric !== '') out.yearNumeric = +d.yearNumeric;
+    if(d.era)   out.era   = d.era;
+    if(d.thumb) out.thumb = d.thumb;
+    if(d.banner) out.banner = d.banner;
+    if(d.summary) out.summary = d.summary;
+    if(d.description) out.description = d.description;
+    if(d.images?.length)   out.images  = d.images;
+    if(d.sources?.length)  out.sources = d.sources;
+    if(d.hadiths?.length)  out.hadiths = d.hadiths;
+    if(d.tags?.length)     out.tags    = d.tags;
+  }
+
+  return out;
+}
+
+/* ════════════════════════════════════════
+   EXPORT
+════════════════════════════════════════ */
+function copyJSON(){
+  collectCurrentStep();
+  const txt = JSON.stringify(buildJSON(), null, 2);
+  navigator.clipboard.writeText(txt).then(() => {
+    const t = document.getElementById('copiedToast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
   });
 }
 
-function downloadJSON() {
-  if (!lastJSON) return;
-  const blob = new Blob([JSON.stringify(lastJSON, null, 2)], { type: 'application/json' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = lastFilename;
+function downloadJSON(){
+  collectCurrentStep();
+  const json = buildJSON();
+  const txt = JSON.stringify(json, null, 2);
+  const slug = (json.slug || json.id || 'safeenah-record') + '.json';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], {type:'application/json'}));
+  a.download = slug;
   a.click();
-  URL.revokeObjectURL(url);
-  showToast('Downloading ' + lastFilename, 'success');
 }
 
-function resetForm() {
-  if (!confirm('Start over and clear all fields?')) return;
-  location.reload();
+function startOver(){
+  formData = {};
+  selectedType = null;
+  currentStep = 0;
+  document.getElementById('screen-wizard').style.display = 'none';
+  document.getElementById('screen-welcome').style.display = 'flex';
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('startBtn').disabled = true;
 }
 
-/* ═══════════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════════ */
-let toastTimer;
-function showToast(msg, type = 'success') {
-  const el  = document.getElementById('toast');
-  const ico = document.getElementById('toast-icon');
-  document.getElementById('toast-msg').textContent = msg;
-  el.className = `show ${type}`;
-  ico.innerHTML = type === 'success'
-    ? `<polyline points="20 6 9 17 4 12"/>`
-    : `<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`;
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.className = '', 2600);
+/* ════════════════════════════════════════
+   DRAFT
+════════════════════════════════════════ */
+function saveDraft(){
+  collectCurrentStep();
+  localStorage.setItem(DRAFT_KEY, JSON.stringify({type:selectedType, step:currentStep, data:formData}));
+  const el = document.getElementById('draftSaved');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
 }
+function saveDraftSilent(){
+  localStorage.setItem(DRAFT_KEY, JSON.stringify({type:selectedType, step:currentStep, data:formData}));
+}
+
+/* ════════════════════════════════════════
+   RESUME
+════════════════════════════════════════ */
+let resumeType = null;
+function openResumeModal(){ document.getElementById('resumeModal').classList.add('show'); }
+function closeResumeModal(){ document.getElementById('resumeModal').classList.remove('show'); }
+
+function resumeSelectType(t){
+  resumeType = t;
+  document.querySelectorAll('#resumeModal .type-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('res-'+t).classList.add('selected');
+}
+
+function loadResumeFile(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { document.getElementById('resumePaste').value = ev.target.result; };
+  reader.readAsText(file);
+}
+
+function applyResume(){
+  const raw = document.getElementById('resumePaste').value.trim();
+  if(!raw){ alert('Please paste or upload a JSON file.'); return; }
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch(e){ alert('Invalid JSON. Please check your file.'); return; }
+  if(!resumeType){ alert('Please select Hadith or Event type first.'); return; }
+
+  selectedType = resumeType;
+  formData = flattenParsed(parsed);
+  currentStep = 0;
+  closeResumeModal();
+  buildWizard();
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-wizard').style.display = 'block';
+  setTimeout(initDynLists, 80);
+}
+
+function flattenParsed(p){
+  const d = {...p};
+  // Ensure arrays are arrays
+  ['tags','images','events','links','sources','hadiths','chain_of_narrator'].forEach(k => {
+    if(d[k] && !Array.isArray(d[k])) d[k] = [];
+  });
+  if(typeof d.id === 'number') d.id = String(d.id);
+  if(typeof d.yearNumeric === 'number') d.yearNumeric = String(d.yearNumeric);
+  return d;
+}
+
+/* ════════════════════════════════════════
+   UTILS
+════════════════════════════════════════ */
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+/* ════════════════════════════════════════
+   LOAD DRAFT ON INIT
+════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  const raw = localStorage.getItem(DRAFT_KEY);
+  if(raw){
+    try {
+      const saved = JSON.parse(raw);
+      if(saved.type && saved.data){
+        // Show draft restore notice on welcome screen
+        const notice = document.createElement('div');
+        notice.style.cssText='margin-bottom:1.2rem;padding:.65rem 1.2rem;background:var(--gold-dim);border:1px solid var(--border);border-radius:8px;font-family:var(--f-display);font-size:.9rem;color:var(--ink-sub);display:flex;align-items:center;gap:.6rem;';
+        notice.innerHTML = `<i class="fa fa-history" style="color:var(--gold-dk);"></i> Draft found (${saved.type}). <button onclick="loadDraft()" style="background:none;border:none;cursor:pointer;color:var(--gold-dk);font-family:var(--f-display);font-size:.9rem;font-weight:700;text-decoration:underline;">Resume draft</button>`;
+        document.getElementById('screen-welcome').insertBefore(notice, document.querySelector('.anim-3'));
+        window._savedDraft = saved;
+      }
+    } catch(e){}
+  }
+});
+
+function loadDraft(){
+  const saved = window._savedDraft;
+  if(!saved) return;
+  selectedType = saved.type;
+  formData = saved.data || {};
+  currentStep = saved.step || 0;
+  buildWizard();
+  document.getElementById('screen-welcome').style.display='none';
+  document.getElementById('screen-wizard').style.display='block';
+  setTimeout(initDynLists, 80);
+}
+
+/* Present files button after the page loads to ensure output */
+document.getElementById('screen-welcome').style.display = 'flex';
 </script>
 </body>
 </html>
