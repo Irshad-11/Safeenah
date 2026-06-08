@@ -426,7 +426,7 @@ body {
 
 // Points to the data folder; tracks explicitly where your event files reside
 const DATA_BASE_DIR = '../data/events/';
-const EVENT_FILES = ['index.json', 'more10.json', 'more.json'];
+const EVENT_FILES = ['test.json'];
 
 /* ── Parse a year string to a sortable integer ── */
 function parseYear(str) {
@@ -484,17 +484,6 @@ async function loadEvents() {
     console.warn('[timeline] Target files failed or missing. Falling back to demo array.', e.message);
   }
 
-  /* Hard-coded demo fallback so the page is never blank during system issues */
-  return [
-    { slug:'hadith-al-dar',   title:'The Feast of Dhul Asheera',
-      year:'1 BH',  yearNumeric:-1,
-      thumb:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=200&fit=crop',
-      summary:'When the Prophet first invited his clan to Islam, only Ali ibn Abi Talib responded — three times.' },
-    { slug:'ghadir-khum',     title:'The Declaration at Ghadir Khum',
-      year:'10 AH', yearNumeric:10,
-      thumb:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=200&h=200&fit=crop',
-      summary:'On the return from the Farewell Pilgrimage, the Prophet addressed over a hundred thousand companions.' }
-  ];
 }
 
 

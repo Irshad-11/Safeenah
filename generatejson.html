@@ -10,234 +10,422 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-:root { --f-display:'Playfair Display',Georgia,serif; --f-bn:'Hind Siliguri',sans-serif; --f-mono:'JetBrains Mono',monospace; }
-[data-theme="dark"] {
-  --bg:#0d0b08; --surface:#1a1610; --surface2:#221e14; --surface3:#2a2518;
-  --border:rgba(180,135,45,.2); --border2:rgba(180,135,45,.1);
-  --gold:#c49a30; --gold-lt:#e0b84a; --gold-dk:#8a6518; --gold-dim:rgba(196,154,48,.1);
-  --ink:#f0e4cc; --ink-body:#d8c8a8; --ink-sub:#a89878; --ink-mute:#6a5a42;
-  --card:rgba(26,22,16,.95); --input-bg:rgba(34,30,20,.8);
-  --shadow:0 8px 40px rgba(0,0,0,.7); --code-bg:#111009;
+:root{--f-display:'Playfair Display',Georgia,serif;--f-bn:'Hind Siliguri',sans-serif;--f-mono:'JetBrains Mono',monospace;}
+[data-theme="dark"]{
+  --bg:#0d0b08;--surface:#1a1610;--surface2:#221e14;--surface3:#2a2518;
+  --border:rgba(180,135,45,.2);--border2:rgba(180,135,45,.1);
+  --gold:#c49a30;--gold-lt:#e0b84a;--gold-dk:#8a6518;--gold-dim:rgba(196,154,48,.1);
+  --ink:#f0e4cc;--ink-body:#d8c8a8;--ink-sub:#a89878;--ink-mute:#6a5a42;
+  --card:rgba(26,22,16,.95);--input-bg:rgba(34,30,20,.85);
+  --shadow:0 8px 40px rgba(0,0,0,.65);--code-bg:#0c0a06;--danger:#c0613a;
 }
-[data-theme="light"] {
-  --bg:#f8f0dc; --surface:#fffbf0; --surface2:#f5e8c8; --surface3:#ede0b0;
-  --border:rgba(120,90,20,.22); --border2:rgba(120,90,20,.12);
-  --gold:#8a6010; --gold-lt:#a87820; --gold-dk:#6a4808; --gold-dim:rgba(138,96,16,.1);
-  --ink:#1a1006; --ink-body:#2a1c08; --ink-sub:#5a3e18; --ink-mute:#9a7a48;
-  --card:rgba(255,251,240,.98); --input-bg:rgba(248,240,220,.9);
-  --shadow:0 6px 28px rgba(120,90,20,.15); --code-bg:#f0e8d0;
+[data-theme="light"]{
+  --bg:#f8f0dc;--surface:#fffbf0;--surface2:#f5e8c8;--surface3:#ede0b0;
+  --border:rgba(120,90,20,.22);--border2:rgba(120,90,20,.12);
+  --gold:#8a6010;--gold-lt:#a87820;--gold-dk:#6a4808;--gold-dim:rgba(138,96,16,.1);
+  --ink:#1a1006;--ink-body:#2a1c08;--ink-sub:#5a3e18;--ink-mute:#9a7a48;
+  --card:rgba(255,251,240,.98);--input-bg:rgba(248,240,220,.92);
+  --shadow:0 6px 28px rgba(120,90,20,.14);--code-bg:#f0e8d0;--danger:#b04030;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--ink-body);font-family:var(--f-display);font-size:17px;line-height:1.7;min-height:100vh;transition:background .3s,color .3s;}
-::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
-
-/* ── TYPOGRAPHY ── */
-.f-display{font-family:var(--f-display);}
-.f-mono{font-family:var(--f-mono);}
+body{
+  background:var(--bg);color:var(--ink-body);
+  font-family:var(--f-display);font-size:16px;line-height:1.7;
+  min-height:100vh;overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
 
 /* ── TOPBAR ── */
-.topbar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.85rem 2rem;backdrop-filter:blur(16px);}
-.topbar-logo{font-family:var(--f-display);font-size:1.1rem;font-weight:700;color:var(--gold);letter-spacing:.05em;text-decoration:none;}
-.theme-toggle{display:flex;align-items:center;gap:.5rem;cursor:pointer;background:none;border:1px solid var(--border);border-radius:50px;padding:.3rem .8rem;color:var(--ink-sub);font-family:var(--f-display);font-size:.85rem;transition:all .2s;}
+.topbar{
+  position:sticky;top:0;z-index:200;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.7rem 1.25rem;backdrop-filter:blur(16px);gap:.75rem;
+}
+.topbar-logo{
+  font-family:var(--f-display);font-size:1rem;font-weight:700;
+  color:var(--gold);letter-spacing:.05em;text-decoration:none;white-space:nowrap;
+}
+.topbar-right{display:flex;align-items:center;gap:.5rem;flex-shrink:0;}
+.theme-toggle{
+  display:flex;align-items:center;gap:.4rem;cursor:pointer;
+  background:none;border:1px solid var(--border);border-radius:50px;
+  padding:.28rem .7rem;color:var(--ink-sub);
+  font-family:var(--f-display);font-size:.8rem;
+  transition:all .2s;white-space:nowrap;
+}
 .theme-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.draft-saved{
+  display:none;align-items:center;gap:.35rem;
+  font-size:.75rem;color:var(--gold-dk);font-family:var(--f-display);
+  white-space:nowrap;
+}
+.draft-saved.show{display:inline-flex;}
 
-/* ── WELCOME SCREEN ── */
-#screen-welcome{min-height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;text-align:center;}
-.welcome-title{font-family:var(--f-display);font-size:clamp(2rem,6vw,3.8rem);font-weight:900;color:var(--ink);line-height:1.1;margin-bottom:.75rem;letter-spacing:-.01em;}
+/* ── WELCOME ── */
+#screen-welcome{
+  min-height:calc(100vh - 50px);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:2.5rem 1.25rem;text-align:center;
+}
+.welcome-title{
+  font-family:var(--f-display);font-size:clamp(1.8rem,6vw,3.5rem);
+  font-weight:900;color:var(--ink);line-height:1.1;
+  margin-bottom:.6rem;letter-spacing:-.01em;
+}
 .welcome-title span{color:var(--gold);}
-.welcome-sub{font-family:var(--f-display);font-size:clamp(1rem,2.5vw,1.25rem);color:var(--ink-sub);max-width:560px;line-height:1.75;margin-bottom:3rem;font-style:italic;}
+.welcome-sub{
+  font-family:var(--f-display);font-size:clamp(.9rem,2.5vw,1.1rem);
+  color:var(--ink-sub);max-width:520px;line-height:1.75;
+  margin-bottom:2.5rem;font-style:italic;
+}
 
 /* type selector */
-.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:680px;width:100%;margin-bottom:3.5rem;}
-@media(max-width:540px){.type-grid{grid-template-columns:1fr;}}
-.type-card{
-  border:2px solid var(--border);border-radius:12px;padding:2rem 1.75rem;cursor:pointer;
-  background:var(--surface);text-align:left;transition:all .25s;position:relative;overflow:hidden;
+.type-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+  max-width:620px;width:100%;margin-bottom:2.5rem;
 }
-.type-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold-dim),transparent);opacity:0;transition:opacity .3s;}
-.type-card:hover{border-color:var(--gold-dk);transform:translateY(-3px);box-shadow:var(--shadow);}
+@media(max-width:440px){.type-grid{grid-template-columns:1fr;}}
+
+.type-card{
+  border:2px solid var(--border);border-radius:10px;padding:1.5rem 1.25rem;
+  cursor:pointer;background:var(--surface);text-align:left;
+  transition:all .25s;position:relative;overflow:hidden;
+}
+.type-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-dim),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.type-card:hover{border-color:var(--gold-dk);transform:translateY(-2px);box-shadow:var(--shadow);}
 .type-card:hover::before{opacity:1;}
-.type-card.selected{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,48,.15),var(--shadow);}
+.type-card.selected{border-color:var(--gold);box-shadow:0 0 0 3px rgba(196,154,48,.15);}
 .type-card.selected::before{opacity:1;}
-.type-card-icon{font-size:2.2rem;margin-bottom:.85rem;display:block;}
-.type-card-title{font-family:var(--f-display);font-size:1.25rem;font-weight:700;color:var(--ink);margin-bottom:.4rem;}
-.type-card-desc{font-size:.9rem;color:var(--ink-sub);line-height:1.6;}
-.type-check{position:absolute;top:1rem;right:1rem;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;display:none;align-items:center;justify-content:center;font-size:.75rem;}
+.type-card-icon{font-size:1.8rem;margin-bottom:.65rem;display:block;}
+.type-card-title{font-family:var(--f-display);font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.3rem;}
+.type-card-desc{font-size:.82rem;color:var(--ink-sub);line-height:1.55;}
+.type-check{
+  position:absolute;top:.75rem;right:.75rem;
+  width:20px;height:20px;border-radius:50%;background:var(--gold);
+  color:#fff;display:none;align-items:center;justify-content:center;font-size:.65rem;
+}
 .type-card.selected .type-check{display:flex;}
 
-/* sample preview */
-.sample-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:900px;width:100%;text-align:left;margin-bottom:3rem;}
-@media(max-width:640px){.sample-grid{grid-template-columns:1fr;}}
-.sample-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-.sample-head{padding:.75rem 1.1rem;background:var(--surface2);border-bottom:1px solid var(--border2);font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-dk);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;}
-.sample-body{padding:.85rem 1.1rem;display:flex;flex-direction:column;gap:.45rem;}
-.skel-row{display:flex;align-items:center;gap:.6rem;}
-.skel-key{font-family:var(--f-mono);font-size:.72rem;color:var(--gold-dk);min-width:120px;flex-shrink:0;}
-.skel-val{height:10px;border-radius:3px;flex:1;background:linear-gradient(90deg,rgba(196,154,48,.1) 0%,rgba(196,154,48,.2) 50%,rgba(196,154,48,.1) 100%);background-size:200% 100%;animation:shim 1.6s infinite;}
-.skel-val.short{flex:0 0 60px;}
-.skel-val.medium{flex:0 0 130px;}
+/* sample cards */
+.sample-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:820px;width:100%;text-align:left;margin-bottom:2.5rem;}
+@media(max-width:580px){.sample-grid{grid-template-columns:1fr;}}
+.sample-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.sample-head{padding:.6rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border2);font-family:var(--f-display);font-size:.75rem;font-weight:700;color:var(--gold-dk);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:.45rem;}
+.sample-body{padding:.75rem 1rem;display:flex;flex-direction:column;gap:.4rem;}
+.skel-row{display:flex;align-items:center;gap:.55rem;}
+.skel-key{font-family:var(--f-mono);font-size:.65rem;color:var(--gold-dk);min-width:110px;flex-shrink:0;}
+.skel-val{height:9px;border-radius:3px;flex:1;background:linear-gradient(90deg,rgba(196,154,48,.09) 0%,rgba(196,154,48,.2) 50%,rgba(196,154,48,.09) 100%);background-size:200% 100%;animation:shim 1.7s infinite;}
+.skel-val.short{flex:0 0 55px;}.skel-val.medium{flex:0 0 120px;}
 @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* resume option */
-.resume-btn{display:inline-flex;align-items:center;gap:.6rem;padding:.65rem 1.4rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:none;color:var(--ink-sub);font-family:var(--f-display);font-size:.95rem;transition:all .2s;margin-bottom:1.5rem;}
+/* resume btn */
+.resume-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.6rem 1.25rem;border:1px solid var(--border);
+  border-radius:8px;cursor:pointer;background:none;color:var(--ink-sub);
+  font-family:var(--f-display);font-size:.88rem;
+  transition:all .2s;margin-bottom:1.25rem;
+}
 .resume-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
 
-/* primary btn */
-.btn-primary{display:inline-flex;align-items:center;gap:.6rem;padding:.75rem 2.2rem;background:var(--gold);color:#0d0b08;border:none;border-radius:8px;font-family:var(--f-display);font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.02em;}
-.btn-primary:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 6px 20px rgba(196,154,48,.3);}
-.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none;}
-.btn-secondary{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.8rem;background:none;color:var(--ink-sub);border:1px solid var(--border);border-radius:8px;font-family:var(--f-display);font-size:.95rem;cursor:pointer;transition:all .2s;}
+/* buttons */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.55rem;
+  padding:.7rem 1.9rem;background:var(--gold);color:#0d0b08;
+  border:none;border-radius:8px;font-family:var(--f-display);
+  font-size:.95rem;font-weight:700;cursor:pointer;
+  transition:all .2s;letter-spacing:.02em;
+}
+.btn-primary:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 5px 18px rgba(196,154,48,.28);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.65rem 1.5rem;background:none;color:var(--ink-sub);
+  border:1px solid var(--border);border-radius:8px;
+  font-family:var(--f-display);font-size:.9rem;cursor:pointer;transition:all .2s;
+}
 .btn-secondary:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
-.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:none;color:var(--ink-mute);border:none;font-family:var(--f-display);font-size:.88rem;cursor:pointer;transition:color .2s;border-radius:6px;}
+.btn-secondary:disabled{opacity:.35;cursor:not-allowed;}
+
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.5rem .9rem;background:none;color:var(--ink-mute);
+  border:none;font-family:var(--f-display);font-size:.82rem;
+  cursor:pointer;transition:color .2s;border-radius:6px;white-space:nowrap;
+}
 .btn-ghost:hover{color:var(--gold-dk);background:var(--gold-dim);}
 
+/* Skip button — distinctive */
+.btn-skip{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.5rem .9rem;background:none;color:var(--ink-mute);
+  border:1px dashed var(--border);border-radius:6px;
+  font-family:var(--f-display);font-size:.78rem;cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.btn-skip:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+
 /* ── WIZARD ── */
-#screen-wizard{display:none;min-height:calc(100vh - 60px);}
+#screen-wizard{display:none;min-height:calc(100vh - 50px);padding-bottom:80px;}
 
 /* progress bar */
-.progress-bar-wrap{background:var(--surface);border-bottom:1px solid var(--border);padding:1.1rem 2rem;}
-.progress-steps{display:flex;align-items:center;gap:0;max-width:860px;margin:0 auto;}
-.prog-step{display:flex;align-items:center;gap:.5rem;flex:1;position:relative;}
+.progress-bar-wrap{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.9rem 1.25rem;overflow-x:auto;
+}
+.progress-steps{
+  display:flex;align-items:center;gap:0;
+  min-width:max-content;margin:0 auto;max-width:960px;
+}
+.prog-step{display:flex;align-items:center;gap:.4rem;flex:1;position:relative;}
 .prog-step:last-child{flex:0;}
-.prog-dot{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:.75rem;font-weight:700;color:var(--ink-mute);transition:all .3s;flex-shrink:0;cursor:pointer;}
+.prog-dot{
+  width:30px;height:30px;border-radius:50%;
+  border:2px solid var(--border);background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-display);font-size:.68rem;font-weight:700;
+  color:var(--ink-mute);transition:all .3s;flex-shrink:0;cursor:pointer;
+}
 .prog-step.active .prog-dot{border-color:var(--gold);background:var(--gold);color:#0d0b08;}
-.prog-step.done .prog-dot{border-color:var(--gold-dk);background:var(--gold-dk);color:#fff;}
-.prog-label{font-family:var(--f-display);font-size:.72rem;color:var(--ink-mute);font-weight:600;white-space:nowrap;}
+.prog-step.done   .prog-dot{border-color:var(--gold-dk);background:var(--gold-dk);color:#fff;}
+.prog-label{
+  font-family:var(--f-display);font-size:.65rem;color:var(--ink-mute);
+  font-weight:600;white-space:nowrap;
+}
 .prog-step.active .prog-label{color:var(--gold);}
-.prog-step.done .prog-label{color:var(--gold-dk);}
-.prog-line{flex:1;height:2px;background:var(--border);margin:0 .25rem;transition:background .3s;}
-.prog-step.done + .prog-step .prog-line,.prog-step.done .prog-line{background:var(--gold-dk);}
-@media(max-width:640px){.prog-label{display:none;}.prog-step{flex:0;}}
+.prog-step.done   .prog-label{color:var(--gold-dk);}
+.prog-line{flex:1;height:2px;background:var(--border);margin:0 .2rem;transition:background .3s;min-width:12px;}
+.prog-step.done .prog-line{background:var(--gold-dk);}
+@media(max-width:600px){.prog-label{display:none;}.prog-step{flex:0;}.prog-line{min-width:8px;}}
 
 /* wizard body */
-.wizard-body{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 6rem;}
+.wizard-body{max-width:820px;margin:0 auto;padding:2rem 1.25rem;}
 
 /* step pane */
 .step-pane{display:none;animation:stepIn .3s ease both;}
 .step-pane.active{display:block;}
-@keyframes stepIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes stepIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-.step-title{font-family:var(--f-display);font-size:clamp(1.4rem,4vw,1.9rem);font-weight:700;color:var(--ink);margin-bottom:.35rem;}
-.step-desc{font-family:var(--f-display);font-size:1rem;color:var(--ink-sub);font-style:italic;margin-bottom:2rem;}
+.step-title{font-family:var(--f-display);font-size:clamp(1.3rem,4vw,1.75rem);font-weight:700;color:var(--ink);margin-bottom:.3rem;}
+.step-desc{font-family:var(--f-display);font-size:.92rem;color:var(--ink-sub);font-style:italic;margin-bottom:1.75rem;}
 
-/* form fields */
-.field-group{margin-bottom:1.6rem;}
-.field-label{display:block;font-family:var(--f-display);font-size:.92rem;font-weight:700;color:var(--ink);margin-bottom:.35rem;}
-.field-hint{font-family:var(--f-display);font-size:.8rem;color:var(--ink-mute);margin-bottom:.45rem;font-style:italic;}
+/* fields */
+.field-group{margin-bottom:1.4rem;}
+.field-label{
+  display:block;font-family:var(--f-display);font-size:.88rem;
+  font-weight:700;color:var(--ink);margin-bottom:.3rem;
+}
+.field-hint{font-family:var(--f-display);font-size:.76rem;color:var(--ink-mute);margin-bottom:.4rem;font-style:italic;line-height:1.5;}
 .field-required{color:var(--gold);margin-left:2px;}
 
 .field-input{
   width:100%;background:var(--input-bg);border:1.5px solid var(--border);
-  border-radius:8px;padding:.75rem 1rem;
-  font-family:var(--f-display);font-size:.97rem;color:var(--ink);
+  border-radius:8px;padding:.7rem .95rem;
+  font-family:var(--f-display);font-size:.93rem;color:var(--ink);
   transition:border-color .2s,box-shadow .2s;outline:none;
+  -webkit-appearance:none;
 }
 .field-input:focus{border-color:var(--gold-dk);box-shadow:0 0 0 3px rgba(196,154,48,.1);}
-.field-input::placeholder{color:var(--ink-mute);}
-.field-textarea{resize:vertical;min-height:100px;line-height:1.65;}
-.field-textarea.tall{min-height:180px;}
+.field-input::placeholder{color:var(--ink-mute);font-style:italic;}
+.field-textarea{resize:vertical;min-height:95px;line-height:1.65;}
+.field-textarea.tall{min-height:175px;}
 .field-textarea.xtall{min-height:280px;}
 
-/* two col */
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
-@media(max-width:580px){.field-row{grid-template-columns:1fr;}}
+/* two col — stack on mobile */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:560px){.field-row{grid-template-columns:1fr;gap:.75rem;}}
 
-/* dynamic list (narrator chain, images, events, links) */
+/* slug row */
+.slug-wrap{position:relative;}
+.slug-wrap .slug-auto-badge{
+  position:absolute;right:.65rem;top:50%;transform:translateY(-50%);
+  font-family:var(--f-mono);font-size:.6rem;color:var(--gold-dk);
+  background:var(--gold-dim);padding:.12rem .4rem;border-radius:4px;
+  pointer-events:none;
+}
+
+/* dynamic list */
 .dyn-list{display:flex;flex-direction:column;gap:.75rem;margin-bottom:.65rem;}
-.dyn-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.1rem;position:relative;transition:border-color .2s;}
+.dyn-item{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:.9rem 1rem;transition:border-color .2s;
+}
 .dyn-item:hover{border-color:var(--border2);}
-.dyn-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;}
-.dyn-item-label{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-dk);letter-spacing:.05em;text-transform:uppercase;}
-.dyn-remove{background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:.9rem;padding:.2rem .4rem;border-radius:4px;transition:all .2s;}
-.dyn-remove:hover{color:#c0613a;background:rgba(192,97,58,.1);}
-.add-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border:1.5px dashed var(--border);border-radius:8px;background:none;cursor:pointer;color:var(--ink-sub);font-family:var(--f-display);font-size:.88rem;transition:all .2s;width:100%;justify-content:center;}
+.dyn-item-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.7rem;
+}
+.dyn-item-label{font-family:var(--f-display);font-size:.75rem;font-weight:700;color:var(--gold-dk);letter-spacing:.05em;text-transform:uppercase;}
+.dyn-remove{background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:.85rem;padding:.2rem .35rem;border-radius:4px;transition:all .2s;}
+.dyn-remove:hover{color:var(--danger);background:rgba(192,97,58,.1);}
+
+.add-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.55rem 1rem;border:1.5px dashed var(--border);
+  border-radius:8px;background:none;cursor:pointer;
+  color:var(--ink-sub);font-family:var(--f-display);font-size:.83rem;
+  transition:all .2s;width:100%;justify-content:center;
+}
 .add-btn:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
 
 /* weight slider */
-.weight-wrap{display:flex;align-items:center;gap:.75rem;}
-.weight-slider{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none;}
-.weight-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--gold-lt);}
-.weight-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:.8rem;font-weight:700;flex-shrink:0;border:2px solid;}
+.weight-wrap{display:flex;align-items:center;gap:.7rem;}
+.weight-slider{
+  flex:1;-webkit-appearance:none;height:4px;border-radius:2px;
+  background:var(--border);outline:none;min-width:0;
+}
+.weight-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--gold);cursor:pointer;border:2px solid var(--gold-lt);
+}
+.weight-badge{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-display);font-size:.78rem;font-weight:700;border:2px solid;
+}
 
-/* tab selector (sunni / shia) */
-.tab-bar{display:flex;gap:.5rem;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.5rem;}
-.tab-btn{padding:.45rem 1.1rem;border:none;background:none;cursor:pointer;font-family:var(--f-display);font-size:.9rem;color:var(--ink-sub);border-radius:6px 6px 0 0;transition:all .2s;}
+/* perspective tabs */
+.tab-bar{display:flex;gap:.4rem;margin-bottom:.9rem;border-bottom:1px solid var(--border);padding-bottom:.45rem;flex-wrap:wrap;}
+.tab-btn{
+  padding:.4rem 1rem;border:none;background:none;cursor:pointer;
+  font-family:var(--f-display);font-size:.85rem;color:var(--ink-sub);
+  border-radius:6px 6px 0 0;transition:all .2s;
+}
 .tab-btn.active{color:var(--gold);background:var(--gold-dim);font-weight:700;}
 
-/* ── REVIEW / OUTPUT ── */
-.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
-@media(max-width:700px){.review-grid{grid-template-columns:1fr;}}
-.review-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem;}
-.review-section-title{font-family:var(--f-display);font-size:.8rem;font-weight:700;color:var(--gold-dk);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;}
-.review-row{display:flex;flex-direction:column;gap:.15rem;margin-bottom:.7rem;padding-bottom:.7rem;border-bottom:1px solid var(--border2);}
-.review-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
-.review-key{font-family:var(--f-mono);font-size:.72rem;color:var(--ink-mute);}
-.review-val{font-family:var(--f-display);font-size:.9rem;color:var(--ink);line-height:1.5;word-break:break-word;}
-.review-val.empty{color:var(--ink-mute);font-style:italic;font-size:.82rem;}
+/* ── JSON OUTPUT ── */
+.json-wrap{
+  background:var(--code-bg);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;
+}
+.json-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem 1rem;background:var(--surface2);
+  border-bottom:1px solid var(--border2);flex-wrap:wrap;gap:.5rem;
+}
+.json-toolbar-left{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.json-file-name{
+  font-family:var(--f-mono);font-size:.72rem;color:var(--gold-dk);
+}
+.json-line-count{font-family:var(--f-mono);font-size:.68rem;color:var(--ink-mute);}
+.json-toolbar-right{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
 
-/* code output */
 .code-block{
-  background:var(--code-bg);border:1px solid var(--border);border-radius:10px;
-  padding:1.25rem;overflow-x:auto;max-height:480px;overflow-y:auto;
-  font-family:var(--f-mono);font-size:.8rem;line-height:1.7;color:var(--ink-body);
+  font-family:var(--f-mono);font-size:.78rem;line-height:1.75;
+  color:var(--ink-body);padding:1.1rem 1.25rem;
+  overflow-x:auto;overflow-y:auto;max-height:520px;
   white-space:pre;
 }
-.code-actions{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem;}
-.code-action-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;border-radius:8px;cursor:pointer;font-family:var(--f-display);font-size:.9rem;font-weight:600;transition:all .2s;}
-.btn-copy{background:var(--surface2);border:1px solid var(--border);color:var(--ink-sub);}
-.btn-copy:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
-.btn-download{background:var(--gold);border:1px solid var(--gold);color:#0d0b08;}
-.btn-download:hover{background:var(--gold-lt);}
-.copied-toast{display:none;font-size:.8rem;color:var(--gold);align-items:center;gap:.3rem;padding:.45rem .8rem;background:var(--gold-dim);border-radius:6px;border:1px solid var(--border);}
+/* syntax highlight */
+.jk{color:#c49a30;}.js{color:#8ab8a0;}.jn{color:#a080d8;}.jb{color:#d87060;}
+
+.code-action-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.42rem 1rem;border-radius:7px;cursor:pointer;
+  font-family:var(--f-display);font-size:.8rem;font-weight:600;
+  transition:all .2s;white-space:nowrap;
+}
+.btn-copy-json{background:var(--surface3);border:1px solid var(--border);color:var(--ink-sub);}
+.btn-copy-json:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
+.btn-dl-json{background:var(--gold);border:none;color:#0d0b08;}
+.btn-dl-json:hover{background:var(--gold-lt);}
+.btn-new-json{background:none;border:1px solid var(--border);color:var(--ink-mute);}
+.btn-new-json:hover{border-color:var(--border);color:var(--ink-sub);}
+
+.copied-toast{
+  display:none;font-size:.75rem;color:var(--gold);
+  align-items:center;gap:.3rem;padding:.38rem .7rem;
+  background:var(--gold-dim);border-radius:6px;border:1px solid var(--border);
+  white-space:nowrap;
+}
 .copied-toast.show{display:inline-flex;}
 
-/* nav footer */
-.wizard-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:50;gap:1rem;}
-.nav-left{display:flex;align-items:center;gap:.75rem;}
-.nav-right-btns{display:flex;align-items:center;gap:.75rem;}
-.step-counter{font-family:var(--f-display);font-size:.85rem;color:var(--ink-mute);}
+/* ── WIZARD NAV FOOTER ── */
+.wizard-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:.8rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:100;gap:.5rem;flex-wrap:nowrap;
+}
+.nav-left{display:flex;align-items:center;gap:.4rem;min-width:0;flex-shrink:0;}
+.nav-right{display:flex;align-items:center;gap:.4rem;flex-shrink:0;}
+.step-counter{
+  font-family:var(--f-display);font-size:.9rem;color:var(--ink-mute);
+  white-space:nowrap;
+}
+@media(max-width:480px){
+  .step-counter{display:none;}
+  .wizard-nav{padding:.65rem 1rem;}
+}
 
 /* skip notice */
-.skip-notice{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-display);font-size:.8rem;color:var(--ink-mute);font-style:italic;margin-top:.5rem;}
-
-/* draft badge */
-.draft-saved{display:none;align-items:center;gap:.4rem;font-size:.8rem;color:var(--gold-dk);font-family:var(--f-display);}
-.draft-saved.show{display:inline-flex;}
-
-/* resume modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px);}
-.modal-overlay.show{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2rem;max-width:560px;width:100%;box-shadow:var(--shadow);}
-.modal-title{font-family:var(--f-display);font-size:1.4rem;font-weight:700;color:var(--ink);margin-bottom:.5rem;}
-.modal-desc{font-family:var(--f-display);font-size:.95rem;color:var(--ink-sub);margin-bottom:1.5rem;font-style:italic;line-height:1.65;}
-.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:1.1rem;transition:color .2s;}
-.modal-close:hover{color:var(--ink);}
-
-/* ── ANIMATIONS ── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-.anim-1{animation:fadeUp .5s .05s ease both;}
-.anim-2{animation:fadeUp .5s .15s ease both;}
-.anim-3{animation:fadeUp .5s .25s ease both;}
-.anim-4{animation:fadeUp .5s .35s ease both;}
-.anim-5{animation:fadeUp .5s .45s ease both;}
+.skip-notice{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--f-display);font-size:.76rem;
+  color:var(--ink-mute);font-style:italic;margin-top:.5rem;
+}
 
 /* color by weight */
-.w-peak{background:#e0b84a22;border-color:#e0b84a66;}.w-peak .weight-badge{background:#e0b84a22;border-color:#e0b84a;color:#e0b84a;}
-.w-ok{background:#4a9e6a22;border-color:#4a9e6a66;}.w-ok .weight-badge{background:#4a9e6a22;border-color:#4a9e6a;color:#4a9e6a;}
-.w-warn{background:#c49a3022;border-color:#c49a3066;}.w-warn .weight-badge{background:#c49a3022;border-color:#c49a30;color:#c49a30;}
-.w-bad{background:#c0613a22;border-color:#c0613a66;}.w-bad .weight-badge{background:#c0613a22;border-color:#c0613a;color:#c0613a;}
-.w-crit{background:#8b3a8b22;border-color:#8b3a8b66;}.w-crit .weight-badge{background:#8b3a8b22;border-color:#8b3a8b;color:#8b3a8b;}
+.w-peak{background:#e0b84a1a;border-color:#e0b84a55;}.w-peak .weight-badge{background:#e0b84a1a;border-color:#e0b84a;color:#e0b84a;}
+.w-ok  {background:#4a9e6a1a;border-color:#4a9e6a55;}.w-ok   .weight-badge{background:#4a9e6a1a;border-color:#4a9e6a;color:#4a9e6a;}
+.w-warn{background:#c49a301a;border-color:#c49a3055;}.w-warn .weight-badge{background:#c49a301a;border-color:#c49a30;color:#c49a30;}
+.w-bad {background:#c0613a1a;border-color:#c0613a55;}.w-bad  .weight-badge{background:#c0613a1a;border-color:#c0613a;color:#c0613a;}
+.w-crit{background:#8b3a8b1a;border-color:#8b3a8b55;}.w-crit .weight-badge{background:#8b3a8b1a;border-color:#8b3a8b;color:#8b3a8b;}
+
+/* resume modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:300;display:none;align-items:flex-start;justify-content:center;padding:1.5rem 1rem;overflow-y:auto;backdrop-filter:blur(6px);}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem 1.5rem;max-width:540px;width:100%;box-shadow:var(--shadow);position:relative;margin:auto;}
+.modal-title{font-family:var(--f-display);font-size:1.3rem;font-weight:700;color:var(--ink);margin-bottom:.4rem;}
+.modal-desc{font-family:var(--f-display);font-size:.88rem;color:var(--ink-sub);margin-bottom:1.25rem;font-style:italic;line-height:1.6;}
+.modal-close{position:absolute;top:.9rem;right:.9rem;background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:1rem;transition:color .2s;}
+.modal-close:hover{color:var(--ink);}
+
+/* draft notice banner */
+.draft-notice{
+  display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;
+  padding:.6rem 1rem;background:var(--gold-dim);
+  border:1px solid var(--border);border-radius:8px;
+  font-family:var(--f-display);font-size:.85rem;color:var(--ink-sub);
+  margin-bottom:1.25rem;text-align:center;
+}
+.draft-notice button{
+  background:none;border:none;cursor:pointer;
+  color:var(--gold-dk);font-family:var(--f-display);font-size:.85rem;
+  font-weight:700;text-decoration:underline;
+}
+
+/* animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.a1{animation:fadeUp .5s .05s ease both;}
+.a2{animation:fadeUp .5s .12s ease both;}
+.a3{animation:fadeUp .5s .2s  ease both;}
+.a4{animation:fadeUp .5s .28s ease both;}
+.a5{animation:fadeUp .5s .36s ease both;}
+
+/* arabic RTL textarea */
+.rtl-input{direction:rtl;text-align:right;font-size:1.1rem;line-height:2;}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
+<!-- ══ TOPBAR ══ -->
 <header class="topbar">
-  <a href="index.html" class="topbar-logo">⛵ Safeenah</a>
-  <div style="display:flex;align-items:center;gap:1rem;">
-    <span id="draftSaved" class="draft-saved"><i class="fa fa-check-circle"></i> Draft saved</span>
+  <a href="./index.html" class="topbar-logo">Safeenah</a>
+  <div class="topbar-right">
+    <span id="draftSaved" class="draft-saved"><i class="fa fa-check-circle"></i> Saved</span>
     <button class="theme-toggle" onclick="toggleTheme()">
       <i class="fa fa-sun" id="themeIcon"></i>
       <span id="themeLbl">Light</span>
@@ -245,139 +433,131 @@ body{background:var(--bg);color:var(--ink-body);font-family:var(--f-display);fon
   </div>
 </header>
 
-<!-- ══════════════ WELCOME SCREEN ══════════════ -->
+<!-- ══ WELCOME ══ -->
 <div id="screen-welcome">
 
-  <div class="anim-1" style="margin-bottom:.5rem;">
-    <span style="font-family:var(--f-display);font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dk);">Safeenah Archive Tools</span>
+  <div class="a1" style="margin-bottom:.4rem;">
+    <span style="font-family:var(--f-display);font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dk);">Safeenah Archive Tools</span>
   </div>
 
-  <h1 class="welcome-title anim-2">JSON <span>Generator</span></h1>
-  <p class="welcome-sub anim-3">Generate structured JSON records for the Safeenah archive — step by step, field by field. No data is sent anywhere. Everything stays in your browser.</p>
+  <h1 class="welcome-title a2">JSON <span>Generator</span></h1>
+  <p class="welcome-sub a3">You can generate a real event or hadith as JSON here. It will save to localstorage on that browser.</p>
 
-  <!-- Resume option -->
-  <div class="anim-3" style="margin-bottom:1rem;">
-    <button class="resume-btn" onclick="openResumeModal()">
-      <i class="fa fa-upload"></i> Resume an unfinished JSON file
-    </button>
-  </div>
+  <div class="a3" id="draftNoticeWrap"></div>
 
-  <!-- Type selector -->
-  <p style="font-family:var(--f-display);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:1rem;" class="anim-3">Choose what to generate:</p>
-  <div class="type-grid anim-4">
+  <button class="resume-btn a3" onclick="openResumeModal()">
+    <i class="fa fa-upload"></i> Resume an unfinished draft or JSON file
+  </button>
+
+  <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.85rem;" class="a3">What are you creating?</p>
+  <div class="type-grid a4">
     <div class="type-card" id="card-hadith" onclick="selectType('hadith')">
       <span class="type-card-icon">📖</span>
       <div class="type-card-title">Hadith Record</div>
-      <div class="type-card-desc">Arabic text, Bangla translation, narrator chain with weights, scholarly perspectives, dialogue, images, links.</div>
+      <div class="type-card-desc">Arabic script, Bengali translation, narrator chain with reliability weights, Sunni & Shia scholarly perspectives, simulated dialogue, images, links.</div>
       <span class="type-check"><i class="fa fa-check"></i></span>
     </div>
     <div class="type-card" id="card-event" onclick="selectType('event')">
       <span class="type-card-icon">📅</span>
       <div class="type-card-title">Historical Event</div>
-      <div class="type-card-desc">Timeline event with description, sources, related hadith, images, tags, and scholarly context.</div>
+      <div class="type-card-desc">Timeline event with full HTML description, primary sources, related hadith references, images, and searchable tags.</div>
       <span class="type-check"><i class="fa fa-check"></i></span>
     </div>
   </div>
 
-  <!-- Sample preview -->
-  <p style="font-family:var(--f-display);font-size:.9rem;color:var(--ink-mute);margin-bottom:1rem;font-style:italic;" class="anim-4">Sample JSON structure for each type:</p>
-  <div class="sample-grid anim-5">
-    <!-- Hadith sample -->
+  <button class="btn-primary a5 mb-10" onclick="startWizard()" id="startBtn" disabled>
+    Begin <i class="fa fa-arrow-right"></i>
+  </button>
+
+  <!-- Sample skeleton previews -->
+  <div class="sample-grid a5">
     <div class="sample-card">
-      <div class="sample-head"><i class="fa fa-book"></i> Hadith JSON</div>
+      <div class="sample-head"><i class="fa fa-book"></i> Hadith JSON fields</div>
       <div class="sample-body">
-        <div class="skel-row"><span class="skel-key">"id":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"slug":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"title":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"subTitle":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"year":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"book_name":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"arabic_script":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"bangla_script":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"details":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"chain_of_narrator":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"prespective_explanation":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"simulated_dialogue":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"images":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"tags":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"id"</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"slug"</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"title"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"arabic_script"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"bangla_script"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"book_name"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"chain_of_narrator"</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"prespective_explanation"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"simulated_dialogue"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"tags"</span><div class="skel-val"></div></div>
       </div>
     </div>
-    <!-- Event sample -->
     <div class="sample-card">
-      <div class="sample-head"><i class="fa fa-calendar"></i> Event JSON</div>
+      <div class="sample-head"><i class="fa fa-calendar"></i> Event JSON fields</div>
       <div class="sample-body">
-        <div class="skel-row"><span class="skel-key">"id":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"slug":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"title":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"subTitle":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"year":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"yearNumeric":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"era":</span><div class="skel-val short"></div></div>
-        <div class="skel-row"><span class="skel-key">"author":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"summary":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"description":</span><div class="skel-val"></div></div>
-        <div class="skel-row"><span class="skel-key">"sources":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"hadiths":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"images":</span><div class="skel-val medium"></div></div>
-        <div class="skel-row"><span class="skel-key">"tags":</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"id"</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"slug"</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"title"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"year"</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"yearNumeric"</span><div class="skel-val short"></div></div>
+        <div class="skel-row"><span class="skel-key">"summary"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"description"</span><div class="skel-val"></div></div>
+        <div class="skel-row"><span class="skel-key">"sources"</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"hadiths"</span><div class="skel-val medium"></div></div>
+        <div class="skel-row"><span class="skel-key">"tags"</span><div class="skel-val"></div></div>
       </div>
     </div>
   </div>
 
-  <button class="btn-primary anim-5" onclick="startWizard()" id="startBtn" disabled>
-    Start Generating <i class="fa fa-arrow-right"></i>
-  </button>
+  
 </div>
 
-<!-- ══════════════ WIZARD ══════════════ -->
+<!-- ══ WIZARD ══ -->
 <div id="screen-wizard">
-
-  <!-- PROGRESS BAR -->
   <div class="progress-bar-wrap">
     <div class="progress-steps" id="progressSteps"></div>
   </div>
-
-  <!-- STEP BODY -->
   <div class="wizard-body" id="wizardBody"></div>
-
-  <!-- NAV FOOTER -->
   <div class="wizard-nav">
     <div class="nav-left">
-      <button class="btn-secondary" id="btnBack" onclick="goBack()"><i class="fa fa-arrow-left"></i> Back</button>
+      <button class="btn-secondary" id="btnBack" onclick="goBack()">
+        <i class="fa fa-arrow-left"></i> <span class="hidden sm:inline">Back</span>
+      </button>
       <span class="step-counter" id="stepCounter"></span>
     </div>
-    <div class="nav-right-btns">
-      <button class="btn-ghost" onclick="saveDraft()"><i class="fa fa-save"></i> Save Draft</button>
-      <button class="btn-primary" id="btnNext" onclick="goNext()">Next <i class="fa fa-arrow-right"></i></button>
+    <div class="nav-right">
+      <button class="btn-skip" onclick="skipToReview()" id="btnSkip" title="Skip remaining steps and go to JSON output">
+        <i class="fa fa-forward"></i> Skip to Export
+      </button>
+      <button class="btn-ghost" onclick="saveDraft()">
+        <i class="fa fa-save"></i> <span class="hidden sm:inline">Save Draft</span>
+      </button>
+      <button class="btn-primary" id="btnNext" onclick="goNext()">
+        Next <i class="fa fa-arrow-right"></i>
+      </button>
     </div>
   </div>
 </div>
 
-<!-- RESUME MODAL -->
+<!-- ══ RESUME MODAL ══ -->
 <div class="modal-overlay" id="resumeModal">
-  <div class="modal" style="position:relative;">
+  <div class="modal">
     <button class="modal-close" onclick="closeResumeModal()"><i class="fa fa-times"></i></button>
-    <div class="modal-title">Resume Unfinished JSON</div>
-    <div class="modal-desc">Select the type of your unfinished record, then paste or upload the JSON file. Filled fields will be pre-loaded; empty fields will be ready for you to complete.</div>
-    <div style="display:flex;gap:.75rem;margin-bottom:1.25rem;">
-      <button class="type-card" style="flex:1;padding:1rem;" id="res-hadith" onclick="resumeSelectType('hadith')">
-        <div class="type-card-title" style="font-size:1rem;">📖 Hadith</div>
+    <div class="modal-title">Resume or Continue</div>
+    <div class="modal-desc">Select the record type, then paste or upload an existing JSON file. Fields that already have data will be pre-filled; empty ones are ready to complete.</div>
+    <div style="display:flex;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap;">
+      <button class="type-card" style="flex:1;min-width:120px;padding:1rem;" id="res-hadith" onclick="resumeSelectType('hadith')">
+        <div class="type-card-title" style="font-size:.95rem;">📖 Hadith</div>
         <span class="type-check"><i class="fa fa-check"></i></span>
       </button>
-      <button class="type-card" style="flex:1;padding:1rem;" id="res-event" onclick="resumeSelectType('event')">
-        <div class="type-card-title" style="font-size:1rem;">📅 Event</div>
+      <button class="type-card" style="flex:1;min-width:120px;padding:1rem;" id="res-event" onclick="resumeSelectType('event')">
+        <div class="type-card-title" style="font-size:.95rem;">📅 Event</div>
         <span class="type-check"><i class="fa fa-check"></i></span>
       </button>
     </div>
     <div class="field-group">
       <label class="field-label">Paste JSON content</label>
-      <textarea class="field-input field-textarea" id="resumePaste" placeholder='{ "id": 1, "title": "...", ... }' style="min-height:130px;font-family:var(--f-mono);font-size:.8rem;"></textarea>
+      <textarea class="field-input field-textarea" id="resumePaste" style="font-family:var(--f-mono);font-size:.76rem;min-height:120px;" placeholder="Paste the JSON object here, or upload the file below."></textarea>
     </div>
-    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
-      <span style="font-family:var(--f-display);font-size:.88rem;color:var(--ink-mute);">or upload file:</span>
-      <input type="file" id="resumeFile" accept=".json" style="font-family:var(--f-display);font-size:.85rem;color:var(--ink-sub);" onchange="loadResumeFile(event)"/>
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.1rem;flex-wrap:wrap;">
+      <span style="font-family:var(--f-display);font-size:.82rem;color:var(--ink-mute);">Or upload file:</span>
+      <input type="file" id="resumeFile" accept=".json" style="font-family:var(--f-display);font-size:.8rem;color:var(--ink-sub);" onchange="loadResumeFile(event)"/>
     </div>
-    <div style="display:flex;gap:.75rem;">
+    <div style="display:flex;gap:.65rem;flex-wrap:wrap;">
       <button class="btn-primary" onclick="applyResume()"><i class="fa fa-check"></i> Load & Continue</button>
       <button class="btn-secondary" onclick="closeResumeModal()">Cancel</button>
     </div>
@@ -385,736 +565,618 @@ body{background:var(--bg);color:var(--ink-body);font-family:var(--f-display);fon
 </div>
 
 <script>
-/* ════════════════════════════════════════
-   THEME
-════════════════════════════════════════ */
+/* ═══════════════════════ THEME ═══════════════════════ */
 let currentTheme = localStorage.getItem('sf-theme') || 'dark';
 document.documentElement.setAttribute('data-theme', currentTheme);
 updateThemeUI();
 function toggleTheme(){
-  currentTheme = currentTheme==='dark' ? 'light' : 'dark';
+  currentTheme = currentTheme==='dark'?'light':'dark';
   document.documentElement.setAttribute('data-theme', currentTheme);
   localStorage.setItem('sf-theme', currentTheme);
   updateThemeUI();
 }
 function updateThemeUI(){
-  document.getElementById('themeLbl').textContent = currentTheme==='dark' ? 'Light' : 'Dark';
-  document.getElementById('themeIcon').className = currentTheme==='dark' ? 'fa fa-sun' : 'fa fa-moon';
+  document.getElementById('themeLbl').textContent   = currentTheme==='dark'?'Light':'Dark';
+  document.getElementById('themeIcon').className    = currentTheme==='dark'?'fa fa-sun':'fa fa-moon';
 }
 
-/* ════════════════════════════════════════
-   STATE
-════════════════════════════════════════ */
-let selectedType = null;   // 'hadith' | 'event'
-let currentStep = 0;
-let formData = {};
-const DRAFT_KEY = 'safeenah_json_draft';
+/* ═══════════════════════ STATE ═══════════════════════ */
+let selectedType = null;
+let currentStep  = 0;
+let formData     = {};
+const DRAFT_KEY  = 'safeenah_json_draft_v2';
 
-/* ════════════════════════════════════════
-   WELCOME
-════════════════════════════════════════ */
+/* ═══════════════════════ WELCOME ═══════════════════════ */
 function selectType(t){
   selectedType = t;
-  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('selected'));
   document.getElementById('card-'+t).classList.add('selected');
   document.getElementById('startBtn').disabled = false;
 }
-
 function startWizard(){
   if(!selectedType) return;
   formData = {};
   currentStep = 0;
   buildWizard();
-  document.getElementById('screen-welcome').style.display = 'none';
-  document.getElementById('screen-wizard').style.display = 'block';
+  document.getElementById('screen-welcome').style.display='none';
+  document.getElementById('screen-wizard').style.display='block';
 }
 
-/* ════════════════════════════════════════
-   STEP DEFINITIONS
-════════════════════════════════════════ */
+/* ═══════════════════════ STEPS ═══════════════════════ */
 function getSteps(){
   if(selectedType==='hadith') return [
-    { id:'basic',   label:'Basic Info',    icon:'fa-info-circle' },
-    { id:'book',    label:'Book & Source', icon:'fa-book' },
-    { id:'text',    label:'Arabic & Text', icon:'fa-font' },
-    { id:'details', label:'Details',       icon:'fa-align-left' },
-    { id:'chain',   label:'Narrators',     icon:'fa-link' },
-    { id:'media',   label:'Images',        icon:'fa-image' },
-    { id:'persp',   label:'Perspectives',  icon:'fa-balance-scale' },
-    { id:'dlg',     label:'Dialogue',      icon:'fa-comments' },
-    { id:'events',  label:'Events & Links',icon:'fa-external-link' },
-    { id:'tags',    label:'Tags',          icon:'fa-tags' },
-    { id:'review',  label:'Review & Export',icon:'fa-check-circle' },
+    {id:'basic',   label:'Basic',       icon:'fa-info-circle'},
+    {id:'book',    label:'Book',        icon:'fa-book'},
+    {id:'text',    label:'Text',        icon:'fa-font'},
+    {id:'details', label:'Details',     icon:'fa-align-left'},
+    {id:'chain',   label:'Narrators',   icon:'fa-link'},
+    {id:'media',   label:'Images',      icon:'fa-image'},
+    {id:'persp',   label:'Perspectives',icon:'fa-balance-scale'},
+    {id:'dlg',     label:'Dialogue',    icon:'fa-comments'},
+    {id:'linksev', label:'Links',       icon:'fa-external-link'},
+    {id:'tags',    label:'Tags',        icon:'fa-tags'},
+    {id:'review',  label:'Export',      icon:'fa-check-circle'},
   ];
   return [
-    { id:'basic',   label:'Basic Info',    icon:'fa-info-circle' },
-    { id:'meta',    label:'Meta',          icon:'fa-user' },
-    { id:'content', label:'Description',   icon:'fa-align-left' },
-    { id:'sources', label:'Sources',       icon:'fa-book-open' },
-    { id:'hadiths', label:'Hadiths',       icon:'fa-book' },
-    { id:'media',   label:'Images',        icon:'fa-image' },
-    { id:'tags',    label:'Tags',          icon:'fa-tags' },
-    { id:'review',  label:'Review & Export',icon:'fa-check-circle' },
+    {id:'basic',   label:'Basic',   icon:'fa-info-circle'},
+    {id:'meta',    label:'Meta',    icon:'fa-user'},
+    {id:'content', label:'Content', icon:'fa-align-left'},
+    {id:'sources', label:'Sources', icon:'fa-book-open'},
+    {id:'hadiths', label:'Hadiths', icon:'fa-book'},
+    {id:'media',   label:'Images',  icon:'fa-image'},
+    {id:'tags',    label:'Tags',    icon:'fa-tags'},
+    {id:'review',  label:'Export',  icon:'fa-check-circle'},
   ];
 }
 
-/* ════════════════════════════════════════
-   BUILD WIZARD
-════════════════════════════════════════ */
+/* ═══════════════════════ BUILD WIZARD ═══════════════════════ */
 function buildWizard(){
   const steps = getSteps();
-  // Progress bar
   const pSteps = document.getElementById('progressSteps');
-  pSteps.innerHTML = steps.map((s,i) =>
-    `<div class="prog-step" id="prog-${i}">
+  pSteps.innerHTML = steps.map((s,i)=>`
+    <div class="prog-step" id="prog-${i}">
       <div class="prog-dot" onclick="jumpToStep(${i})" title="${s.label}">
-        <i class="fa ${s.icon}" style="font-size:.65rem;"></i>
+        <i class="fa ${s.icon}" style="font-size:.58rem;"></i>
       </div>
       <span class="prog-label">${s.label}</span>
-      ${i < steps.length-1 ? '<div class="prog-line"></div>' : ''}
-    </div>`
-  ).join('');
-
+      ${i<steps.length-1?'<div class="prog-line"></div>':''}
+    </div>`).join('');
   renderStep();
 }
 
 function renderStep(){
   const steps = getSteps();
-  // Update progress
-  steps.forEach((_,i) => {
+  steps.forEach((_,i)=>{
     const el = document.getElementById('prog-'+i);
     if(!el) return;
-    el.className = 'prog-step' + (i===currentStep?' active':i<currentStep?' done':'');
+    el.className = 'prog-step'+(i===currentStep?' active':i<currentStep?' done':'');
   });
-
-  document.getElementById('stepCounter').textContent = `Step ${currentStep+1} of ${steps.length}`;
-
-  const isLast = currentStep === steps.length - 1;
+  document.getElementById('stepCounter').textContent = `${currentStep+1} / ${steps.length}`;
+  const isLast = currentStep===steps.length-1;
   const btnNext = document.getElementById('btnNext');
-  btnNext.innerHTML = isLast ? '<i class="fa fa-check"></i> Finish' : 'Next <i class="fa fa-arrow-right"></i>';
-  document.getElementById('btnBack').disabled = currentStep === 0;
-
-  // Render step content
+  btnNext.innerHTML = isLast?'<i class="fa fa-check"></i> Finish':'Next <i class="fa fa-arrow-right"></i>';
+  document.getElementById('btnBack').disabled = currentStep===0;
+  document.getElementById('btnSkip').style.display = isLast?'none':'';
   const wb = document.getElementById('wizardBody');
-  const step = steps[currentStep];
-  wb.innerHTML = buildStepHTML(step.id);
-
-  // Restore values
-  restoreStepValues(step.id);
-
-  // Scroll to top
-  wb.scrollIntoView({behavior:'smooth', block:'start'});
+  const sid = steps[currentStep].id;
+  wb.innerHTML = buildStepHTML(sid);
+  restoreStepValues(sid);
+  wb.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ════════════════════════════════════════
-   STEP HTML BUILDERS
-════════════════════════════════════════ */
-function buildStepHTML(stepId){
-  if(selectedType==='hadith') return buildHadithStep(stepId);
-  return buildEventStep(stepId);
+/* ═══════════════════════ STEP HTML ═══════════════════════ */
+function buildStepHTML(id){
+  return selectedType==='hadith' ? buildHadithStep(id) : buildEventStep(id);
 }
 
-/* ── HADITH STEPS ── */
 function buildHadithStep(id){
   switch(id){
-    case 'basic': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Basic Information</h2>
-        <p class="step-desc">The core identifiers of this hadith record.</p>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">ID <span class="field-required">*</span></label>
-            <div class="field-hint">A unique number or short identifier (e.g. 1, 2, 42)</div>
-            <input class="field-input" id="f-id" placeholder="e.g. 1" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Slug <span class="field-required">*</span></label>
-            <div class="field-hint">URL-friendly identifier (e.g. hadith-thaqalayn)</div>
-            <input class="field-input" id="f-slug" placeholder="e.g. hadith-thaqalayn" oninput="autoSlug()" />
-          </div>
+    case 'basic': return `<div class="step-pane active">
+      <h2 class="step-title">Basic Information</h2>
+      <p class="step-desc">The unique identifiers that link this hadith to the archive and the URL system.</p>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">ID <span class="field-required">*</span></label>
+          <div class="field-hint">A unique numeric or text identifier — used internally to locate this record</div>
+          <input class="field-input" id="f-id" placeholder="A unique number or short code for this record"/>
         </div>
         <div class="field-group">
-          <label class="field-label">Title (Bengali) <span class="field-required">*</span></label>
-          <div class="field-hint">Full title of the hadith in Bengali</div>
-          <input class="field-input" id="f-title" placeholder="হাদীসের শিরোনাম..." oninput="autoSlugFromTitle(this.value)" />
+          <label class="field-label">Slug <span class="field-required">*</span></label>
+          <div class="field-hint">URL-safe identifier — auto-generated from title, can be edited manually</div>
+          <div class="slug-wrap">
+            <input class="field-input" id="f-slug" placeholder="Auto-generated from title — only lowercase letters, numbers, hyphens"/>
+            <span class="slug-auto-badge" id="slugBadge">auto</span>
+          </div>
         </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Title (Bengali preferred) <span class="field-required">*</span></label>
+        <div class="field-hint">The full title of this hadith — write in Bengali or English. Slug will auto-generate from this.</div>
+        <input class="field-input" id="f-title" placeholder="Write the complete hadith title here — this appears as the heading on the detail page" oninput="autoSlugFromTitle(this.value)"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Subtitle</label>
+        <div class="field-hint">A secondary line shown below the title — a brief thematic description or alternative name</div>
+        <input class="field-input" id="f-subTitle" placeholder="A secondary description or alternative name for this hadith"/>
+      </div>
+      <div class="field-row">
         <div class="field-group">
-          <label class="field-label">Subtitle</label>
-          <div class="field-hint">A secondary title or brief description</div>
-          <input class="field-input" id="f-subTitle" placeholder="সংক্ষিপ্ত বিবরণ বা উপশিরোনাম..." />
-        </div>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Year</label>
-            <div class="field-hint">e.g. ১০ হিজরি / ৬৩২ খ্রিস্টাব্দ</div>
-            <input class="field-input" id="f-year" placeholder="৬৩২ CE" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Banner Image URL</label>
-            <div class="field-hint">Header image URL for this hadith</div>
-            <input class="field-input" id="f-banner" placeholder="https://..." />
-          </div>
-        </div>
-        <p class="skip-notice"><i class="fa fa-info-circle"></i> All non-required fields can be left blank and filled later.</p>
-      </div>`;
-
-    case 'book': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Book & Source Details</h2>
-        <p class="step-desc">Information about the hadith collection this record appears in.</p>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Book Name</label>
-            <input class="field-input" id="f-book_name" placeholder="সহীহ বুখারী, সহীহ মুসলিম..." />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Book Author</label>
-            <input class="field-input" id="f-book_author" placeholder="ইমাম বুখারী..." />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Author Manhaj</label>
-            <div class="field-hint">Scholarly tradition (Sunni, Shia, Multi-Perspective…)</div>
-            <input class="field-input" id="f-author_manhaj" placeholder="Sunni, Multi-Perspective..." />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Book Year</label>
-            <input class="field-input" id="f-book_year" placeholder="২৬১ হিজরি" />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Publication</label>
-            <input class="field-input" id="f-publication" placeholder="ইসলামিক ফাউন্ডেশন..." />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Edition</label>
-            <input class="field-input" id="f-edition" placeholder="২য় সংস্করণ" />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Enlisting Author</label>
-            <div class="field-hint">Who is adding this to the archive</div>
-            <input class="field-input" id="f-enlist_author" placeholder="ইরশাদ হোসাইন" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Enlist Date</label>
-            <input class="field-input" id="f-enlist_date" placeholder="YYYY-MM-DD" />
-          </div>
-        </div>
-      </div>`;
-
-    case 'text': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Arabic Text & Bengali Translation</h2>
-        <p class="step-desc">The core hadith text in Arabic script and its Bengali meaning.</p>
-        <div class="field-group">
-          <label class="field-label">Arabic Script</label>
-          <div class="field-hint">The original Arabic text of the hadith. Use RTL direction.</div>
-          <textarea class="field-input field-textarea" id="f-arabic_script" dir="rtl" style="font-size:1.2rem;line-height:2.1;" placeholder="إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ..."></textarea>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Bengali Translation (Bangla Script)</label>
-          <div class="field-hint">The meaning of the hadith in Bengali</div>
-          <textarea class="field-input field-textarea" id="f-bangla_script" style="font-family:var(--f-bn);" placeholder="কাজ পরিচালিত হয় নিয়তের ওপর..."></textarea>
-        </div>
-      </div>`;
-
-    case 'details': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Details & Analysis</h2>
-        <p class="step-desc">Full explanation and historical context. HTML is supported.</p>
-        <div class="field-group">
-          <label class="field-label">Details (HTML supported)</label>
-          <div class="field-hint">Use &lt;p&gt;, &lt;h2&gt;, &lt;blockquote&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ol&gt;, &lt;ul&gt; etc.</div>
-          <textarea class="field-input field-textarea xtall" id="f-details" placeholder="&lt;p&gt;এই হাদীসটি ইসলামের...&lt;/p&gt;"></textarea>
-        </div>
-      </div>`;
-
-    case 'chain': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Chain of Narrators</h2>
-        <p class="step-desc">Add each narrator in the chain. Weight 0–10 indicates reliability. Click a narrator to expand/add note.</p>
-        <div class="dyn-list" id="chain-list"></div>
-        <button class="add-btn" onclick="addChainItem()"><i class="fa fa-plus"></i> Add Narrator</button>
-      </div>`;
-
-    case 'media': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Images</h2>
-        <p class="step-desc">Add image URLs with descriptive captions for this hadith.</p>
-        <div class="dyn-list" id="images-list"></div>
-        <button class="add-btn" onclick="addImageItem()"><i class="fa fa-plus"></i> Add Image</button>
-      </div>`;
-
-    case 'persp': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Scholarly Perspectives</h2>
-        <p class="step-desc">Add Sunni and Shia scholarly interpretations. HTML is supported.</p>
-        <div class="tab-bar">
-          <button class="tab-btn active" onclick="switchPerspTab(this,'sunni')">☀️ Sunni</button>
-          <button class="tab-btn" onclick="switchPerspTab(this,'shiya')">🌙 Shia</button>
-        </div>
-        <div id="persp-sunni">
-          <div class="field-hint">Write or paste Sunni scholarly analysis. HTML tags supported.</div>
-          <textarea class="field-input field-textarea xtall" id="f-persp-sunni" placeholder="&lt;p&gt;সুন্নী আলেমদের মতে...&lt;/p&gt;"></textarea>
-        </div>
-        <div id="persp-shiya" style="display:none;">
-          <div class="field-hint">Write or paste Shia scholarly analysis. HTML tags supported.</div>
-          <textarea class="field-input field-textarea xtall" id="f-persp-shiya" placeholder="&lt;p&gt;শিয়া ফিকহে...&lt;/p&gt;"></textarea>
-        </div>
-      </div>`;
-
-    case 'dlg': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Simulated Dialogue</h2>
-        <p class="step-desc">A dialogue illustrating the scholarly debate around this hadith. HTML supported — use &lt;p&gt; tags for each turn.</p>
-        <div class="field-hint">Each &lt;p&gt; will render as a separate speech bubble. Label speakers with &lt;strong&gt;A:&lt;/strong&gt; or character names.</div>
-        <textarea class="field-input field-textarea xtall" id="f-simulated_dialogue" placeholder="&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; প্রশ্ন...&lt;/p&gt;&#10;&lt;p&gt;&lt;strong&gt;B:&lt;/strong&gt; উত্তর...&lt;/p&gt;"></textarea>
-      </div>`;
-
-    case 'events': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Related Events & Links</h2>
-        <p class="step-desc">Link to related historical events and further reading resources.</p>
-        <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.75rem;">Related Events</p>
-        <div class="dyn-list" id="events-list"></div>
-        <button class="add-btn" onclick="addEventItem()" style="margin-bottom:1.5rem;"><i class="fa fa-plus"></i> Add Event Link</button>
-        <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:.75rem;">Further Reading Links</p>
-        <div class="dyn-list" id="links-list"></div>
-        <button class="add-btn" onclick="addLinkItem()"><i class="fa fa-plus"></i> Add Reading Link</button>
-      </div>`;
-
-    case 'tags': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Tags</h2>
-        <p class="step-desc">Add searchable tags separated by commas or pressing Enter.</p>
-        <div class="field-group">
-          <label class="field-label">Tags</label>
-          <div class="field-hint">e.g. আহলে-বাইত, সাক্বালাইন, সহীহ-মুসলিম, গাদীর-খুম</div>
-          <input class="field-input" id="f-tags" placeholder="নিয়ত, ইখলাস, বুখারী..." />
-          <div id="tag-preview" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem;"></div>
-        </div>
-      </div>`;
-
-    case 'review': return buildReviewStep();
-
-    default: return `<div class="step-pane active"><p>Step not found.</p></div>`;
-  }
-}
-
-/* ── EVENT STEPS ── */
-function buildEventStep(id){
-  switch(id){
-    case 'basic': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Basic Information</h2>
-        <p class="step-desc">Core identifiers for this historical event.</p>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">ID <span class="field-required">*</span></label>
-            <input class="field-input" id="f-id" placeholder="e.g. ghadir-khum" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Slug <span class="field-required">*</span></label>
-            <input class="field-input" id="f-slug" placeholder="e.g. ghadir-khum" />
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Title <span class="field-required">*</span></label>
-          <input class="field-input" id="f-title" placeholder="Event title..." oninput="autoSlugFromTitle(this.value)" />
-        </div>
-        <div class="field-group">
-          <label class="field-label">Subtitle</label>
-          <input class="field-input" id="f-subTitle" placeholder="Secondary title or short description..." />
-        </div>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Year</label>
-            <input class="field-input" id="f-year" placeholder="e.g. 10 AH / 632 CE" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Year Numeric</label>
-            <div class="field-hint">Negative for BH (e.g. -1 for 1 BH)</div>
-            <input class="field-input" id="f-yearNumeric" placeholder="e.g. 10 or -1" type="number" />
-          </div>
-        </div>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Era</label>
-            <div class="field-hint">AH, BH, CE, BCE</div>
-            <input class="field-input" id="f-era" placeholder="AH" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Thumbnail URL</label>
-            <input class="field-input" id="f-thumb" placeholder="https://..." />
-          </div>
+          <label class="field-label">Year</label>
+          <div class="field-hint">The approximate year or period this hadith was narrated or refers to</div>
+          <input class="field-input" id="f-year" placeholder="Approximate year or period — e.g. 10th year after Hijra"/>
         </div>
         <div class="field-group">
           <label class="field-label">Banner Image URL</label>
-          <input class="field-input" id="f-banner" placeholder="https://..." />
+          <div class="field-hint">A wide image shown at the top of the hadith detail page</div>
+          <input class="field-input" id="f-banner" placeholder="Direct URL to the banner image (recommended: 1200×500px)"/>
+        </div>
+      </div>
+      <p class="skip-notice"><i class="fa fa-info-circle"></i> Non-required fields can be completed later — the JSON will still be valid.</p>
+    </div>`;
+
+    case 'book': return `<div class="step-pane active">
+      <h2 class="step-title">Book & Source Details</h2>
+      <p class="step-desc">Information about the classical hadith collection this record is drawn from.</p>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Book Name</label>
+          <div class="field-hint">Name of the hadith collection — in Bengali, Arabic or English</div>
+          <input class="field-input" id="f-book_name" placeholder="Name of the primary hadith collection this appears in"/>
         </div>
         <div class="field-group">
-          <label class="field-label">Summary <span class="field-required">*</span></label>
-          <div class="field-hint">A 2–3 sentence overview shown on the timeline and cards</div>
-          <textarea class="field-input field-textarea" id="f-summary" placeholder="Brief summary of the event..."></textarea>
+          <label class="field-label">Book Author</label>
+          <div class="field-hint">The scholar who compiled or wrote this collection</div>
+          <input class="field-input" id="f-book_author" placeholder="Full name of the hadith collection's author or compiler"/>
         </div>
-      </div>`;
-
-    case 'meta': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Author & Publication</h2>
-        <p class="step-desc">Who documented this event and when.</p>
-        <div class="field-row">
-          <div class="field-group">
-            <label class="field-label">Author</label>
-            <input class="field-input" id="f-author" placeholder="Irshad" />
-          </div>
-          <div class="field-group">
-            <label class="field-label">Published Date</label>
-            <input class="field-input" id="f-published" placeholder="20 June, 2026" />
-          </div>
-        </div>
-      </div>`;
-
-    case 'content': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Description</h2>
-        <p class="step-desc">Full description of the event. HTML is fully supported.</p>
-        <div class="field-hint">Use &lt;p&gt;, &lt;blockquote&gt;, &lt;h2&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;ul&gt;, &lt;ol&gt; etc.</div>
-        <textarea class="field-input field-textarea xtall" id="f-description" placeholder="&lt;p&gt;Early in the prophetic mission...&lt;/p&gt;"></textarea>
-      </div>`;
-
-    case 'sources': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Primary Sources</h2>
-        <p class="step-desc">Reference books, classical texts, and URLs that document this event.</p>
-        <div class="dyn-list" id="sources-list"></div>
-        <button class="add-btn" onclick="addSourceItem()"><i class="fa fa-plus"></i> Add Source</button>
-      </div>`;
-
-    case 'hadiths': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Related Hadith</h2>
-        <p class="step-desc">Hadith narrations that relate to or support this event.</p>
-        <div class="dyn-list" id="hadiths-list"></div>
-        <button class="add-btn" onclick="addHadithLink()"><i class="fa fa-plus"></i> Add Hadith Reference</button>
-      </div>`;
-
-    case 'media': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Images</h2>
-        <p class="step-desc">Add image URLs with descriptive captions.</p>
-        <div class="dyn-list" id="images-list"></div>
-        <button class="add-btn" onclick="addImageItem()"><i class="fa fa-plus"></i> Add Image</button>
-      </div>`;
-
-    case 'tags': return `
-      <div class="step-pane active">
-        <h2 class="step-title">Tags</h2>
-        <p class="step-desc">Add searchable tags.</p>
+      </div>
+      <div class="field-row">
         <div class="field-group">
-          <label class="field-label">Tags</label>
-          <div class="field-hint">e.g. early-islam, ali, ghadir-khum, 10AH</div>
-          <input class="field-input" id="f-tags" placeholder="early-islam, ali, prophethood..." />
-          <div id="tag-preview" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem;"></div>
+          <label class="field-label">Author's Scholarly Tradition (Manhaj)</label>
+          <div class="field-hint">The scholarly school or tradition the author belongs to</div>
+          <input class="field-input" id="f-author_manhaj" placeholder="e.g. Sunni Hanbali, Shia Ithna Ashari, Multi-Perspective"/>
         </div>
-      </div>`;
+        <div class="field-group">
+          <label class="field-label">Book Year / Era</label>
+          <div class="field-hint">When the book was written or when the author lived</div>
+          <input class="field-input" id="f-book_year" placeholder="Year or century when this book was compiled"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Publisher</label>
+          <div class="field-hint">The publishing house or institution for the edition used</div>
+          <input class="field-input" id="f-publication" placeholder="Name of the publisher or printing institution"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Edition</label>
+          <div class="field-hint">Which edition or printing of the book is being referenced</div>
+          <input class="field-input" id="f-edition" placeholder="Edition number or description of the printing"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Enlistment Author</label>
+          <div class="field-hint">The name of the person adding this record to the Safeenah archive</div>
+          <input class="field-input" id="f-enlist_author" placeholder="Your name or the name of whoever is creating this entry"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Enlistment Date</label>
+          <div class="field-hint">The date this record was created or added — format YYYY-MM-DD</div>
+          <input class="field-input" id="f-enlist_date" placeholder="Date of entry creation in YYYY-MM-DD format"/>
+        </div>
+      </div>
+    </div>`;
+
+    case 'text': return `<div class="step-pane active">
+      <h2 class="step-title">Arabic Text & Bengali Translation</h2>
+      <p class="step-desc">The original hadith text and its meaning in Bengali.</p>
+      <div class="field-group">
+        <label class="field-label">Arabic Script</label>
+        <div class="field-hint">The verbatim Arabic text of the hadith as it appears in the source collection</div>
+        <textarea class="field-input field-textarea rtl-input" id="f-arabic_script" placeholder="اكتب النص العربي للحديث هنا — يُعرض كما هو في المصدر الأصلي"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Bengali Translation (Bangla Script)</label>
+        <div class="field-hint">The meaning of the hadith in Bengali — should be a faithful translation, not a paraphrase</div>
+        <textarea class="field-input field-textarea" id="f-bangla_script" style="font-family:var(--f-bn);font-size:1rem;" placeholder="হাদীসের অর্থ এখানে বাংলায় লিখুন — মূল আরবি পাঠের বিশ্বস্ত অনুবাদ হওয়া উচিত"></textarea>
+      </div>
+    </div>`;
+
+    case 'details': return `<div class="step-pane active">
+      <h2 class="step-title">Details & Historical Analysis</h2>
+      <p class="step-desc">The full contextual explanation of this hadith. HTML tags are supported and rendered on the detail page.</p>
+      <div class="field-group">
+        <div class="field-hint">Use &lt;p&gt; for paragraphs, &lt;h2&gt;/&lt;h3&gt; for sections, &lt;blockquote&gt; for quotes, &lt;strong&gt;/&lt;em&gt; for emphasis, &lt;ul&gt;/&lt;ol&gt; for lists. Add class="bn" to &lt;p&gt; tags for Bengali text.</div>
+        <textarea class="field-input field-textarea xtall" id="f-details" placeholder="Write the complete historical context and explanation here using HTML. Include: the background/occasion of this hadith, the historical setting, the significance, any textual variants, post-event developments, and scholarly notes. Use &lt;h2&gt; tags to divide into clear sections."></textarea>
+      </div>
+    </div>`;
+
+    case 'chain': return `<div class="step-pane active">
+      <h2 class="step-title">Chain of Narrators</h2>
+      <p class="step-desc">Add each narrator in the transmission chain in order. Assign a reliability weight and add a note for any narrator whose credibility has been questioned.</p>
+      <div class="dyn-list" id="chain-list"></div>
+      <button class="add-btn" onclick="addChainItem()"><i class="fa fa-plus"></i> Add narrator to chain</button>
+    </div>`;
+
+    case 'media': return `<div class="step-pane active">
+      <h2 class="step-title">Images</h2>
+      <p class="step-desc">Add relevant image URLs with descriptive captions — manuscripts, geographic locations, historical artwork.</p>
+      <div class="dyn-list" id="images-list"></div>
+      <button class="add-btn" onclick="addImageItem()"><i class="fa fa-plus"></i> Add image reference</button>
+    </div>`;
+
+    case 'persp': return `<div class="step-pane active">
+      <h2 class="step-title">Scholarly Perspectives</h2>
+      <p class="step-desc">Document how different scholarly traditions interpret this hadith. HTML is supported — use headings and lists for readability.</p>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchPerspTab(this,'sunni')">☀️ Sunni Analysis</button>
+        <button class="tab-btn" onclick="switchPerspTab(this,'shiya')">🌙 Shia Analysis</button>
+      </div>
+      <div id="persp-sunni">
+        <div class="field-hint">Explain how major Sunni scholars and imams have understood, graded, and interpreted this hadith — include their names and source texts.</div>
+        <textarea class="field-input field-textarea xtall" id="f-persp-sunni" placeholder="Write the Sunni scholarly interpretation here using HTML. Name specific imams, cite their works, explain the grading, and describe how they applied this hadith."></textarea>
+      </div>
+      <div id="persp-shiya" style="display:none;">
+        <div class="field-hint">Explain how major Shia scholars and imams have understood and applied this hadith — include their names and source texts.</div>
+        <textarea class="field-input field-textarea xtall" id="f-persp-shiya" placeholder="Write the Shia scholarly interpretation here using HTML. Name specific scholars, cite their works, and explain how this hadith is understood in Shia jurisprudence."></textarea>
+      </div>
+    </div>`;
+
+    case 'dlg': return `<div class="step-pane active">
+      <h2 class="step-title">Simulated Dialogue</h2>
+      <p class="step-desc">A structured conversation that walks through the scholarly debate around this hadith. Each speaker represents a perspective. HTML is fully supported.</p>
+      <div class="field-hint">Use &lt;p&gt; tags for each speech turn. Label speakers with &lt;strong&gt; tags inside the paragraph. The dialogue should feel like a genuine intellectual exchange — one side raises logical objections, the other responds with reasoning. Both sides should be fair representations.</div>
+      <textarea class="field-input field-textarea xtall" id="f-simulated_dialogue" placeholder="Write the dialogue here using HTML &lt;p&gt; tags for each turn. Label speakers clearly. The goal is to show a genuine intellectual exchange where both perspectives are represented honestly — one asking questions, the other responding with evidence and reasoning."></textarea>
+    </div>`;
+
+    case 'linksev': return `<div class="step-pane active">
+      <h2 class="step-title">Related Events & External Links</h2>
+      <p class="step-desc">Connect this hadith to related events in the Safeenah archive, and provide links to further reading.</p>
+      <p style="font-family:var(--f-display);font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.65rem;">Related Events (in this archive)</p>
+      <div class="dyn-list" id="events-list"></div>
+      <button class="add-btn" onclick="addEventItem()" style="margin-bottom:1.5rem;"><i class="fa fa-plus"></i> Link to a related event</button>
+      <p style="font-family:var(--f-display);font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:.65rem;">External Reading Links</p>
+      <div class="dyn-list" id="links-list"></div>
+      <button class="add-btn" onclick="addLinkItem()"><i class="fa fa-plus"></i> Add external link</button>
+    </div>`;
+
+    case 'tags': return `<div class="step-pane active">
+      <h2 class="step-title">Tags</h2>
+      <p class="step-desc">Searchable keywords that help readers find this hadith. Use hyphens for multi-word tags.</p>
+      <div class="field-group">
+        <div class="field-hint">Write tags separated by commas. Use relevant concepts, people, events, book names, and time periods. Hyphens allowed — no spaces within a tag.</div>
+        <input class="field-input" id="f-tags" placeholder="Enter descriptive tags separated by commas — topics, people, time periods, books referenced"/>
+        <div id="tag-preview" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem;min-height:24px;"></div>
+      </div>
+    </div>`;
 
     case 'review': return buildReviewStep();
-
     default: return `<div class="step-pane active"><p>Step not found.</p></div>`;
   }
 }
 
-/* ════════════════════════════════════════
-   REVIEW STEP
-════════════════════════════════════════ */
+function buildEventStep(id){
+  switch(id){
+    case 'basic': return `<div class="step-pane active">
+      <h2 class="step-title">Basic Information</h2>
+      <p class="step-desc">The core identifiers and content that defines this historical event in the archive.</p>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">ID <span class="field-required">*</span></label>
+          <div class="field-hint">A unique identifier — used internally to reference this event</div>
+          <input class="field-input" id="f-id" placeholder="A unique identifier string or number for this event"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Slug <span class="field-required">*</span></label>
+          <div class="field-hint">URL-safe identifier — auto-generated from title, can be edited</div>
+          <div class="slug-wrap">
+            <input class="field-input" id="f-slug" placeholder="Auto-generated from title — lowercase letters, numbers, hyphens only"/>
+            <span class="slug-auto-badge" id="slugBadge">auto</span>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Title <span class="field-required">*</span></label>
+        <div class="field-hint">The full name of this historical event — this appears as the heading everywhere</div>
+        <input class="field-input" id="f-title" placeholder="Write the complete name of this historical event — will appear as the main heading" oninput="autoSlugFromTitle(this.value)"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Subtitle</label>
+        <div class="field-hint">A secondary line — a thematic description or alternative name shown below the title</div>
+        <input class="field-input" id="f-subTitle" placeholder="A shorter description or alternative name shown beneath the main title"/>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Year</label>
+          <div class="field-hint">The historical year displayed on the timeline card and event page</div>
+          <input class="field-input" id="f-year" placeholder="The year or period shown on the timeline — both AH and CE can be noted"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Year (Numeric)</label>
+          <div class="field-hint">A sortable number — use negative values for years Before Hijra (BH)</div>
+          <input class="field-input" id="f-yearNumeric" placeholder="Numeric value for sorting — negative for BH (e.g. -1 means 1 BH)" type="number"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Era</label>
+          <div class="field-hint">The calendar system for the year value</div>
+          <input class="field-input" id="f-era" placeholder="AH, BH, CE, or BCE — whichever applies to this event"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Thumbnail URL</label>
+          <div class="field-hint">Square image shown in the timeline grid</div>
+          <input class="field-input" id="f-thumb" placeholder="Direct URL to a square image for the timeline grid (recommended: 400×400px)"/>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Banner Image URL</label>
+        <div class="field-hint">Wide image displayed at the top of the event detail page</div>
+        <input class="field-input" id="f-banner" placeholder="Direct URL to the banner image displayed at the top of the event page (recommended: 1200×500px)"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Summary <span class="field-required">*</span></label>
+        <div class="field-hint">A 2–3 sentence overview shown on timeline cards and as a pull-quote on the event page</div>
+        <textarea class="field-input field-textarea" id="f-summary" placeholder="Write a concise 2–3 sentence summary of what happened — this appears on the timeline card and as a prominent pull-quote on the detail page"></textarea>
+      </div>
+    </div>`;
+
+    case 'meta': return `<div class="step-pane active">
+      <h2 class="step-title">Author & Publication</h2>
+      <p class="step-desc">Information about who documented this event and when it was added to the archive.</p>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Author</label>
+          <div class="field-hint">The name of the person who researched and wrote this event entry</div>
+          <input class="field-input" id="f-author" placeholder="Name of the researcher or author who created this event entry"/>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Published Date</label>
+          <div class="field-hint">When this event entry was published or made public</div>
+          <input class="field-input" id="f-published" placeholder="Publication date shown on the event page — e.g. 20 June, 2026"/>
+        </div>
+      </div>
+    </div>`;
+
+    case 'content': return `<div class="step-pane active">
+      <h2 class="step-title">Full Description</h2>
+      <p class="step-desc">The complete narrative of this historical event. HTML is fully supported and rendered on the detail page.</p>
+      <div class="field-hint">Recommended structure: use &lt;h2&gt; sections for Historical Background, Main Events, Aftermath, and Scholarly Significance. Use &lt;blockquote&gt; for direct quotes from classical sources. Add class="bn" to Bengali &lt;p&gt; tags.</div>
+      <textarea class="field-input field-textarea xtall" id="f-description" placeholder="Write the complete historical narrative here using HTML. Structure it clearly: start with the background and context, describe what happened in sequence, include primary source quotes in &lt;blockquote&gt; tags, then cover the aftermath and historical significance."></textarea>
+    </div>`;
+
+    case 'sources': return `<div class="step-pane active">
+      <h2 class="step-title">Primary Sources</h2>
+      <p class="step-desc">The classical texts, books, and reference works that document this event.</p>
+      <div class="dyn-list" id="sources-list"></div>
+      <button class="add-btn" onclick="addSourceItem()"><i class="fa fa-plus"></i> Add a primary source reference</button>
+    </div>`;
+
+    case 'hadiths': return `<div class="step-pane active">
+      <h2 class="step-title">Related Hadith References</h2>
+      <p class="step-desc">Narrations that directly relate to or provide evidence for this historical event.</p>
+      <div class="dyn-list" id="hadiths-list"></div>
+      <button class="add-btn" onclick="addHadithLink()"><i class="fa fa-plus"></i> Add a related hadith reference</button>
+    </div>`;
+
+    case 'media': return `<div class="step-pane active">
+      <h2 class="step-title">Images</h2>
+      <p class="step-desc">Add image URLs with descriptive captions — maps, manuscripts, historical artwork related to this event.</p>
+      <div class="dyn-list" id="images-list"></div>
+      <button class="add-btn" onclick="addImageItem()"><i class="fa fa-plus"></i> Add an image reference</button>
+    </div>`;
+
+    case 'tags': return `<div class="step-pane active">
+      <h2 class="step-title">Tags</h2>
+      <p class="step-desc">Searchable keywords that help readers find this event on the timeline.</p>
+      <div class="field-group">
+        <div class="field-hint">Write tags separated by commas. Include people involved, locations, time periods, themes, and referenced books. Use hyphens for multi-word tags.</div>
+        <input class="field-input" id="f-tags" placeholder="Enter searchable tags separated by commas — include people, places, themes, dates, and source books"/>
+        <div id="tag-preview" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.65rem;min-height:24px;"></div>
+      </div>
+    </div>`;
+
+    case 'review': return buildReviewStep();
+    default: return `<div class="step-pane active"><p>Step not found.</p></div>`;
+  }
+}
+
+/* ═══════════════════════ REVIEW STEP ═══════════════════════ */
 function buildReviewStep(){
   collectCurrentStep();
-  const json = buildJSON();
+  const json   = buildJSON();
   const pretty = JSON.stringify(json, null, 2);
+  const lines  = pretty.split('\n').length;
+  const fname  = (json.slug || json.id || 'safeenah-record') + '.json';
 
   return `<div class="step-pane active">
-    <h2 class="step-title">Review & Export</h2>
-    <p class="step-desc">Your JSON record is ready. Preview, copy, or download it below.</p>
+    <h2 class="step-title">Export JSON</h2>
+    <p class="step-desc">Your record is ready. Copy the JSON, download the file, or go back to fill in more fields.</p>
 
-    <div class="review-grid" style="margin-bottom:1.5rem;">
-      ${Object.entries(json).filter(([k,v])=>v && typeof v !== 'object').slice(0,10).map(([k,v])=>`
-        <div class="review-section">
-          <div class="review-section-title"><i class="fa fa-check-circle"></i> ${k}</div>
-          <div class="review-row">
-            <span class="review-key">${k}</span>
-            <span class="review-val">${String(v).slice(0,120)}${String(v).length>120?'…':''}</span>
-          </div>
-        </div>`).join('')}
-    </div>
-
-    <div style="margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
-      <p style="font-family:var(--f-display);font-size:.9rem;font-weight:700;color:var(--ink);">Generated JSON</p>
-      <div style="display:flex;gap:.5rem;align-items:center;">
-        <span class="copied-toast" id="copiedToast"><i class="fa fa-check"></i> Copied!</span>
+    <div class="json-wrap">
+      <div class="json-toolbar">
+        <div class="json-toolbar-left">
+          <span class="json-file-name"><i class="fa fa-file-code" style="color:var(--gold-dk);margin-right:.3rem;"></i>${fname}</span>
+          <span class="json-line-count">${lines} lines</span>
+          <span class="copied-toast" id="copiedToast"><i class="fa fa-check"></i> Copied</span>
+        </div>
+        <div class="json-toolbar-right">
+          <button class="code-action-btn btn-copy-json" onclick="copyJSON()">
+            <i class="fa fa-copy"></i> Copy
+          </button>
+          <button class="code-action-btn btn-dl-json" onclick="downloadJSON()">
+            <i class="fa fa-download"></i> Download
+          </button>
+          <button class="code-action-btn btn-new-json" onclick="startOver()">
+            <i class="fa fa-redo"></i> New
+          </button>
+        </div>
       </div>
+      <div class="code-block" id="jsonOutput">${syntaxHL(pretty)}</div>
     </div>
 
-    <div class="code-block" id="jsonOutput">${escHtml(pretty)}</div>
-
-    <div class="code-actions">
-      <button class="code-action-btn btn-copy" onclick="copyJSON()">
-        <i class="fa fa-copy"></i> Copy JSON
-      </button>
-      <button class="code-action-btn btn-download" onclick="downloadJSON()">
-        <i class="fa fa-download"></i> Download .json
-      </button>
-      <button class="btn-ghost" onclick="startOver()" style="margin-left:.5rem;">
-        <i class="fa fa-redo"></i> Start New
-      </button>
-    </div>
-    <p class="skip-notice" style="margin-top:1rem;"><i class="fa fa-info-circle"></i> You can go back to any step and make changes, then return here to refresh the output.</p>
+    <p class="skip-notice" style="margin-top:.85rem;"><i class="fa fa-arrow-left"></i> Use the Back button or click any step above to edit and refresh the output.</p>
   </div>`;
 }
 
-/* ════════════════════════════════════════
-   NAVIGATION
-════════════════════════════════════════ */
+/* ═══════════════════════ NAVIGATION ═══════════════════════ */
 function goNext(){
   collectCurrentStep();
   saveDraftSilent();
   const steps = getSteps();
-  if(currentStep < steps.length - 1){
-    currentStep++;
-    renderStep();
-    // Re-init dynamic lists after render
-    setTimeout(initDynLists, 50);
-  }
+  if(currentStep < steps.length-1){ currentStep++; renderStep(); setTimeout(initDynLists,60); }
 }
-
 function goBack(){
   collectCurrentStep();
-  if(currentStep > 0){
-    currentStep--;
-    renderStep();
-    setTimeout(initDynLists, 50);
-  } else {
-    // back to welcome
-    document.getElementById('screen-wizard').style.display='none';
-    document.getElementById('screen-welcome').style.display='flex';
-  }
+  if(currentStep>0){ currentStep--; renderStep(); setTimeout(initDynLists,60); }
+  else { document.getElementById('screen-wizard').style.display='none'; document.getElementById('screen-welcome').style.display='flex'; }
 }
-
-function jumpToStep(i){
+function jumpToStep(i){ collectCurrentStep(); currentStep=i; renderStep(); setTimeout(initDynLists,60); }
+function skipToReview(){
   collectCurrentStep();
-  currentStep = i;
+  const steps = getSteps();
+  currentStep = steps.length-1;
   renderStep();
-  setTimeout(initDynLists, 50);
 }
 
-/* ════════════════════════════════════════
-   COLLECT STEP VALUES
-════════════════════════════════════════ */
+/* ═══════════════════════ COLLECT ═══════════════════════ */
 function collectCurrentStep(){
   const steps = getSteps();
-  const sid = steps[currentStep]?.id;
+  const sid   = steps[currentStep]?.id;
   if(!sid || sid==='review') return;
 
-  // Simple inputs / textareas
-  document.querySelectorAll('[id^="f-"]').forEach(el => {
-    const key = el.id.replace('f-', '');
+  document.querySelectorAll('[id^="f-"]').forEach(el=>{
+    const key = el.id.replace('f-','');
     formData[key] = el.value.trim();
   });
 
-  // Tags
   const tagsEl = document.getElementById('f-tags');
-  if(tagsEl){
-    formData.tags = tagsEl.value.split(',').map(t=>t.trim()).filter(Boolean);
-  }
+  if(tagsEl) formData.tags = tagsEl.value.split(',').map(t=>t.trim()).filter(Boolean);
 
-  // Perspectives
   const ps = document.getElementById('f-persp-sunni');
   const ph = document.getElementById('f-persp-shiya');
-  if(ps || ph){
+  if(ps||ph){
     formData.prespective_explanation = {};
     if(ps) formData.prespective_explanation.sunni = ps.value.trim();
     if(ph) formData.prespective_explanation.shiya = ph.value.trim();
   }
 
-  // Chain of narrators
-  const chainItems = document.querySelectorAll('.chain-item-data');
-  if(chainItems.length){
-    formData.chain_of_narrator = Array.from(chainItems).map(el => ({
-      name:   el.querySelector('[data-key="name"]')?.value?.trim() || '',
-      weight: parseInt(el.querySelector('[data-key="weight"]')?.value) || 5,
-      Note:   el.querySelector('[data-key="note"]')?.value?.trim() || '',
+  // Dynamic lists
+  collectDynList('chain-item-data', (items)=>{
+    formData.chain_of_narrator = items.map(el=>({
+      name:   el.querySelector('[data-key="name"]')?.value?.trim()||'',
+      weight: parseInt(el.querySelector('[data-key="weight"]')?.value)||5,
+      Note:   el.querySelector('[data-key="note"]')?.value?.trim()||'',
     })).filter(n=>n.name);
-  }
-
-  // Images
-  const imgItems = document.querySelectorAll('.img-item-data');
-  if(imgItems.length){
-    formData.images = Array.from(imgItems).map(el => ({
-      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
-      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
+  });
+  collectDynList('img-item-data',(items)=>{
+    formData.images = items.map(el=>({
+      url:  el.querySelector('[data-key="url"]')?.value?.trim()||'',
+      text: el.querySelector('[data-key="text"]')?.value?.trim()||'',
     })).filter(i=>i.url);
-  }
-
-  // Event links
-  const evItems = document.querySelectorAll('.ev-link-data');
-  if(evItems.length){
-    formData.events = Array.from(evItems).map(el => ({
-      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
-      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+  });
+  collectDynList('ev-link-data',(items)=>{
+    formData.events = items.map(el=>({
+      text: el.querySelector('[data-key="text"]')?.value?.trim()||'',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim()||'',
     })).filter(e=>e.text||e.url);
-  }
-
-  // Links
-  const linkItems = document.querySelectorAll('.link-item-data');
-  if(linkItems.length){
-    formData.links = Array.from(linkItems).map(el => ({
-      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
-      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+  });
+  collectDynList('link-item-data',(items)=>{
+    formData.links = items.map(el=>({
+      text: el.querySelector('[data-key="text"]')?.value?.trim()||'',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim()||'',
     })).filter(l=>l.text||l.url);
-  }
-
-  // Sources (event)
-  const srcItems = document.querySelectorAll('.src-item-data');
-  if(srcItems.length){
-    formData.sources = Array.from(srcItems).map(el => ({
-      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
-      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+  });
+  collectDynList('src-item-data',(items)=>{
+    formData.sources = items.map(el=>({
+      text: el.querySelector('[data-key="text"]')?.value?.trim()||'',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim()||'',
     })).filter(s=>s.text||s.url);
-  }
-
-  // Hadith links (event)
-  const hLinkItems = document.querySelectorAll('.hlink-item-data');
-  if(hLinkItems.length){
-    formData.hadiths = Array.from(hLinkItems).map(el => ({
-      text: el.querySelector('[data-key="text"]')?.value?.trim() || '',
-      url:  el.querySelector('[data-key="url"]')?.value?.trim() || '',
+  });
+  collectDynList('hlink-item-data',(items)=>{
+    formData.hadiths = items.map(el=>({
+      text: el.querySelector('[data-key="text"]')?.value?.trim()||'',
+      url:  el.querySelector('[data-key="url"]')?.value?.trim()||'',
     })).filter(h=>h.text||h.url);
-  }
+  });
 }
 
-/* ════════════════════════════════════════
-   RESTORE STEP VALUES
-════════════════════════════════════════ */
+function collectDynList(cls, fn){
+  const items = document.querySelectorAll('.'+cls);
+  if(items.length) fn(Array.from(items));
+}
+
+/* ═══════════════════════ RESTORE ═══════════════════════ */
 function restoreStepValues(sid){
-  // Restore simple fields
-  Object.entries(formData).forEach(([k,v]) => {
+  Object.entries(formData).forEach(([k,v])=>{
     const el = document.getElementById('f-'+k);
-    if(el && typeof v === 'string') el.value = v;
+    if(el && typeof v==='string') el.value=v;
   });
-
-  // Tags
   const tagsEl = document.getElementById('f-tags');
-  if(tagsEl && formData.tags) {
-    tagsEl.value = Array.isArray(formData.tags) ? formData.tags.join(', ') : formData.tags;
-  }
-
-  // Perspectives
+  if(tagsEl && formData.tags) tagsEl.value = Array.isArray(formData.tags)?formData.tags.join(', '):formData.tags;
   const ps = document.getElementById('f-persp-sunni');
   const ph = document.getElementById('f-persp-shiya');
-  if(ps && formData.prespective_explanation?.sunni) ps.value = formData.prespective_explanation.sunni;
-  if(ph && formData.prespective_explanation?.shiya) ph.value = formData.prespective_explanation.shiya;
-
-  // Init dynamic lists with saved data
+  if(ps && formData.prespective_explanation?.sunni) ps.value=formData.prespective_explanation.sunni;
+  if(ph && formData.prespective_explanation?.shiya) ph.value=formData.prespective_explanation.shiya;
+  // Slug badge
+  const slugBadge = document.getElementById('slugBadge');
+  if(slugBadge && formData.slug) slugBadge.textContent = 'edited';
   initDynLists();
 }
 
 function initDynLists(){
-  // Chain
-  const cList = document.getElementById('chain-list');
-  if(cList && cList.children.length === 0 && formData.chain_of_narrator?.length){
-    formData.chain_of_narrator.forEach(n => addChainItem(n));
-  }
-  // Images
-  const iList = document.getElementById('images-list');
-  if(iList && iList.children.length === 0 && formData.images?.length){
-    formData.images.forEach(img => addImageItem(img));
-  }
-  // Events
-  const evList = document.getElementById('events-list');
-  if(evList && evList.children.length === 0 && formData.events?.length){
-    formData.events.forEach(ev => addEventItem(ev));
-  }
-  // Links
-  const lList = document.getElementById('links-list');
-  if(lList && lList.children.length === 0 && formData.links?.length){
-    formData.links.forEach(lk => addLinkItem(lk));
-  }
-  // Sources
-  const sList = document.getElementById('sources-list');
-  if(sList && sList.children.length === 0 && formData.sources?.length){
-    formData.sources.forEach(s => addSourceItem(s));
-  }
-  // Hadith links
-  const hList = document.getElementById('hadiths-list');
-  if(hList && hList.children.length === 0 && formData.hadiths?.length){
-    formData.hadiths.forEach(h => addHadithLink(h));
-  }
+  tryInit('chain-list',   formData.chain_of_narrator, addChainItem);
+  tryInit('images-list',  formData.images,            addImageItem);
+  tryInit('events-list',  formData.events,            addEventItem);
+  tryInit('links-list',   formData.links,             addLinkItem);
+  tryInit('sources-list', formData.sources,           addSourceItem);
+  tryInit('hadiths-list', formData.hadiths,           addHadithLink);
 }
+function tryInit(id, data, fn){ const el=document.getElementById(id); if(el&&el.children.length===0&&data?.length) data.forEach(d=>fn(d)); }
 
-/* ════════════════════════════════════════
-   DYNAMIC LIST HELPERS
-════════════════════════════════════════ */
-let dynCounter = 0;
-
+/* ═══════════════════════ DYN LIST HELPERS ═══════════════════════ */
+let dc=0;
 function addChainItem(data={}){
-  const list = document.getElementById('chain-list');
-  if(!list) return;
-  const id = ++dynCounter;
-  const w = data.weight ?? 5;
-  const wc = weightClass(w);
-  const div = document.createElement('div');
-  div.className = `dyn-item chain-item-data ${wc}`;
-  div.innerHTML = `
+  const list=document.getElementById('chain-list'); if(!list) return;
+  const id=++dc; const w=data.weight??5; const wc=weightClass(w);
+  const div=document.createElement('div');
+  div.className=`dyn-item chain-item-data ${wc}`;
+  div.innerHTML=`
     <div class="dyn-item-head">
       <span class="dyn-item-label">Narrator ${list.children.length+1}</span>
       <button class="dyn-remove" onclick="this.closest('.dyn-item').remove()"><i class="fa fa-trash"></i></button>
     </div>
-    <div class="field-group" style="margin-bottom:.75rem;">
-      <label class="field-label" style="font-size:.82rem;">Name</label>
-      <input class="field-input" data-key="name" placeholder="Narrator name in Bengali or Arabic..." value="${escAttr(data.name||'')}"/>
+    <div class="field-group" style="margin-bottom:.7rem;">
+      <label class="field-label" style="font-size:.82rem;">Full Name</label>
+      <input class="field-input" data-key="name" placeholder="Full name of this narrator — as it appears in classical sources" value="${ea(data.name||'')}"/>
     </div>
-    <div class="field-group" style="margin-bottom:.75rem;">
-      <label class="field-label" style="font-size:.82rem;">Weight <span id="wlbl-${id}">${w}</span>/10</label>
-      <div class="field-hint">0=not reliable · 5=moderate · 7+=reliable · 10=highest</div>
+    <div class="field-group" style="margin-bottom:.7rem;">
+      <label class="field-label" style="font-size:.82rem;">Reliability Weight <span id="wlbl-${id}">${w}</span>/10</label>
+      <div class="field-hint" style="margin-bottom:.35rem;">0 = fabricated / unreliable &nbsp;·&nbsp; 5 = contested &nbsp;·&nbsp; 8+ = highly reliable &nbsp;·&nbsp; 10 = undisputed</div>
       <div class="weight-wrap">
-        <input type="range" class="weight-slider" data-key="weight" min="0" max="10" value="${w}"
-          oninput="updateWeight(this,${id})" />
+        <input type="range" class="weight-slider" data-key="weight" min="0" max="10" value="${w}" oninput="updateWeight(this,${id})"/>
         <div class="weight-badge" id="wbadge-${id}">${w}</div>
       </div>
     </div>
     <div class="field-group" style="margin-bottom:0;">
-      <label class="field-label" style="font-size:.82rem;">Note (shown on click)</label>
-      <textarea class="field-input field-textarea" data-key="note" placeholder="সর্বোচ্চ নির্ভরযোগ্য..." style="min-height:70px;">${escAttr(data.Note||'')}</textarea>
+      <label class="field-label" style="font-size:.82rem;">Reliability Note <span style="color:var(--ink-mute);font-weight:400;">(especially for weight below 8)</span></label>
+      <textarea class="field-input field-textarea" data-key="note" style="min-height:65px;" placeholder="Explain why this narrator's reliability is rated this way — cite which scholars questioned or affirmed them">${ea(data.Note||'')}</textarea>
     </div>`;
   list.appendChild(div);
 }
-
-function updateWeight(el, id){
-  const v = el.value;
-  document.getElementById('wlbl-'+id).textContent = v;
-  document.getElementById('wbadge-'+id).textContent = v;
-  const item = el.closest('.dyn-item');
-  item.className = 'dyn-item chain-item-data ' + weightClass(parseInt(v));
+function updateWeight(el,id){
+  const v=el.value;
+  document.getElementById('wlbl-'+id).textContent=v;
+  document.getElementById('wbadge-'+id).textContent=v;
+  el.closest('.dyn-item').className='dyn-item chain-item-data '+weightClass(parseInt(v));
 }
-
-function weightClass(w){
-  if(w===10) return 'w-peak';
-  if(w>=7)   return 'w-ok';
-  if(w>=5)   return 'w-warn';
-  if(w>=3)   return 'w-bad';
-  return 'w-crit';
-}
+function weightClass(w){ return w===10?'w-peak':w>=7?'w-ok':w>=5?'w-warn':w>=3?'w-bad':'w-crit'; }
 
 function addImageItem(data={}){
-  const list = document.getElementById('images-list');
-  if(!list) return;
-  const div = document.createElement('div');
-  div.className = 'dyn-item img-item-data';
-  div.innerHTML = `
+  const list=document.getElementById('images-list'); if(!list) return;
+  const div=document.createElement('div');
+  div.className='dyn-item img-item-data';
+  div.innerHTML=`
     <div class="dyn-item-head">
       <span class="dyn-item-label">Image ${list.children.length+1}</span>
       <button class="dyn-remove" onclick="this.closest('.dyn-item').remove()"><i class="fa fa-trash"></i></button>
@@ -1122,280 +1184,226 @@ function addImageItem(data={}){
     <div class="field-row">
       <div class="field-group" style="margin-bottom:0;">
         <label class="field-label" style="font-size:.82rem;">Image URL</label>
-        <input class="field-input" data-key="url" placeholder="https://..." value="${escAttr(data.url||'')}"/>
+        <input class="field-input" data-key="url" placeholder="Direct URL to the image file — must be publicly accessible" value="${ea(data.url||'')}"/>
       </div>
       <div class="field-group" style="margin-bottom:0;">
-        <label class="field-label" style="font-size:.82rem;">Caption / Description</label>
-        <input class="field-input" data-key="text" placeholder="Description of this image..." value="${escAttr(data.text||'')}"/>
+        <label class="field-label" style="font-size:.82rem;">Caption</label>
+        <input class="field-input" data-key="text" placeholder="Describe what this image shows and why it is relevant" value="${ea(data.text||'')}"/>
       </div>
     </div>`;
   list.appendChild(div);
 }
+function addEventItem(data={}){ const l=document.getElementById('events-list'); if(!l) return; addTU(l,'ev-link-data','Related Event',data,'Title of the related event in the Safeenah archive','URL to this event in the archive — e.g. /event/index.html?id=ghadir-khum'); }
+function addLinkItem(data={})  { const l=document.getElementById('links-list');  if(!l) return; addTU(l,'link-item-data','External Link',data,'Descriptive title of the external resource or article','Full URL to the external source, article, or reference'); }
+function addSourceItem(data={})   { const l=document.getElementById('sources-list'); if(!l) return; addTU(l,'src-item-data','Source',data,'Citation — book name, volume, page number, hadith number','URL to an online version or reference page for this source'); }
+function addHadithLink(data={})   { const l=document.getElementById('hadiths-list'); if(!l) return; addTU(l,'hlink-item-data','Hadith Reference',data,'Description of the hadith and what it establishes about this event','URL to the hadith on sunnah.com or another reliable source'); }
 
-function addEventItem(data={}){
-  const list = document.getElementById('events-list');
-  if(!list) return;
-  addTextUrlItem(list,'ev-link-data','Event',data);
-}
-
-function addLinkItem(data={}){
-  const list = document.getElementById('links-list');
-  if(!list) return;
-  addTextUrlItem(list,'link-item-data','Link',data);
-}
-
-function addSourceItem(data={}){
-  const list = document.getElementById('sources-list');
-  if(!list) return;
-  addTextUrlItem(list,'src-item-data','Source',data);
-}
-
-function addHadithLink(data={}){
-  const list = document.getElementById('hadiths-list');
-  if(!list) return;
-  addTextUrlItem(list,'hlink-item-data','Hadith Reference',data);
-}
-
-function addTextUrlItem(list, cls, label, data){
-  const div = document.createElement('div');
-  div.className = `dyn-item ${cls}`;
-  div.innerHTML = `
+function addTU(list,cls,label,data,phText,phUrl){
+  const div=document.createElement('div');
+  div.className=`dyn-item ${cls}`;
+  div.innerHTML=`
     <div class="dyn-item-head">
       <span class="dyn-item-label">${label} ${list.children.length+1}</span>
       <button class="dyn-remove" onclick="this.closest('.dyn-item').remove()"><i class="fa fa-trash"></i></button>
     </div>
     <div class="field-row">
       <div class="field-group" style="margin-bottom:0;">
-        <label class="field-label" style="font-size:.82rem;">Text</label>
-        <input class="field-input" data-key="text" placeholder="Display text..." value="${escAttr(data.text||'')}"/>
+        <label class="field-label" style="font-size:.82rem;">Text / Title</label>
+        <input class="field-input" data-key="text" placeholder="${phText}" value="${ea(data.text||'')}"/>
       </div>
       <div class="field-group" style="margin-bottom:0;">
         <label class="field-label" style="font-size:.82rem;">URL</label>
-        <input class="field-input" data-key="url" placeholder="https://..." value="${escAttr(data.url||'')}"/>
+        <input class="field-input" data-key="url" placeholder="${phUrl}" value="${ea(data.url||'')}"/>
       </div>
     </div>`;
   list.appendChild(div);
 }
 
-/* ════════════════════════════════════════
-   PERSPECTIVES TAB
-════════════════════════════════════════ */
-function switchPerspTab(btn, tab){
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+/* ═══════════════════════ PERSPECTIVES TAB ═══════════════════════ */
+function switchPerspTab(btn,tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('persp-sunni').style.display = tab==='sunni' ? 'block' : 'none';
-  document.getElementById('persp-shiya').style.display = tab==='shiya' ? 'block' : 'none';
+  document.getElementById('persp-sunni').style.display=tab==='sunni'?'block':'none';
+  document.getElementById('persp-shiya').style.display=tab==='shiya'?'block':'none';
 }
 
-/* ════════════════════════════════════════
-   SLUG AUTO-GENERATION
-════════════════════════════════════════ */
+/* ═══════════════════════ SLUG AUTO ═══════════════════════ */
+let slugManual = false;
 function autoSlugFromTitle(val){
-  const slugEl = document.getElementById('f-slug');
-  if(!slugEl || slugEl.value) return;
-  slugEl.value = val.toLowerCase()
+  const slugEl=document.getElementById('f-slug');
+  const badge =document.getElementById('slugBadge');
+  if(!slugEl||slugManual) return;
+  const slug=val.toLowerCase()
     .replace(/[\u0980-\u09FF\u0600-\u06FF]/g,'')
-    .replace(/[^a-z0-9\s-]/g,'')
-    .trim().replace(/\s+/g,'-').slice(0,60);
-}
-function autoSlug(){
-  const el = document.getElementById('f-slug');
-  if(el) el.value = el.value.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    .replace(/[^a-z0-9\s\-]/g,'')
+    .trim().replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,70);
+  slugEl.value=slug;
+  if(badge) badge.textContent='auto';
 }
 
-/* ════════════════════════════════════════
-   BUILD JSON OUTPUT
-════════════════════════════════════════ */
-function buildJSON(){
-  const d = {...formData};
-  const out = {};
-
-  if(selectedType==='hadith'){
-    if(d.id)   out.id = isNaN(+d.id) ? d.id : +d.id;
-    if(d.title) out.title = d.title;
-    if(d.subTitle) out.subTitle = d.subTitle;
-    if(d.slug)  out.slug = d.slug;
-    if(d.banner) out.banner = d.banner;
-    if(d.year)  out.year = d.year;
-    if(d.enlist_author) out.enlist_author = d.enlist_author;
-    if(d.enlist_date)   out.enlist_date   = d.enlist_date;
-    if(d.book_name)     out.book_name     = d.book_name;
-    if(d.book_author)   out.book_author   = d.book_author;
-    if(d.author_manhaj) out.author_manhaj = d.author_manhaj;
-    if(d.book_year)     out.book_year     = d.book_year;
-    if(d.publication)   out.publication   = d.publication;
-    if(d.edition)       out.edition       = d.edition;
-    if(d.arabic_script) out.arabic_script = d.arabic_script;
-    if(d.bangla_script) out.bangla_script = d.bangla_script;
-    if(d.details)       out.details       = d.details;
-    if(d.chain_of_narrator?.length) out.chain_of_narrator = d.chain_of_narrator;
-    if(d.images?.length)            out.images            = d.images;
-    if(d.events?.length)            out.events            = d.events;
-    if(d.prespective_explanation && Object.values(d.prespective_explanation).some(v=>v))
-      out.prespective_explanation = d.prespective_explanation;
-    if(d.simulated_dialogue)        out.simulated_dialogue = d.simulated_dialogue;
-    if(d.links?.length)             out.links              = d.links;
-    if(d.tags?.length)              out.tags               = d.tags;
-  } else {
-    if(d.id)   out.id = d.id;
-    if(d.slug) out.slug = d.slug;
-    if(d.title) out.title = d.title;
-    if(d.subTitle) out.subTitle = d.subTitle;
-    if(d.author) out.author = d.author;
-    if(d.published) out.published = d.published;
-    if(d.year) out.year = d.year;
-    if(d.yearNumeric !== undefined && d.yearNumeric !== '') out.yearNumeric = +d.yearNumeric;
-    if(d.era)   out.era   = d.era;
-    if(d.thumb) out.thumb = d.thumb;
-    if(d.banner) out.banner = d.banner;
-    if(d.summary) out.summary = d.summary;
-    if(d.description) out.description = d.description;
-    if(d.images?.length)   out.images  = d.images;
-    if(d.sources?.length)  out.sources = d.sources;
-    if(d.hadiths?.length)  out.hadiths = d.hadiths;
-    if(d.tags?.length)     out.tags    = d.tags;
-  }
-
-  return out;
-}
-
-/* ════════════════════════════════════════
-   EXPORT
-════════════════════════════════════════ */
-function copyJSON(){
-  collectCurrentStep();
-  const txt = JSON.stringify(buildJSON(), null, 2);
-  navigator.clipboard.writeText(txt).then(() => {
-    const t = document.getElementById('copiedToast');
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2200);
-  });
-}
-
-function downloadJSON(){
-  collectCurrentStep();
-  const json = buildJSON();
-  const txt = JSON.stringify(json, null, 2);
-  const slug = (json.slug || json.id || 'safeenah-record') + '.json';
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([txt], {type:'application/json'}));
-  a.download = slug;
-  a.click();
-}
-
-function startOver(){
-  formData = {};
-  selectedType = null;
-  currentStep = 0;
-  document.getElementById('screen-wizard').style.display = 'none';
-  document.getElementById('screen-welcome').style.display = 'flex';
-  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById('startBtn').disabled = true;
-}
-
-/* ════════════════════════════════════════
-   DRAFT
-════════════════════════════════════════ */
-function saveDraft(){
-  collectCurrentStep();
-  localStorage.setItem(DRAFT_KEY, JSON.stringify({type:selectedType, step:currentStep, data:formData}));
-  const el = document.getElementById('draftSaved');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2500);
-}
-function saveDraftSilent(){
-  localStorage.setItem(DRAFT_KEY, JSON.stringify({type:selectedType, step:currentStep, data:formData}));
-}
-
-/* ════════════════════════════════════════
-   RESUME
-════════════════════════════════════════ */
-let resumeType = null;
-function openResumeModal(){ document.getElementById('resumeModal').classList.add('show'); }
-function closeResumeModal(){ document.getElementById('resumeModal').classList.remove('show'); }
-
-function resumeSelectType(t){
-  resumeType = t;
-  document.querySelectorAll('#resumeModal .type-card').forEach(c => c.classList.remove('selected'));
-  document.getElementById('res-'+t).classList.add('selected');
-}
-
-function loadResumeFile(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => { document.getElementById('resumePaste').value = ev.target.result; };
-  reader.readAsText(file);
-}
-
-function applyResume(){
-  const raw = document.getElementById('resumePaste').value.trim();
-  if(!raw){ alert('Please paste or upload a JSON file.'); return; }
-  let parsed;
-  try { parsed = JSON.parse(raw); } catch(e){ alert('Invalid JSON. Please check your file.'); return; }
-  if(!resumeType){ alert('Please select Hadith or Event type first.'); return; }
-
-  selectedType = resumeType;
-  formData = flattenParsed(parsed);
-  currentStep = 0;
-  closeResumeModal();
-  buildWizard();
-  document.getElementById('screen-welcome').style.display = 'none';
-  document.getElementById('screen-wizard').style.display = 'block';
-  setTimeout(initDynLists, 80);
-}
-
-function flattenParsed(p){
-  const d = {...p};
-  // Ensure arrays are arrays
-  ['tags','images','events','links','sources','hadiths','chain_of_narrator'].forEach(k => {
-    if(d[k] && !Array.isArray(d[k])) d[k] = [];
-  });
-  if(typeof d.id === 'number') d.id = String(d.id);
-  if(typeof d.yearNumeric === 'number') d.yearNumeric = String(d.yearNumeric);
-  return d;
-}
-
-/* ════════════════════════════════════════
-   UTILS
-════════════════════════════════════════ */
-function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-
-/* ════════════════════════════════════════
-   LOAD DRAFT ON INIT
-════════════════════════════════════════ */
-window.addEventListener('load', () => {
-  const raw = localStorage.getItem(DRAFT_KEY);
-  if(raw){
-    try {
-      const saved = JSON.parse(raw);
-      if(saved.type && saved.data){
-        // Show draft restore notice on welcome screen
-        const notice = document.createElement('div');
-        notice.style.cssText='margin-bottom:1.2rem;padding:.65rem 1.2rem;background:var(--gold-dim);border:1px solid var(--border);border-radius:8px;font-family:var(--f-display);font-size:.9rem;color:var(--ink-sub);display:flex;align-items:center;gap:.6rem;';
-        notice.innerHTML = `<i class="fa fa-history" style="color:var(--gold-dk);"></i> Draft found (${saved.type}). <button onclick="loadDraft()" style="background:none;border:none;cursor:pointer;color:var(--gold-dk);font-family:var(--f-display);font-size:.9rem;font-weight:700;text-decoration:underline;">Resume draft</button>`;
-        document.getElementById('screen-welcome').insertBefore(notice, document.querySelector('.anim-3'));
-        window._savedDraft = saved;
-      }
-    } catch(e){}
+/* Track manual slug edits */
+document.addEventListener('input', e=>{
+  if(e.target.id==='f-slug'){
+    slugManual=true;
+    const badge=document.getElementById('slugBadge');
+    if(badge) badge.textContent='edited';
+    e.target.value=e.target.value.toLowerCase().replace(/[^a-z0-9\-]/g,'');
   }
 });
 
-function loadDraft(){
-  const saved = window._savedDraft;
-  if(!saved) return;
-  selectedType = saved.type;
-  formData = saved.data || {};
-  currentStep = saved.step || 0;
+/* ═══════════════════════ BUILD JSON ═══════════════════════ */
+function buildJSON(){
+  const d={...formData};
+  const o={};
+  if(selectedType==='hadith'){
+    const fields=['id','title','subTitle','slug','banner','year','enlist_author','enlist_date',
+      'book_name','book_author','author_manhaj','book_year','publication','edition',
+      'arabic_script','bangla_script','details'];
+    fields.forEach(k=>{ if(d[k]) o[k]= k==='id'&&!isNaN(+d[k])?+d[k]:d[k]; });
+    if(d.chain_of_narrator?.length) o.chain_of_narrator=d.chain_of_narrator;
+    if(d.images?.length) o.images=d.images;
+    if(d.events?.length) o.events=d.events;
+    if(d.prespective_explanation&&Object.values(d.prespective_explanation).some(v=>v))
+      o.prespective_explanation=d.prespective_explanation;
+    if(d.simulated_dialogue) o.simulated_dialogue=d.simulated_dialogue;
+    if(d.links?.length) o.links=d.links;
+    if(d.tags?.length)  o.tags=d.tags;
+  } else {
+    const fields=['id','slug','title','subTitle','author','published','year','era','thumb','banner','summary','description'];
+    fields.forEach(k=>{ if(d[k]) o[k]=d[k]; });
+    if(d.yearNumeric!==undefined&&d.yearNumeric!=='') o.yearNumeric=+d.yearNumeric;
+    if(d.images?.length)  o.images=d.images;
+    if(d.sources?.length) o.sources=d.sources;
+    if(d.hadiths?.length) o.hadiths=d.hadiths;
+    if(d.tags?.length)    o.tags=d.tags;
+  }
+  return o;
+}
+
+/* ═══════════════════════ EXPORT ═══════════════════════ */
+function copyJSON(){
+  collectCurrentStep();
+  navigator.clipboard.writeText(JSON.stringify(buildJSON(),null,2)).then(()=>{
+    const t=document.getElementById('copiedToast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2200);
+  });
+}
+function downloadJSON(){
+  collectCurrentStep();
+  const json=buildJSON();
+  const fname=(json.slug||json.id||'safeenah-record')+'.json';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(json,null,2)],{type:'application/json'}));
+  a.download=fname; a.click();
+}
+function startOver(){
+  if(!confirm('Clear all fields and start a new record?')) return;
+  formData={}; selectedType=null; currentStep=0;
+  document.getElementById('screen-wizard').style.display='none';
+  document.getElementById('screen-welcome').style.display='flex';
+  document.querySelectorAll('.type-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('startBtn').disabled=true;
+}
+
+/* ═══════════════════════ DRAFT ═══════════════════════ */
+function saveDraft(){
+  collectCurrentStep();
+  localStorage.setItem(DRAFT_KEY,JSON.stringify({type:selectedType,step:currentStep,data:formData}));
+  const el=document.getElementById('draftSaved');
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2400);
+}
+function saveDraftSilent(){
+  localStorage.setItem(DRAFT_KEY,JSON.stringify({type:selectedType,step:currentStep,data:formData}));
+}
+
+/* ═══════════════════════ RESUME ═══════════════════════ */
+let resumeType=null;
+function openResumeModal(){ document.getElementById('resumeModal').classList.add('show'); }
+function closeResumeModal(){ document.getElementById('resumeModal').classList.remove('show'); }
+function resumeSelectType(t){
+  resumeType=t;
+  document.querySelectorAll('#resumeModal .type-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('res-'+t).classList.add('selected');
+}
+function loadResumeFile(e){
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=ev=>{ document.getElementById('resumePaste').value=ev.target.result; };
+  r.readAsText(file);
+}
+function applyResume(){
+  const raw=document.getElementById('resumePaste').value.trim();
+  if(!raw){ alert('Please paste or upload a JSON file.'); return; }
+  let p;
+  try{ p=JSON.parse(raw); }catch(e){ alert('Invalid JSON. Please check the content.'); return; }
+  if(!resumeType){ alert('Please select Hadith or Event first.'); return; }
+  selectedType=resumeType;
+  formData=flattenParsed(p);
+  currentStep=0; slugManual=!!formData.slug;
+  closeResumeModal();
   buildWizard();
   document.getElementById('screen-welcome').style.display='none';
   document.getElementById('screen-wizard').style.display='block';
-  setTimeout(initDynLists, 80);
+  setTimeout(initDynLists,80);
+}
+function flattenParsed(p){
+  const d={...p};
+  ['tags','images','events','links','sources','hadiths','chain_of_narrator'].forEach(k=>{
+    if(d[k]&&!Array.isArray(d[k])) d[k]=[];
+  });
+  if(typeof d.id==='number') d.id=String(d.id);
+  if(typeof d.yearNumeric==='number') d.yearNumeric=String(d.yearNumeric);
+  return d;
 }
 
-/* Present files button after the page loads to ensure output */
-document.getElementById('screen-welcome').style.display = 'flex';
+/* ═══════════════════════ SYNTAX HIGHLIGHT ═══════════════════════ */
+function syntaxHL(json){
+  return json.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{
+      let c='jn';
+      if(/^"/.test(m)) c=/:$/.test(m)?'jk':'js';
+      else if(/true|false/.test(m)) c='jb';
+      else if(/null/.test(m)) c='jb';
+      return `<span class="${c}">${m}</span>`;
+    });
+}
+
+/* ═══════════════════════ HELPERS ═══════════════════════ */
+function ea(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+/* ═══════════════════════ INIT — DRAFT RESTORE ═══════════════════════ */
+window.addEventListener('load',()=>{
+  const raw=localStorage.getItem(DRAFT_KEY);
+  if(!raw) return;
+  try {
+    const saved=JSON.parse(raw);
+    if(saved.type&&saved.data){
+      window._savedDraft=saved;
+      const wrap=document.getElementById('draftNoticeWrap');
+      const notice=document.createElement('div');
+      notice.className='draft-notice a3';
+      notice.innerHTML=`<i class="fa fa-history" style="color:var(--gold-dk);"></i>
+        Draft found — <strong>${saved.type}</strong> record.
+        <button onclick="loadDraft()">Resume draft</button>
+        <button onclick="this.closest('.draft-notice').remove()" style="color:var(--ink-mute);font-size:.78rem;font-weight:400;text-decoration:none;">Dismiss</button>`;
+      wrap.appendChild(notice);
+    }
+  } catch(e){}
+});
+
+function loadDraft(){
+  const saved=window._savedDraft; if(!saved) return;
+  selectedType=saved.type;
+  formData=saved.data||{};
+  currentStep=saved.step||0;
+  slugManual=!!formData.slug;
+  buildWizard();
+  document.getElementById('screen-welcome').style.display='none';
+  document.getElementById('screen-wizard').style.display='block';
+  setTimeout(initDynLists,80);
+}
 </script>
 </body>
 </html>

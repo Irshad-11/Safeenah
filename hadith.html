@@ -490,11 +490,11 @@ mark {
 <nav class="navbar">
   <a href="index.html" class="logo">Safeenah</a>
   <div class="nav-links">
-    <a href="home.html"        class="nav-a">Home</a>
-    <a href="timeline.html"     class="nav-a">Timeline</a>
-    <a href="hadith.html"       class="nav-a active">Hadith</a>
-    <a href="about.html"        class="nav-a">About</a>
-    <a href="submit.html"       class="nav-a">Submit Issue</a>
+    <a href="./home.html"        class="nav-a">Home</a>
+    <a href="./timeline.html"     class="nav-a">Timeline</a>
+    <a href="./hadith.html"       class="nav-a active">Hadith</a>
+    <a href="./about.html"        class="nav-a">About</a>
+    <a href="https://github.com/Irshad-11/Safeenah/issues"       class="nav-a">Submit Issue</a>
   </div>
   <div style="display:flex;align-items:center;gap:0.75rem;">
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">Light</button>
@@ -506,10 +506,11 @@ mark {
   </div>
 </nav>
 <div id="mob">
-  <a href="home.html"    class="nav-a">Home</a>
-  <a href="timeline.html" class="nav-a">Timeline</a>
-  <a href="hadith.html"   class="nav-a" style="color:var(--gold);">Hadith</a>
-  <a href="about.html"    class="nav-a">About</a>
+  <a href="./home.html"    class="nav-a">Home</a>
+  <a href="./timeline.html" class="nav-a">Timeline</a>
+  <a href="./hadith.html"   class="nav-a" style="color:var(--gold);">Hadith</a>
+  <a href="./about.html"    class="nav-a">About</a>
+  <a href="https://github.com/Irshad-11/Safeenah/issues"       class="nav-a">Submit Issue</a>
 </div>
 
 <!-- PAGE HEADER -->
@@ -683,7 +684,7 @@ mobMenu.querySelectorAll('a').forEach(link => {
    Each file: single object {} or array [{}]
 ══════════════════════════════════════════════════════════ */
 const DATA_BASE   = 'data/hadith/';
-const HADITH_FILES = ['index.json', 'extrasample.json'];
+const HADITH_FILES = [];
 /* ↑ Add more files here: e.g. ['index.json','vol2.json','companions.json'] */
 
 /* ══════════════════════════════════════════════════════════
@@ -744,50 +745,7 @@ async function loadHadith() {
 
   /* ── DEMO FALLBACK so page is never blank ── */
   console.warn('[safeenah] Hadith JSON not found — showing demo data');
-  return normalise([
-    { slug:'hadith-thaqalayn', title:'Hadith al-Thaqalayn',
-      subTitle:'The Two Weighty Things',
-      book:'Sahih Muslim', bookDetail:'Book 44, Hadith 2408',
-      narrator:'Zayd ibn Arqam', year:'10 AH', yearNumeric:10,
-      summary:'The Prophet declared he was leaving two weighty things — the Book of Allah and his household — and that holding fast to both would prevent going astray.',
-      thumb:'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=400&fit=crop',
-      tags:['prophet','ahlul-bayt','quran','10AH'], grade:'Sahih', category:'prophet' },
-    { slug:'hadith-ghadir', title:'Hadith al-Ghadir',
-      subTitle:'Whoever I am his Mawla',
-      book:'Musnad Ahmad', bookDetail:'Vol. 4, p. 370',
-      narrator:'Multiple companions', year:'10 AH', yearNumeric:10,
-      summary:'At Ghadir Khum, the Prophet declared: "Whoever I am his mawla, then Ali is his mawla."',
-      thumb:'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop',
-      tags:['prophet','ali','ghadir','10AH'], grade:'Sahih', category:'prophet' },
-    { slug:'hadith-manzila', title:'Hadith al-Manzila',
-      subTitle:'You are to me as Aaron was to Moses',
-      book:'Sahih Bukhari', bookDetail:'Book 59, Hadith 3706',
-      narrator:'Sa\'d ibn Abi Waqqas', year:'9 AH', yearNumeric:9,
-      summary:'The Prophet told Ali: "You are to me as Aaron was to Moses, except there is no prophet after me."',
-      thumb:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-      tags:['prophet','ali','9AH','sahih-bukhari'], grade:'Sahih', category:'prophet' },
-    { slug:'hadith-safeenah', title:"Hadith al-Safeenah",
-      subTitle:"The Ship of Noah",
-      book:'Al-Mustadrak', bookDetail:'Vol. 3, p. 151',
-      narrator:'Abu Dharr al-Ghifari', year:'Unknown',
-      summary:'The Prophet likened his household to Noah\'s Ark — whoever boards it is saved, whoever stays behind is drowned.',
-      thumb:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=400&fit=crop',
-      tags:['prophet','ahlul-bayt','metaphor'], grade:'Hasan', category:'prophet' },
-    { slug:'hadith-madinah', title:'Hadith Madinatul Ilm',
-      subTitle:'I am the city of knowledge',
-      book:'Al-Hakim', bookDetail:'Al-Mustadrak, Vol. 3, p. 126',
-      narrator:'Ibn Abbas', year:'Unknown',
-      summary:'"I am the city of knowledge and Ali is its gate." A narration reported in multiple classical sources with varying grades.',
-      thumb:'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop',
-      tags:['prophet','ali','knowledge'], grade:'Hasan', category:'prophet' },
-    { slug:'hadith-al-dar-narration', title:'Hadith al-Dar Narration',
-      subTitle:'First public invitation to Islam',
-      book:'Tarikh al-Tabari', bookDetail:'Vol. 2, Early Prophetic Mission',
-      narrator:'Ali ibn Abi Talib', year:'1 BH', yearNumeric:-1,
-      summary:'At the Feast of Dhul Asheera, the Prophet invited his clan. Only Ali responded — three times.',
-      thumb:'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=400&h=400&fit=crop',
-      tags:['early-islam','ali','BH','tabari'], grade:'Reported', category:'companion' },
-  ]);
+  
 }
 
 /* ══════════════════════════════════════════════════════════

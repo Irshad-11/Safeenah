@@ -327,7 +327,7 @@ svg{display:inline-block;vertical-align:middle;flex-shrink:0;}
     <a href="../timeline.html" class="nav-a">Timeline</a>
     <a href="../hadith.html" class="nav-a">Hadith</a>
     <a href="../about.html" class="nav-a">About</a>
-    <a href="../submit.html" class="nav-a">Submit Issue</a>
+    <a href="https://github.com/Irshad-11/Safeenah/issues" class="nav-a">Submit Issue</a>
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
@@ -687,7 +687,7 @@ function weightClass(w) {
 
 /* DATA */
 const DATA_BASE    = '../data/hadith/';
-const HADITH_FILES = ['index.json', 'extrasample.json'];
+const HADITH_FILES = [];
 
 async function loadAll() {
   const res = await Promise.allSettled(
@@ -701,36 +701,7 @@ async function loadAll() {
   const all = res.filter(r => r.status==='fulfilled').flatMap(r => r.value);
   if (all.length) return all;
 
-  /* demo fallback */
-  return [{
-    id:1, slug:'importance-of-intention-niyyah',
-    title:'নিয়ত বা সংকল্পের গুরুত্ব', subTitle:'The Hadith of Intention',
-    banner:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=500&fit=crop',
-    year:'622 CE', enlist_author:'হাফেজ আবদুল্লাহ', enlist_date:'2026-06-07',
-    book_name:'সহীহ বুখারী', book_author:'ইমাম বুখারী', author_manhaj:'Sunni',
-    book_year:'846 CE', publication:'ইসলামিক ফাউন্ডেশন', edition:'২য় সংস্করণ',
-    arabic_script:'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى',
-    bangla_script:'কাজ পরিচালিত হয় নিয়তের ওপর এবং প্রত্যেক ব্যক্তি তার নিয়ত অনুযায়ী প্রতিফল পাবে।',
-    details:'<p>এই হাদীসটি ইসলামের অন্যতম মৌলিক ভিত্তি। ইমাম শাফেয়ী (র.)-এর মতে, এটি দ্বীনের এক-তৃতীয়াংশ জ্ঞান ধারণ করে।</p>',
-    chain_of_narrator:[
-      { name:'হযরত উমর ইবনুল খাত্তাব (রা.)', weight:10, Note:'সর্বোচ্চ বিশ্বস্ত সাহাবী।' },
-      { name:'আলকামা ইবনে ওয়াক্কাস', weight:7, Note:'নির্ভরযোগ্য তাবেয়ী।' },
-      { name:'মুহাম্মদ ইবনে ইব্রাহিম আল-তাইমি', weight:4, Note:'কিছু দুর্বলতা রয়েছে।' },
-      { name:'ইয়াহইয়া ইবনে সাঈদ আল-আনসারী', weight:2, Note:'বর্ণনায় সমস্যা আছে।' }
-    ],
-    images:[
-      { url:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=600&fit=crop', text:'মদীনার ঐতিহাসিক দৃশ্য' },
-      { url:'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&h=600&fit=crop', text:'পুরনো পাণ্ডুলিপি' }
-    ],
-    events:[{ text:'হিজরতের ঐতিহাসিক প্রেক্ষাপট এবং উম্মে কায়স নামক এক মহিলাকে বিয়ে করার ঘটনা', url:'#' }],
-    prespective_explanation:{
-      sunni:'<p>সুন্নী আলেমদের মতে, এটি সমস্ত ইবাদতের মূল চাবিকাঠি। সালাত, যাকাত ও সিয়ামের মতো বাহ্যিক আমলসমূহ নিয়ত ছাড়া আল্লাহর নিকট গ্রহণযোগ্য হবে না।</p>',
-      shiya:'<p>শিয়া ফিকহেও নিয়তের গুরুত্ব সমভাবে স্বীকৃত। তাদের মতে, <em>নিয়ত হচ্ছে আমলের রূহ বা আত্মা</em>। নিয়তহীন আমল একটি মৃতদেহের সমতুল্য।</p>'
-    },
-    simulated_dialogue:'<p><strong>A:</strong> যদি কেউ সমাজসেবার উদ্দেশ্যে দান করে কিন্তু আল্লাহর সন্তুষ্টির নিয়ত না থাকে, তবে কি সে সওয়াব পাবে?</p><p><strong>B:</strong> হাদীসের আলোকেই স্পষ্ট যে, সে দুনিয়াবি প্রশংসা পাবে কিন্তু আখিরাতে কোনো প্রতিদান পাবে না।</p>',
-    links:[{ text:'সূক্ষ্ম রিয়া ও নিয়তের পরিশুদ্ধি', url:'#' }],
-    tags:['নিয়ত','ইখলাস','আমল','বুখারী']
-  }];
+  
 }
 
 /* RENDER */

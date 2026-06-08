@@ -14,19 +14,12 @@
 
 ## 📖 Table of Contents
 
-- [⛵ Safeenah](#-safeenah)
-  - [📖 Table of Contents](#-table-of-contents)
-  - [What is Safeenah](#what-is-safeenah)
-  - [Why This Project Exists](#why-this-project-exists)
-  - [Who This is For](#who-this-is-for)
-  - [Who This is NOT For](#who-this-is-not-for)
-  - [What You Will Find Here](#what-you-will-find-here)
-  - [Project Structure](#project-structure)
-  - [How It Works](#how-it-works)
-  - [Adding New Content](#adding-new-content)
-  - [Contributing](#contributing)
-  - [Submit an Issue](#submit-an-issue)
-  - [Author](#author)
+- [📖 Table of Contents](#-table-of-contents)
+- [What is Safeenah](#what-is-safeenah)
+- [Why This Project Exists](#why-this-project-exists)
+- [Instruction for Contributor](#instruction-for-contributor)
+- [What You Will Find Here](#what-you-will-find-here)
+- [Author](#author)
 
 
 
@@ -54,26 +47,26 @@ We were told to be Muslims. Not Shia. Not Sunni. Just Muslims. And if the truth 
 
 That is the entire reason Safeenah exists.
 
+## Instruction for Contributor
 
-## Who This is For
-
-- Someone who genuinely wants to understand Islamic history, not just a curated version of it
-- A person who can read a reference and sit with it honestly, even if it makes them uncomfortable
-- Anyone tired of getting different answers from different groups and just wanting to know what the primary sources actually say
-- People who understand that being Muslim means following truth — wherever it leads
-
-
-
-## Who This is NOT For
-
-Let's be direct about this too.
-
-This project is not for people who are **blindly attached to a label** — whether that label is a madhab, a sect, or a particular scholar's opinion — to the point where no amount of evidence can reach them. The Arabic word for this kind of attachment is *taqlid* taken to an extreme. In plain terms: people who have already decided what the answer is and are not actually looking, just looking for confirmation.
-
-It's also not for people who think they can do *tahqiq* — proper investigation of religious claims — without actually knowing how to do it. Reading one book, or watching one YouTube channel, is not research. If someone isn't willing to sit with primary sources, check chains of narration, read multiple perspectives and weigh them honestly — this website will probably just frustrate them.
-
-We weren't told to be Shia or Sunni. We were told to be Muslim. And a Muslim follows the truth. If you are genuinely that kind of person, this project was made for you.
-
+This project is open for contributions. If you have information, references, or content that you think should be included, please feel free to submit a pull request. Here are some guidelines:
+1. **Accuracy**: Please ensure that any information you contribute is accurate and well-referenced. Include sources for any claims or events you add.
+2. **Neutrality**: The content should be presented in a neutral and objective manner. Avoid any language that could be seen as biased or inflammatory.
+3. **Format**: You can Create a new JSON file following this link [JSON GENERATOR](https://irshad-11.github.io/Safeenah/generatejson.html) - Download the generated JSON file and add it to the appropriate folder in the repository (e.g., `events`, `hadiths`, etc.).
+4. **Add to the Folder Explorer**: Since this is frontend only project, you will need to update the array with this new JSON file name in particular file . 
+   If you add new Event, then follow this process:
+    - Open `data/events/`
+    - Place the new JSON file in this folder.
+    - Open `timeline.html` and find this line `const EVENT_FILES = [...];` , add the name of your new JSON file to this array.
+    - Open `event/index.html` and find this line `const EVENT_FILES = [...];` , add the name of your new JSON file to this array.
+  
+  If you add new Hadith, then follow this process:
+    - Open `data/hadith/`
+    - Place the new JSON file in this folder.
+    - Open `hadiths.html` and find this line `const HADITH_FILES = [...];` , add the name of your new JSON file to this array.
+    - Open `hadith/index.html` and find this line `const HADITH_FILES = [...];` , add the name of your new JSON file to this array.
+5. **Testing**: After adding your content, please test it locally to ensure that it displays correctly and that all links and references work as intended.
+6. **Pull Request**: When you are ready, submit a pull request with a clear description of the changes you made and the content you added. The maintainers will review your contribution and may provide feedback or request changes before merging it into the main branch.
 
 
 ## What You Will Find Here
