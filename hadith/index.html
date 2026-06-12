@@ -687,7 +687,7 @@ function weightClass(w) {
 
 /* DATA */
 const DATA_BASE    = '../data/hadith/';
-const HADITH_FILES = [];
+const HADITH_FILES = ['hadith-ali-ibn-abi-talib-surah-maryam-96.json'];
 
 async function loadAll() {
   const res = await Promise.allSettled(
@@ -765,50 +765,24 @@ async function init() {
 
   /* DIALOGUE — HTML rendered, A/B rows */
   const dlg = hd.simulated_dialogue;
-  if (dlg && typeof dlg === 'string' && dlg.trim()) {
+if (dlg && typeof dlg === 'string' && dlg.trim()) {
+  document.getElementById('dialogueSection').style.display = '';
+  const dw = document.getElementById('dialogueWrap');
+  dw.innerHTML = dlg;
+} else if (dlg && typeof dlg === 'object') {
+  if (dlg.PersonA || dlg.PersonB) {
     document.getElementById('dialogueSection').style.display = '';
-    /* wrap each <p> as a labelled row A, B, A, B... */
-    const tmp = document.createElement('div');
-    tmp.innerHTML = dlg;
-    const paras = tmp.querySelectorAll('p');
     const dw = document.getElementById('dialogueWrap');
-    if (paras.length) {
-      paras.forEach((p, i) => {
-        const row = document.createElement('div');
-        row.className = 'dlg-row';
-        const lbl = document.createElement('span');
-        lbl.className = 'dlg-label';
-        lbl.textContent = String.fromCharCode(65 + (i % 26)) + ':';
-        const bub = document.createElement('div');
-        bub.className = 'dlg-bubble';
-        bub.innerHTML = p.innerHTML;
-        row.appendChild(lbl); row.appendChild(bub);
-        dw.appendChild(row);
-      });
-    } else {
-      /* raw HTML with no <p> */
-      const row = document.createElement('div');
-      row.className = 'dlg-row';
-      const lbl = document.createElement('span'); lbl.className='dlg-label'; lbl.textContent='A:';
-      const bub = document.createElement('div');  bub.className='dlg-bubble'; bub.innerHTML=dlg;
+    const entries = Object.entries(dlg);
+    entries.forEach(([, val], i) => {
+      const row = document.createElement('div'); row.className='dlg-row';
+      const lbl = document.createElement('span'); lbl.className='dlg-label'; lbl.textContent=String.fromCharCode(65+i)+':';
+      const bub = document.createElement('div');  bub.className='dlg-bubble'; bub.innerHTML = val;
       row.appendChild(lbl); row.appendChild(bub);
       dw.appendChild(row);
-    }
-  } else if (dlg && typeof dlg === 'object') {
-    /* legacy PersonA / PersonB object */
-    if (dlg.PersonA || dlg.PersonB) {
-      document.getElementById('dialogueSection').style.display = '';
-      const dw = document.getElementById('dialogueWrap');
-      const entries = Object.entries(dlg);
-      entries.forEach(([, val], i) => {
-        const row = document.createElement('div'); row.className='dlg-row';
-        const lbl = document.createElement('span'); lbl.className='dlg-label'; lbl.textContent=String.fromCharCode(65+i)+':';
-        const bub = document.createElement('div');  bub.className='dlg-bubble'; bub.textContent=val;
-        row.appendChild(lbl); row.appendChild(bub);
-        dw.appendChild(row);
-      });
-    }
+    });
   }
+}
 
   /* TAGS */
   if (hd.tags && hd.tags.length) {

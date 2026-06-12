@@ -684,7 +684,7 @@ mobMenu.querySelectorAll('a').forEach(link => {
    Each file: single object {} or array [{}]
 ══════════════════════════════════════════════════════════ */
 const DATA_BASE   = 'data/hadith/';
-const HADITH_FILES = [];
+const HADITH_FILES = ['hadith-ali-ibn-abi-talib-surah-maryam-96.json'];
 /* ↑ Add more files here: e.g. ['index.json','vol2.json','companions.json'] */
 
 /* ══════════════════════════════════════════════════════════
@@ -818,7 +818,7 @@ function renderGrid(items, query='') {
   grid.innerHTML = '';
   items.forEach((item, i) => {
     const h      = item._normalised || item;
-    const imgSrc = h.thumb || fallback;
+    const imgSrc = h.banner || fallback;
     const delay  = Math.min(i * 40, 500);
 
     const card = document.createElement('a');

@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dialogue Generator — Safeenah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
+<style>
+:root{
+  --f-head:'Libre Baskerville',Georgia,serif;
+  --f-body:'Cormorant Garamond',Georgia,serif;
+  --f-label:'Cinzel',serif;
+  --f-bn:'Hind Siliguri',sans-serif;
+  --f-mono:'JetBrains Mono',monospace;
+}
+[data-theme="dark"]{
+  --bg:#0d0b08;--surface:#1a1610;--surface2:#221e14;--surface3:#2a2518;
+  --border:rgba(180,135,45,.22);--border2:rgba(180,135,45,.12);
+  --gold:#c49a30;--gold-lt:#e0b84a;--gold-dk:#8a6518;--gold-dim:rgba(196,154,48,.1);
+  --ink:#f0e4cc;--ink-body:#d8c8a8;--ink-sub:#a89878;--ink-mute:#6a5a42;
+  --card:rgba(26,22,16,.95);--input-bg:rgba(34,30,20,.88);
+  --shadow:0 8px 40px rgba(0,0,0,.65);--code-bg:#0c0a06;--danger:#c0613a;
+  --danger-dim:rgba(192,97,58,.12);
+}
+[data-theme="light"]{
+  --bg:#f8f0dc;--surface:#fffbf0;--surface2:#f5e8c8;--surface3:#ede0b0;
+  --border:rgba(120,90,20,.22);--border2:rgba(120,90,20,.12);
+  --gold:#8a6010;--gold-lt:#a87820;--gold-dk:#6a4808;--gold-dim:rgba(138,96,16,.1);
+  --ink:#1a1006;--ink-body:#2a1c08;--ink-sub:#5a3e18;--ink-mute:#9a7a48;
+  --card:rgba(255,251,240,.98);--input-bg:rgba(248,240,220,.92);
+  --shadow:0 6px 28px rgba(120,90,20,.14);--code-bg:#f0e8d0;--danger:#b04030;
+  --danger-dim:rgba(176,64,48,.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--ink-body);
+  font-family:var(--f-body);font-size:16px;line-height:1.7;
+  min-height:100vh;overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:300;
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem 1.25rem;backdrop-filter:blur(16px);gap:.6rem;
+}
+.topbar-logo{
+  font-family:var(--f-label);font-size:.85rem;font-weight:700;
+  color:var(--gold);letter-spacing:.12em;text-transform:uppercase;
+  white-space:nowrap;display:flex;align-items:center;gap:.5rem;
+}
+.topbar-right{display:flex;align-items:center;gap:.45rem;flex-shrink:0;}
+.icon-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:7px;cursor:pointer;
+  background:none;border:1px solid var(--border);color:var(--ink-sub);
+  transition:all .2s;flex-shrink:0;
+}
+.icon-btn:hover{border-color:var(--gold-dk);color:var(--gold);background:var(--gold-dim);}
+.icon-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.btn-label-xs{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.32rem .75rem;border-radius:6px;cursor:pointer;
+  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
+  transition:all .2s;border:1px solid var(--border);
+  background:none;color:var(--ink-sub);white-space:nowrap;
+}
+.btn-label-xs:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+.btn-primary-sm{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.38rem .9rem;border-radius:6px;cursor:pointer;
+  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--gold);color:#0d0b08;border:none;
+  font-weight:700;transition:all .2s;white-space:nowrap;
+}
+.btn-primary-sm:hover{background:var(--gold-lt);box-shadow:0 4px 14px rgba(196,154,48,.3);}
+
+/* ── LAYOUT ── */
+.main-layout{
+  display:grid;
+  grid-template-columns:1fr 360px;
+  min-height:calc(100vh - 52px);
+}
+@media(max-width:900px){
+  .main-layout{grid-template-columns:1fr;}
+}
+
+/* ── LEFT PANEL ── */
+.panel-left{
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  min-height:calc(100vh - 52px);
+}
+.panel-header{
+  padding:.9rem 1.25rem .7rem;
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+  flex-shrink:0;
+}
+.panel-title{
+  font-family:var(--f-label);font-size:.55rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold-dk);
+}
+
+/* ── SPEAKER SELECT ── */
+.speaker-row{
+  display:flex;gap:.5rem;padding:.9rem 1.25rem .6rem;
+  border-bottom:1px solid var(--border2);flex-shrink:0;flex-wrap:wrap;
+}
+.spk-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.4rem .85rem;border-radius:20px;cursor:pointer;
+  font-family:var(--f-label);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;
+  border:1.5px solid var(--border);background:var(--surface);
+  color:var(--ink-sub);transition:all .2s;font-weight:600;
+}
+.spk-btn.active-a{border-color:#7a3b20;background:rgba(122,59,32,.18);color:#d4855a;}
+.spk-btn.active-b{border-color:#2a5c6a;background:rgba(42,92,106,.18);color:#5aacbe;}
+.spk-btn.active-c{border-color:#4a4a38;background:rgba(74,74,56,.22);color:#9a9a78;}
+.spk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-a{background:#7a3b20;}.dot-b{background:#2a5c6a;}.dot-c{background:#4a4a38;}
+
+/* ── COMPOSE AREA ── */
+.compose-wrap{
+  padding:.9rem 1.25rem;
+  border-bottom:1px solid var(--border2);flex-shrink:0;
+}
+.compose-inner{
+  background:var(--input-bg);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;
+  transition:border-color .2s;
+}
+.compose-inner:focus-within{border-color:var(--gold-dk);}
+.compose-ta{
+  width:100%;min-height:80px;max-height:200px;
+  background:transparent;border:none;outline:none;
+  color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.7;
+  padding:.75rem 1rem;resize:vertical;
+}
+.compose-ta::placeholder{color:var(--ink-mute);font-style:italic;}
+.compose-ta:lang(bn){font-family:var(--f-bn) !important;line-height:1.9;}
+.compose-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.4rem .75rem .4rem 1rem;
+  border-top:1px solid var(--border2);gap:.5rem;
+  flex-wrap:wrap;
+}
+.compose-hint{font-size:.72rem;color:var(--ink-mute);font-family:var(--f-label);letter-spacing:.06em;}
+.add-btn{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.38rem 1rem;border-radius:6px;cursor:pointer;
+  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--gold);color:#0d0b08;border:none;font-weight:700;transition:all .2s;
+}
+.add-btn:hover{background:var(--gold-lt);}
+.add-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── DIALOGUE LIST ── */
+.dlg-list{flex:1;overflow-y:auto;padding:1rem 1.25rem;}
+.dlg-list-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:220px;color:var(--ink-mute);text-align:center;gap:.6rem;
+}
+.dlg-list-empty-icon{color:var(--border);opacity:.5;}
+.dlg-list-empty p{font-size:.85rem;font-style:italic;font-family:var(--f-body);}
+
+/* ── DIALOGUE ITEM CARD ── */
+.dlg-item{
+  display:flex;gap:.6rem;margin-bottom:.65rem;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:10px;padding:.7rem .85rem;
+  transition:border-color .2s, box-shadow .2s;
+  position:relative;
+}
+.dlg-item:hover{border-color:var(--border);box-shadow:0 2px 14px rgba(0,0,0,.2);}
+.dlg-item.editing{border-color:var(--gold-dk);box-shadow:0 0 0 2px rgba(196,154,48,.1);}
+.dlg-item-left{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;padding-top:.15rem;}
+.dlg-spk-badge{
+  font-family:var(--f-label);font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.18em .55em;border-radius:3px;color:#fff;white-space:nowrap;font-weight:600;
+}
+.badge-a{background:#7a3b20;}.badge-b{background:#2a5c6a;}.badge-c{background:#4a4a38;}
+.dlg-seq{font-family:var(--f-mono);font-size:.55rem;color:var(--ink-mute);}
+.dlg-item-body{flex:1;min-width:0;}
+.dlg-text{
+  font-family:var(--f-body);font-size:.95rem;line-height:1.7;
+  color:var(--ink-body);word-break:break-word;
+}
+.dlg-text-bn{font-family:var(--f-bn) !important;font-size:.9rem;line-height:1.9 !important;}
+.dlg-edit-ta{
+  width:100%;min-height:60px;background:var(--input-bg);
+  border:1px solid var(--gold-dk);border-radius:6px;outline:none;
+  color:var(--ink);font-family:var(--f-body);font-size:.95rem;line-height:1.7;
+  padding:.5rem .7rem;resize:vertical;display:none;
+}
+.dlg-actions{
+  display:flex;align-items:center;gap:.2rem;flex-shrink:0;
+  opacity:0;transition:opacity .2s;padding-top:.1rem;
+}
+.dlg-item:hover .dlg-actions{opacity:1;}
+.dlg-item.editing .dlg-actions{opacity:1;}
+.act-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:5px;cursor:pointer;
+  background:none;border:none;color:var(--ink-mute);transition:all .15s;
+}
+.act-btn:hover{color:var(--gold);background:var(--gold-dim);}
+.act-btn.danger:hover{color:var(--danger);background:var(--danger-dim);}
+.act-btn.save-act:hover{color:#4a9a5a;background:rgba(74,154,90,.12);}
+
+/* drag handle */
+.drag-handle{
+  cursor:grab;color:var(--border);transition:color .15s;
+  display:flex;align-items:center;justify-content:center;
+  height:20px;
+}
+.drag-handle:hover{color:var(--gold-dk);}
+.dlg-item.dragging{opacity:.5;border-style:dashed;}
+.dlg-item.drag-over{border-color:var(--gold);background:var(--gold-dim);}
+
+/* move btns */
+.move-btns{display:flex;flex-direction:column;gap:.1rem;}
+
+/* ── RIGHT PANEL ── */
+.panel-right{
+  display:flex;flex-direction:column;
+  background:var(--surface);
+  min-height:calc(100vh - 52px);
+}
+@media(max-width:900px){
+  .panel-right{border-top:1px solid var(--border);}
+}
+.panel-right .panel-header{
+  border-bottom:1px solid var(--border);
+}
+
+/* ── PREVIEW ── */
+.preview-wrap{
+  flex:1;overflow-y:auto;padding:1rem;
+}
+.preview-dialogue-wrap{
+  background:var(--surface2);border:1px solid var(--border2);border-radius:8px;
+  padding:.75rem;
+}
+/* app dialogue classes for preview */
+.dialogue-wrap{}
+.dlg-row{
+  display:flex;gap:.55rem;padding:.55rem .3rem;
+  border-radius:6px;transition:background .15s;
+}
+.dlg-row:nth-child(even){background:var(--gold-dim);}
+.dlg-label{
+  font-family:var(--f-label);font-size:.58rem;letter-spacing:.1em;
+  color:var(--gold-dk);flex-shrink:0;padding-top:.3rem;min-width:18px;
+  text-transform:uppercase;
+}
+.dlg-bubble{
+  font-family:var(--f-body);font-size:.9rem;line-height:1.75;
+  color:var(--ink-body);
+}
+.sec-head{
+  font-family:var(--f-label);font-size:.58rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gold);
+  padding:.4rem 0 .2rem;margin:.5rem 0 .3rem;
+  border-bottom:1px solid var(--border2);
+}
+blockquote{
+  border-left:3px solid var(--gold);
+  background:var(--gold-dim);padding:.6rem .9rem;border-radius:0 4px 4px 0;
+  margin:.5rem 0;
+}
+blockquote p{color:var(--ink-body);font-style:italic;}
+.preview-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:200px;gap:.6rem;color:var(--ink-mute);text-align:center;
+}
+.preview-empty p{font-size:.82rem;font-style:italic;}
+
+/* ── CODE OUTPUT ── */
+.code-panel{
+  border-top:1px solid var(--border);background:var(--code-bg);
+  max-height:0;overflow:hidden;transition:max-height .4s ease;
+  flex-shrink:0;
+}
+.code-panel.open{max-height:420px;}
+.code-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.55rem .85rem;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--code-bg);z-index:2;
+}
+.code-header-label{
+  font-family:var(--f-label);font-size:.48rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--gold-dk);display:flex;align-items:center;gap:.4rem;
+}
+.code-area{
+  max-height:360px;overflow-y:auto;padding:.75rem 1rem;
+}
+.code-block{
+  font-family:var(--f-mono);font-size:.68rem;line-height:1.75;
+  color:var(--ink-sub);white-space:pre-wrap;word-break:break-all;
+}
+/* syntax colors */
+.ht{color:var(--gold-dk);}/* tag */
+.ha{color:#7aade0;}/* attr */
+.hv{color:#8acd8a;}/* value */
+.hc{color:var(--ink-mute);}/* comment */
+
+/* ── IMPORT MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.72);backdrop-filter:blur(6px);
+  display:none;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;
+  box-shadow:var(--shadow);
+}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
+}
+.modal-title{font-family:var(--f-label);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);}
+.modal-body{flex:1;overflow-y:auto;padding:1.1rem;}
+.modal-foot{
+  padding:.75rem 1.1rem;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:flex-end;gap:.5rem;
+}
+
+/* import textarea */
+.import-ta{
+  width:100%;min-height:160px;background:var(--input-bg);
+  border:1px solid var(--border);border-radius:8px;outline:none;
+  color:var(--ink);font-family:var(--f-mono);font-size:.72rem;line-height:1.65;
+  padding:.75rem 1rem;resize:vertical;
+  transition:border-color .2s;
+}
+.import-ta:focus{border-color:var(--gold-dk);}
+.import-ta::placeholder{color:var(--ink-mute);font-family:var(--f-body);font-style:italic;font-size:.82rem;}
+.import-label{
+  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold-dk);display:block;margin-bottom:.45rem;
+}
+.file-drop{
+  border:1.5px dashed var(--border);border-radius:8px;padding:1.2rem;
+  text-align:center;cursor:pointer;transition:all .2s;margin-bottom:.85rem;
+}
+.file-drop:hover{border-color:var(--gold-dk);background:var(--gold-dim);}
+.file-drop p{font-size:.82rem;color:var(--ink-sub);font-style:italic;}
+.file-drop p span{color:var(--gold-dk);font-style:normal;font-weight:600;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  padding:.55rem 1.1rem;
+  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);display:flex;align-items:center;gap:.45rem;
+  opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;
+  box-shadow:var(--shadow);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── MOBILE TABS ── */
+.mobile-tabs{
+  display:none;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+}
+@media(max-width:900px){.mobile-tabs{display:flex;}}
+.mob-tab{
+  flex:1;padding:.65rem .5rem;text-align:center;cursor:pointer;
+  font-family:var(--f-label);font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-mute);border-bottom:2px solid transparent;transition:all .2s;
+  background:none;border:none;border-bottom:2px solid transparent;
+}
+.mob-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+@media(max-width:900px){
+  .panel-left,.panel-right{min-height:auto;}
+  .panel-right{border-right:none;}
+  #panel-right-mob{display:none;}
+  #panel-right-mob.active{display:flex;}
+  #panel-left-mob.hidden{display:none;}
+}
+
+/* ── DIVIDER ── */
+.part-divider{
+  display:flex;align-items:center;gap:.75rem;margin:.7rem 0;
+}
+.part-divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
+.part-divider-dot{font-size:.6rem;color:var(--ink-mute);}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  display:flex;gap:1rem;padding:.5rem 1.25rem;
+  border-bottom:1px solid var(--border2);flex-shrink:0;flex-wrap:wrap;
+}
+.stat-item{display:flex;align-items:center;gap:.3rem;}
+.stat-label{font-family:var(--f-label);font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);}
+.stat-val{font-family:var(--f-mono);font-size:.65rem;color:var(--gold-dk);font-weight:600;}
+
+/* ── OPTIONS ROW ── */
+.options-row{
+  display:flex;align-items:center;gap:.5rem;padding:.55rem 1.25rem;
+  border-bottom:1px solid var(--border2);flex-shrink:0;flex-wrap:wrap;
+}
+.opt-toggle{
+  display:inline-flex;align-items:center;gap:.35rem;
+  font-family:var(--f-label);font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-mute);cursor:pointer;padding:.25rem .55rem;border-radius:5px;
+  border:1px solid transparent;transition:all .2s;
+}
+.opt-toggle.on{color:var(--gold-dk);border-color:var(--border);background:var(--gold-dim);}
+.opt-toggle:hover{color:var(--gold-dk);}
+.toggle-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--border);
+  transition:background .2s;flex-shrink:0;
+}
+.opt-toggle.on .toggle-dot{background:var(--gold);}
+
+/* ── COLLAPSE TOGGLE in PREVIEW ── */
+.preview-collapse-btn{
+  display:block;width:100%;margin-top:.5rem;
+  background:none;border:1px solid var(--border);
+  color:var(--gold-dk);cursor:pointer;
+  font-family:var(--f-label);font-size:.48rem;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:.38rem;border-radius:2px;
+  transition:color .2s,border-color .2s;
+}
+.preview-collapse-btn:hover{color:var(--gold);border-color:var(--gold);}
+
+/* ── CHAR COUNT ── */
+.char-count{font-size:.68rem;color:var(--ink-mute);font-family:var(--f-mono);}
+
+/* ── DRAG GHOST ── */
+@keyframes pulse-border{0%,100%{border-color:var(--gold-dk);}50%{border-color:var(--gold-lt);}}
+.dlg-item.drag-target{animation:pulse-border 1s infinite;}
+
+/* ── SECTION HEADER IN LIST ── */
+.section-marker{
+  display:flex;align-items:center;gap:.5rem;
+  margin:.5rem 0 .35rem;
+}
+.section-marker-line{flex:1;height:1px;background:var(--border2);}
+.section-marker-label{
+  font-family:var(--f-label);font-size:.42rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-mute);
+}
+
+/* ── SCROLLBAR CODE AREA ── */
+.code-area::-webkit-scrollbar{width:3px;}
+.code-area::-webkit-scrollbar-thumb{background:var(--gold-dk);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .topbar{padding:.55rem .85rem;}
+  .speaker-row{padding:.65rem .85rem .5rem;}
+  .compose-wrap{padding:.65rem .85rem;}
+  .dlg-list{padding:.75rem .85rem;}
+  .stats-bar{padding:.4rem .85rem;}
+  .options-row{padding:.4rem .85rem;}
+  .panel-header{padding:.7rem .85rem .6rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Dialogue Generator
+  </div>
+  <div class="topbar-right">
+    <button class="btn-label-xs" onclick="openImportModal()" title="Import existing dialogue">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import
+    </button>
+    <button class="btn-label-xs" onclick="saveDraft()" title="Save to localStorage">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save
+    </button>
+    <button class="btn-primary-sm" onclick="toggleCodePanel()" id="generateBtn">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Generate HTML
+    </button>
+    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">
+      <svg id="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="icon-btn" onclick="clearAll()" title="Clear all">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- MOBILE TABS -->
+<div class="mobile-tabs">
+  <button class="mob-tab active" id="tab-compose" onclick="switchMobTab('compose')">Compose</button>
+  <button class="mob-tab" id="tab-preview" onclick="switchMobTab('preview')">Preview</button>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+
+  <!-- LEFT PANEL -->
+  <div class="panel-left" id="panel-left-mob">
+
+    <!-- SPEAKER SELECT -->
+    <div class="speaker-row">
+      <div class="panel-title" style="margin-right:.3rem;padding-top:.25rem;">Speaker:</div>
+      <button class="spk-btn" id="spk-a" onclick="selectSpeaker('A')">
+        <span class="spk-dot dot-a"></span> Person A
+      </button>
+      <button class="spk-btn" id="spk-b" onclick="selectSpeaker('B')">
+        <span class="spk-dot dot-b"></span> Person B
+      </button>
+      <button class="spk-btn" id="spk-c" onclick="selectSpeaker('C')">
+        <span class="spk-dot dot-c"></span> Person C
+      </button>
+    </div>
+
+    <!-- COMPOSE -->
+    <div class="compose-wrap">
+      <div class="compose-inner" id="composeBox">
+        <textarea
+          class="compose-ta"
+          id="composeTa"
+          placeholder="Type the dialogue line here… (Enter to add, Shift+Enter for new line)"
+          oninput="handleComposeInput(this)"
+          onkeydown="handleComposeKey(event)"
+        ></textarea>
+        <div class="compose-footer">
+          <div style="display:flex;align-items:center;gap:.6rem;">
+            <span class="compose-hint" id="activeSpeakerHint">Select a speaker above</span>
+            <span class="char-count" id="charCount">0</span>
+          </div>
+          <button class="add-btn" id="addBtn" onclick="addLine()" disabled>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Line
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="options-row">
+      <div class="panel-title">Options:</div>
+      <button class="opt-toggle" id="opt-collapsible" onclick="toggleOpt('collapsible')">
+        <span class="toggle-dot"></span> Collapsible
+      </button>
+      <button class="opt-toggle" id="opt-sections" onclick="toggleOpt('sections')">
+        <span class="toggle-dot"></span> Section Breaks
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-item"><span class="stat-label">Lines</span><span class="stat-val" id="stat-lines">0</span></div>
+      <div class="stat-item"><span class="stat-label">Person A</span><span class="stat-val" id="stat-a">0</span></div>
+      <div class="stat-item"><span class="stat-label">Person B</span><span class="stat-val" id="stat-b">0</span></div>
+      <div class="stat-item"><span class="stat-label">Person C</span><span class="stat-val" id="stat-c">0</span></div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="panel-header">
+      <span class="panel-title">Dialogue Lines</span>
+      <div style="display:flex;gap:.4rem;">
+        <button class="btn-label-xs" onclick="addSectionBreak()" title="Add section break">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Break
+        </button>
+      </div>
+    </div>
+
+    <!-- LIST -->
+    <div class="dlg-list" id="dlgList">
+      <div class="dlg-list-empty" id="emptyState">
+        <svg class="dlg-list-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <p>No dialogue yet.<br/>Select a speaker and start typing.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel-right" id="panel-right-mob">
+
+    <div class="panel-header">
+      <span class="panel-title">Live Preview</span>
+      <button class="btn-label-xs" onclick="refreshPreview()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Refresh
+      </button>
+    </div>
+
+    <div class="preview-wrap" id="previewWrap">
+      <div class="preview-empty" id="previewEmpty">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--border);opacity:.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
+        <p>Preview appears here as you build.</p>
+      </div>
+      <div id="previewContent" style="display:none;"></div>
+    </div>
+
+    <!-- CODE PANEL -->
+    <div class="code-panel" id="codePanel">
+      <div class="code-header">
+        <span class="code-header-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Generated HTML
+        </span>
+        <div style="display:flex;gap:.4rem;">
+          <button class="btn-label-xs" onclick="copyHTML()" id="copyHtmlBtn">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy HTML
+          </button>
+          <button class="icon-btn" onclick="toggleCodePanel()" title="Close" style="width:26px;height:26px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="code-area" id="codeArea">
+        <pre class="code-block" id="codeBlock"></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">Import Existing Dialogue</span>
+      <button class="icon-btn" onclick="closeImportModal()" style="width:28px;height:28px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondrop="handleFileDrop(event)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold-dk);margin:0 auto .4rem;display:block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p>Drop a <span>.html</span> or <span>.txt</span> file, or <span>click to browse</span></p>
+        <input type="file" id="fileInput" accept=".html,.txt,.json" style="display:none;" onchange="handleFileInput(event)"/>
+      </div>
+      <label class="import-label">Or paste dialogue text / HTML below</label>
+      <textarea class="import-ta" id="importTa" placeholder="Paste raw text (each line = one exchange), or paste existing HTML dialogue markup…"></textarea>
+      <div style="margin-top:.75rem;">
+        <label class="import-label">Format hint</label>
+        <p style="font-size:.8rem;color:var(--ink-mute);line-height:1.65;font-style:italic;">
+          For plain text: each paragraph or line will become a separate entry. Speaker is auto-detected from prefixes like <strong style="color:var(--gold-dk);">A:</strong>, <strong style="color:var(--gold-dk);">B:</strong>, <strong style="color:var(--gold-dk);">Person A:</strong> etc.<br/>
+          For HTML: existing <code style="font-family:var(--f-mono);font-size:.75rem;color:var(--gold-dk);">.dlg-bubble</code> blocks are parsed.
+        </p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-label-xs" onclick="closeImportModal()">Cancel</button>
+      <button class="btn-primary-sm" onclick="processImport()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Import Dialogue
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="toastMsg">Copied!</span>
+</div>
+
+<script>
+/* ═══════════════════ STATE ═══════════════════ */
+const DRAFT_KEY = 'safeenah_dlg_draft_v2';
+let dialogue = []; // [{id, type:'line'|'break', speaker:'A'|'B'|'C', text, label}]
+let activeSpeaker = null;
+let dragSrcIdx = null;
+let opts = { collapsible: false, sections: false };
+let editingId = null;
+let idCounter = 0;
+
+/* ═══════════════════ INIT ═══════════════════ */
+window.addEventListener('load', () => {
+  loadDraftSilent();
+  render();
+  refreshPreview();
+});
+
+/* ═══════════════════ SPEAKER ═══════════════════ */
+function selectSpeaker(s) {
+  activeSpeaker = s;
+  document.querySelectorAll('.spk-btn').forEach(b => {
+    b.className = 'spk-btn';
+  });
+  const btn = document.getElementById('spk-' + s.toLowerCase());
+  if (btn) btn.className = 'spk-btn active-' + s.toLowerCase();
+  document.getElementById('activeSpeakerHint').textContent = 'Speaking as Person ' + s;
+  updateAddBtn();
+  document.getElementById('composeTa').focus();
+}
+
+/* ═══════════════════ COMPOSE ═══════════════════ */
+function handleComposeInput(ta) {
+  const len = ta.value.length;
+  document.getElementById('charCount').textContent = len;
+  updateAddBtn();
+  detectBengali(ta);
+}
+
+function detectBengali(ta) {
+  const bengaliRange = /[\u0980-\u09FF]/;
+  if (bengaliRange.test(ta.value)) {
+    ta.style.fontFamily = "'Hind Siliguri', sans-serif";
+    ta.style.lineHeight = '1.9';
+  } else {
+    ta.style.fontFamily = '';
+    ta.style.lineHeight = '';
+  }
+}
+
+function handleComposeKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    if (!document.getElementById('addBtn').disabled) addLine();
+  }
+}
+
+function updateAddBtn() {
+  const ta = document.getElementById('composeTa');
+  const hasText = ta.value.trim().length > 0;
+  const hasSpeaker = !!activeSpeaker;
+  document.getElementById('addBtn').disabled = !(hasText && hasSpeaker);
+}
+
+function addLine() {
+  const ta = document.getElementById('composeTa');
+  const text = ta.value.trim();
+  if (!text || !activeSpeaker) return;
+  dialogue.push({ id: ++idCounter, type: 'line', speaker: activeSpeaker, text });
+  ta.value = '';
+  document.getElementById('charCount').textContent = '0';
+  updateAddBtn();
+  render();
+  refreshPreview();
+  saveDraftSilent();
+  scrollListToBottom();
+}
+
+function scrollListToBottom() {
+  const list = document.getElementById('dlgList');
+  setTimeout(() => { list.scrollTop = list.scrollHeight; }, 50);
+}
+
+/* ═══════════════════ SECTION BREAK ═══════════════════ */
+function addSectionBreak() {
+  const label = prompt('Section label (e.g. "Part Two — Topic"):', 'Part ' + romanize(countBreaks() + 1));
+  if (label === null) return;
+  dialogue.push({ id: ++idCounter, type: 'break', label: label || ('Section ' + (countBreaks() + 1)) });
+  render();
+  refreshPreview();
+  saveDraftSilent();
+}
+
+function countBreaks() {
+  return dialogue.filter(d => d.type === 'break').length;
+}
+
+function romanize(n) {
+  const r = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'];
+  return r[n - 1] || String(n);
+}
+
+/* ═══════════════════ OPTIONS ═══════════════════ */
+function toggleOpt(key) {
+  opts[key] = !opts[key];
+  const btn = document.getElementById('opt-' + key);
+  btn.classList.toggle('on', opts[key]);
+  refreshPreview();
+  if (document.getElementById('codePanel').classList.contains('open')) generateHTML();
+}
+
+/* ═══════════════════ RENDER LIST ═══════════════════ */
+function render() {
+  const list = document.getElementById('dlgList');
+  const empty = document.getElementById('emptyState');
+
+  if (dialogue.length === 0) {
+    empty.style.display = 'flex';
+    // clear all but empty
+    Array.from(list.children).forEach(c => { if (c !== empty) c.remove(); });
+    updateStats();
+    return;
+  }
+  empty.style.display = 'none';
+
+  // rebuild
+  const existing = {};
+  Array.from(list.querySelectorAll('[data-dlg-id]')).forEach(el => {
+    existing[el.dataset.dlgId] = el;
+  });
+
+  // remove items not in dialogue
+  Array.from(list.querySelectorAll('[data-dlg-id]')).forEach(el => {
+    if (!dialogue.find(d => String(d.id) === el.dataset.dlgId)) el.remove();
+  });
+
+  // insert/update in order
+  dialogue.forEach((item, idx) => {
+    let el = list.querySelector('[data-dlg-id="' + item.id + '"]');
+    const html = item.type === 'break' ? renderBreakEl(item, idx) : renderLineEl(item, idx);
+
+    if (!el) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      el = wrapper.firstElementChild;
+      list.appendChild(el);
+      // animate in
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(6px)';
+      requestAnimationFrame(() => {
+        el.style.transition = 'opacity .25s, transform .25s';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      });
+    } else {
+      el.outerHTML = html;
+    }
+  });
+
+  // ensure order matches dialogue array
+  dialogue.forEach(item => {
+    const el = list.querySelector('[data-dlg-id="' + item.id + '"]');
+    if (el) list.appendChild(el); // reorder
+  });
+
+  updateStats();
+}
+
+function renderLineEl(item, idx) {
+  const cls = item.speaker === 'A' ? 'badge-a' : item.speaker === 'B' ? 'badge-b' : 'badge-c';
+  const lbl = 'Person ' + item.speaker;
+  const isBn = /[\u0980-\u09FF]/.test(item.text);
+  const textCls = isBn ? 'dlg-text dlg-text-bn' : 'dlg-text';
+  const escaped = esc(item.text);
+  return `<div class="dlg-item" data-dlg-id="${item.id}" draggable="true"
+    ondragstart="onDragStart(event,${idx})" ondragover="onDragOver(event,${idx})"
+    ondrop="onDrop(event,${idx})" ondragleave="onDragLeave(event)" ondragend="onDragEnd(event)">
+    <div class="dlg-item-left">
+      <span class="dlg-spk-badge ${cls}">${lbl}</span>
+      <span class="dlg-seq">#${idx + 1}</span>
+      <div class="drag-handle" title="Drag to reorder">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+      </div>
+    </div>
+    <div class="dlg-item-body">
+      <div class="${textCls}" id="text-${item.id}">${escaped}</div>
+      <textarea class="dlg-edit-ta" id="edit-${item.id}" onkeydown="editKey(event,${item.id})">${esc(item.text)}</textarea>
+    </div>
+    <div class="dlg-actions">
+      <div class="move-btns">
+        <button class="act-btn" onclick="moveUp(${idx})" title="Move up" ${idx===0?'style="opacity:.3;pointer-events:none;"':''}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+        <button class="act-btn" onclick="moveDown(${idx})" title="Move down" ${idx===dialogue.length-1?'style="opacity:.3;pointer-events:none;"':''}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <button class="act-btn" onclick="startEdit(${item.id})" title="Edit">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+      <button class="act-btn save-act" id="save-act-${item.id}" onclick="saveEdit(${item.id})" title="Save edit" style="display:none;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+      <button class="act-btn" onclick="changeSpeaker(${item.id})" title="Change speaker">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </button>
+      <button class="act-btn danger" onclick="deleteLine(${item.id})" title="Delete">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      </button>
+    </div>
+  </div>`;
+}
+
+function renderBreakEl(item, idx) {
+  return `<div class="section-marker" data-dlg-id="${item.id}">
+    <div class="section-marker-line"></div>
+    <span class="section-marker-label">${esc(item.label)}</span>
+    <div class="section-marker-line"></div>
+    <button class="act-btn" onclick="editBreak(${item.id})" title="Edit label" style="opacity:0.6;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    </button>
+    <button class="act-btn danger" onclick="deleteLine(${item.id})" title="Delete break" style="opacity:0.6;">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+    </button>
+  </div>`;
+}
+
+/* ═══════════════════ EDIT ═══════════════════ */
+function startEdit(id) {
+  const item = document.querySelector('[data-dlg-id="' + id + '"]');
+  if (!item) return;
+  item.classList.add('editing');
+  const textEl = document.getElementById('text-' + id);
+  const ta = document.getElementById('edit-' + id);
+  const saveBtn = document.getElementById('save-act-' + id);
+  if (textEl) textEl.style.display = 'none';
+  if (ta) { ta.style.display = 'block'; ta.focus(); ta.select(); }
+  if (saveBtn) saveBtn.style.display = 'inline-flex';
+  editingId = id;
+}
+
+function saveEdit(id) {
+  const item = dialogue.find(d => d.id === id);
+  const ta = document.getElementById('edit-' + id);
+  if (!item || !ta) return;
+  item.text = ta.value.trim() || item.text;
+  editingId = null;
+  render();
+  refreshPreview();
+  saveDraftSilent();
+}
+
+function editKey(e, id) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(id); }
+  if (e.key === 'Escape') { editingId = null; render(); }
+}
+
+function editBreak(id) {
+  const item = dialogue.find(d => d.id === id);
+  if (!item) return;
+  const newLabel = prompt('Section label:', item.label);
+  if (newLabel !== null) { item.label = newLabel; render(); refreshPreview(); saveDraftSilent(); }
+}
+
+/* ═══════════════════ CHANGE SPEAKER ═══════════════════ */
+function changeSpeaker(id) {
+  const item = dialogue.find(d => d.id === id);
+  if (!item) return;
+  const spks = ['A','B','C'];
+  const curr = spks.indexOf(item.speaker);
+  item.speaker = spks[(curr + 1) % 3];
+  render();
+  refreshPreview();
+  saveDraftSilent();
+}
+
+/* ═══════════════════ DELETE ═══════════════════ */
+function deleteLine(id) {
+  dialogue = dialogue.filter(d => d.id !== id);
+  render();
+  refreshPreview();
+  saveDraftSilent();
+}
+
+/* ═══════════════════ MOVE ═══════════════════ */
+function moveUp(idx) {
+  if (idx === 0) return;
+  [dialogue[idx - 1], dialogue[idx]] = [dialogue[idx], dialogue[idx - 1]];
+  render(); refreshPreview(); saveDraftSilent();
+}
+function moveDown(idx) {
+  if (idx >= dialogue.length - 1) return;
+  [dialogue[idx], dialogue[idx + 1]] = [dialogue[idx + 1], dialogue[idx]];
+  render(); refreshPreview(); saveDraftSilent();
+}
+
+/* ═══════════════════ DRAG ═══════════════════ */
+function onDragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.target.closest('.dlg-item').classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function onDragOver(e, idx) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.dlg-item').forEach(el => el.classList.remove('drag-over'));
+  if (dragSrcIdx !== idx) {
+    const target = e.target.closest('.dlg-item');
+    if (target) target.classList.add('drag-over');
+  }
+}
+function onDragLeave(e) {
+  const target = e.target.closest('.dlg-item');
+  if (target) target.classList.remove('drag-over');
+}
+function onDrop(e, idx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === idx) return;
+  const moved = dialogue.splice(dragSrcIdx, 1)[0];
+  dialogue.splice(idx, 0, moved);
+  dragSrcIdx = null;
+  render(); refreshPreview(); saveDraftSilent();
+}
+function onDragEnd(e) {
+  document.querySelectorAll('.dlg-item').forEach(el => {
+    el.classList.remove('dragging','drag-over');
+  });
+  dragSrcIdx = null;
+}
+
+/* ═══════════════════ STATS ═══════════════════ */
+function updateStats() {
+  const lines = dialogue.filter(d => d.type === 'line');
+  document.getElementById('stat-lines').textContent = lines.length;
+  document.getElementById('stat-a').textContent = lines.filter(d => d.speaker === 'A').length;
+  document.getElementById('stat-b').textContent = lines.filter(d => d.speaker === 'B').length;
+  document.getElementById('stat-c').textContent = lines.filter(d => d.speaker === 'C').length;
+}
+
+/* ═══════════════════ PREVIEW ═══════════════════ */
+function refreshPreview() {
+  const lines = dialogue.filter(d => d.type === 'line');
+  const previewEmpty = document.getElementById('previewEmpty');
+  const previewContent = document.getElementById('previewContent');
+
+  if (lines.length === 0) {
+    previewEmpty.style.display = 'flex';
+    previewContent.style.display = 'none';
+    return;
+  }
+  previewEmpty.style.display = 'none';
+  previewContent.style.display = 'block';
+  previewContent.innerHTML = '<div class="preview-dialogue-wrap">' + buildPreviewHTML() + '</div>';
+}
+
+function buildPreviewHTML() {
+  let html = '<div class="dialogue-wrap">\n';
+  const splitAt = opts.collapsible ? Math.max(2, Math.floor(dialogue.filter(d=>d.type==='line').length / 2)) : null;
+  let lineCount = 0;
+  let collapsibleStarted = false;
+
+  dialogue.forEach(item => {
+    if (item.type === 'break') {
+      html += buildBreakHTML(item.label);
+      return;
+    }
+    lineCount++;
+    if (opts.collapsible && lineCount === splitAt + 1 && !collapsibleStarted) {
+      html += '\n<div id="dlg-more-preview" style="display:none;">\n';
+      collapsibleStarted = true;
+    }
+    html += buildRowHTML(item, false);
+  });
+
+  if (collapsibleStarted) {
+    html += '</div>\n';
+    html += `<button onclick="(function(b,t){var o=b.style.display==='none';b.style.display=o?'block':'none';t.textContent=o?'Show less ▲':'Show more ▾';})(document.getElementById('dlg-more-preview'),this)" class="preview-collapse-btn">Show more ▾</button>\n`;
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function buildBreakHTML(label) {
+  return `<div style="display:flex;align-items:center;gap:.75rem;margin:1.2rem 0;">
+  <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>
+  <span style="font-size:.6rem;color:var(--ink-mute);">◆</span>
+  <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>
+</div>
+<p class="sec-head">${esc(label)}</p>\n`;
+}
+
+function buildRowHTML(item, forCode) {
+  const isBn = /[\u0980-\u09FF]/.test(item.text);
+  const badgeBg = item.speaker === 'A' ? '#7a3b20' : item.speaker === 'B' ? '#2a5c6a' : '#4a4a38';
+  const lbl = item.speaker + ':';
+  const spkName = 'Person ' + item.speaker;
+  const textStyle = isBn ? ' style="font-family:\'Hind Siliguri\',sans-serif;line-height:1.9;"' : '';
+  const badge = `<span style="display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.15em .6em;border-radius:3px;margin-bottom:.3rem;background:${badgeBg};color:#fff;">${spkName}</span><br/>`;
+  return `  <div class="dlg-row">
+    <span class="dlg-label">${lbl}</span>
+    <div class="dlg-bubble"${textStyle}>
+      ${badge}${forCode ? escapeForCode(item.text) : esc(item.text)}
+    </div>
+  </div>\n`;
+}
+
+/* ═══════════════════ GENERATE HTML ═══════════════════ */
+function generateHTML() {
+  const lines = dialogue.filter(d => d.type === 'line');
+  if (lines.length === 0) { showToast('No dialogue to generate.'); return; }
+
+  const splitAt = opts.collapsible ? Math.max(2, Math.floor(lines.length / 2)) : null;
+  let code = '<div class="dialogue-wrap">\n\n';
+  let lineCount = 0;
+  let collapsibleStarted = false;
+  let breakCount = 0;
+
+  dialogue.forEach(item => {
+    if (item.type === 'break') {
+      breakCount++;
+      code += `  <!-- ── Section Break ── -->\n`;
+      code += `  <div style="display:flex;align-items:center;gap:.75rem;margin:1.2rem 0;">\n`;
+      code += `    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>\n`;
+      code += `    <span style="font-size:.6rem;color:var(--ink-mute);">◆</span>\n`;
+      code += `    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>\n`;
+      code += `  </div>\n`;
+      code += `  <p class="sec-head">${escapeForCode(item.label)}</p>\n\n`;
+      return;
+    }
+
+    lineCount++;
+    if (opts.collapsible && lineCount === splitAt + 1 && !collapsibleStarted) {
+      code += `  <!-- ── Collapsed section ── -->\n`;
+      code += `  <div id="dlg-more-1" style="display:none;">\n\n`;
+      collapsibleStarted = true;
+    }
+
+    const indent = collapsibleStarted ? '    ' : '  ';
+    const isBn = /[\u0980-\u09FF]/.test(item.text);
+    const badgeBg = item.speaker === 'A' ? '#7a3b20' : item.speaker === 'B' ? '#2a5c6a' : '#4a4a38';
+    const lbl = item.speaker + ':';
+    const spkName = 'Person ' + item.speaker;
+    const textAttr = isBn ? '\n' + indent + '      style="font-family:\'Hind Siliguri\',sans-serif;line-height:1.9;"' : '';
+    const badge = `<span style="display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.15em .6em;border-radius:3px;margin-bottom:.3rem;background:${badgeBg};color:#fff;">${spkName}</span><br/>`;
+
+    code += `${indent}<div class="dlg-row">\n`;
+    code += `${indent}  <span class="dlg-label">${lbl}</span>\n`;
+    code += `${indent}  <div class="dlg-bubble"${textAttr}>\n`;
+    code += `${indent}    ${badge}\n`;
+    code += `${indent}    ${escapeForCode(item.text)}\n`;
+    code += `${indent}  </div>\n`;
+    code += `${indent}</div>\n\n`;
+  });
+
+  if (collapsibleStarted) {
+    code += `  </div><!-- /#dlg-more-1 -->\n\n`;
+    code += `  <button\n`;
+    code += `    onclick="(function(b,t){var o=b.style.display==='none';b.style.display=o?'block':'none';t.textContent=o?'Show less ▲':'Show more ▾';})(document.getElementById('dlg-more-1'),this)"\n`;
+    code += `    style="display:block;width:100%;margin-top:.6rem;background:none;border:1px solid var(--border);color:var(--gold-dk);cursor:pointer;font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.4rem;border-radius:2px;transition:color .2s,border-color .2s;"\n`;
+    code += `    onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'"\n`;
+    code += `    onmouseout="this.style.color='var(--gold-dk)';this.style.borderColor='var(--border)'"\n`;
+    code += `  >Show more ▾</button>\n\n`;
+  }
+
+  code += '</div>';
+
+  document.getElementById('codeBlock').textContent = code;
+  return code;
+}
+
+function toggleCodePanel() {
+  const panel = document.getElementById('codePanel');
+  const isOpen = panel.classList.contains('open');
+  if (!isOpen) {
+    generateHTML();
+    panel.classList.add('open');
+  } else {
+    panel.classList.remove('open');
+  }
+}
+
+/* ═══════════════════ COPY HTML ═══════════════════ */
+function copyHTML() {
+  const code = generateHTML();
+  if (!code) return;
+  navigator.clipboard.writeText(code).then(() => showToast('HTML copied to clipboard!'));
+}
+
+/* ═══════════════════ IMPORT ═══════════════════ */
+function openImportModal() { document.getElementById('importModal').classList.add('open'); }
+function closeImportModal() { document.getElementById('importModal').classList.remove('open'); }
+
+function handleDragOver(e) { e.preventDefault(); }
+function handleFileDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) readFile(file);
+}
+function handleFileInput(e) {
+  const file = e.target.files[0];
+  if (file) readFile(file);
+}
+function readFile(file) {
+  const r = new FileReader();
+  r.onload = ev => { document.getElementById('importTa').value = ev.target.result; };
+  r.readAsText(file);
+}
+
+function processImport() {
+  const raw = document.getElementById('importTa').value.trim();
+  if (!raw) { showToast('Nothing to import.'); return; }
+
+  let parsed = [];
+
+  // Try HTML parse first
+  if (raw.includes('dlg-bubble') || raw.includes('dlg-row') || raw.includes('<div')) {
+    parsed = parseHTMLDialogue(raw);
+  } else {
+    parsed = parsePlainText(raw);
+  }
+
+  if (parsed.length === 0) { showToast('Could not parse any dialogue.'); return; }
+
+  if (dialogue.length > 0) {
+    if (!confirm('This will replace the current dialogue (' + dialogue.length + ' items). Continue?')) return;
+  }
+
+  dialogue = parsed.map(p => ({ id: ++idCounter, type: p.type || 'line', speaker: p.speaker, text: p.text, label: p.label }));
+  closeImportModal();
+  document.getElementById('importTa').value = '';
+  render();
+  refreshPreview();
+  saveDraftSilent();
+  showToast('Imported ' + dialogue.filter(d=>d.type==='line').length + ' lines!');
+}
+
+function parseHTMLDialogue(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  const rows = tmp.querySelectorAll('.dlg-row');
+  const result = [];
+  rows.forEach(row => {
+    const labelEl = row.querySelector('.dlg-label');
+    const bubbleEl = row.querySelector('.dlg-bubble');
+    if (!bubbleEl) return;
+    // remove badge spans from text
+    bubbleEl.querySelectorAll('span[style*="border-radius"]').forEach(s => s.remove());
+    const rawText = (bubbleEl.textContent || '').trim().replace(/\n\s+/g,' ');
+    if (!rawText) return;
+    let speaker = 'A';
+    if (labelEl) {
+      const l = labelEl.textContent.trim().replace(':','').toUpperCase();
+      if (l === 'B') speaker = 'B';
+      else if (l === 'C') speaker = 'C';
+    }
+    result.push({ type: 'line', speaker, text: rawText });
+  });
+  return result;
+}
+
+function parsePlainText(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const result = [];
+  const speakerMap = {'A':[],'B':[],'C':[]};
+
+  lines.forEach(line => {
+    // Detect speaker prefix: "A:", "B:", "C:", "Person A:", "Person B:", "Student:", etc.
+    const match = line.match(/^(?:Person\s*)?([A-Ca-c])\s*[:：]\s*(.*)/i)
+      || line.match(/^([A-Ca-c])\s*[.)\]]\s*(.*)/i);
+    if (match) {
+      const spk = match[1].toUpperCase();
+      const txt = match[2].trim();
+      if (txt) result.push({ type: 'line', speaker: spk === 'A' ? 'A' : spk === 'B' ? 'B' : 'C', text: txt });
+    } else if (/^[-—–]{3,}/.test(line) || /^={3,}/.test(line)) {
+      // section break
+      result.push({ type: 'break', label: 'Section Break' });
+    } else {
+      // assign alternating A/B
+      const lastLine = result.filter(r => r.type === 'line').slice(-1)[0];
+      const spk = (!lastLine || lastLine.speaker === 'B') ? 'A' : 'B';
+      result.push({ type: 'line', speaker: spk, text: line });
+    }
+  });
+
+  return result;
+}
+
+/* ═══════════════════ DRAFT ═══════════════════ */
+function saveDraft() {
+  localStorage.setItem(DRAFT_KEY, JSON.stringify({ dialogue, opts, idCounter }));
+  showToast('Draft saved!');
+}
+function saveDraftSilent() {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ dialogue, opts, idCounter })); } catch(e){}
+}
+function loadDraftSilent() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.dialogue && Array.isArray(saved.dialogue)) {
+      dialogue = saved.dialogue;
+      opts = saved.opts || opts;
+      idCounter = saved.idCounter || dialogue.length;
+      // restore opt toggles
+      Object.keys(opts).forEach(k => {
+        document.getElementById('opt-' + k)?.classList.toggle('on', opts[k]);
+      });
+    }
+  } catch(e) {}
+}
+
+/* ═══════════════════ CLEAR ═══════════════════ */
+function clearAll() {
+  if (dialogue.length === 0) return;
+  if (!confirm('Clear all dialogue? This cannot be undone.')) return;
+  dialogue = [];
+  activeSpeaker = null;
+  document.querySelectorAll('.spk-btn').forEach(b => b.className = 'spk-btn');
+  document.getElementById('activeSpeakerHint').textContent = 'Select a speaker above';
+  document.getElementById('composeTa').value = '';
+  document.getElementById('charCount').textContent = '0';
+  updateAddBtn();
+  document.getElementById('codePanel').classList.remove('open');
+  localStorage.removeItem(DRAFT_KEY);
+  render();
+  refreshPreview();
+}
+
+/* ═══════════════════ THEME ═══════════════════ */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon-moon').style.display = isDark ? 'none' : '';
+  document.getElementById('theme-icon-sun').style.display = isDark ? '' : 'none';
+}
+
+/* ═══════════════════ MOBILE TABS ═══════════════════ */
+function switchMobTab(tab) {
+  document.getElementById('tab-compose').classList.toggle('active', tab === 'compose');
+  document.getElementById('tab-preview').classList.toggle('active', tab === 'preview');
+  const left = document.getElementById('panel-left-mob');
+  const right = document.getElementById('panel-right-mob');
+  if (tab === 'compose') {
+    left.classList.remove('hidden');
+    right.classList.remove('active');
+  } else {
+    left.classList.add('hidden');
+    right.classList.add('active');
+    refreshPreview();
+  }
+}
+
+/* ═══════════════════ TOAST ═══════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ═══════════════════ UTILS ═══════════════════ */
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+function escapeForCode(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>

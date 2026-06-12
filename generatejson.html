@@ -82,7 +82,7 @@ body{
 .welcome-sub{
   font-family:var(--f-display);font-size:clamp(.9rem,2.5vw,1.1rem);
   color:var(--ink-sub);max-width:520px;line-height:1.75;
-  margin-bottom:2.5rem;font-style:italic;
+  margin-bottom:1rem;font-style:italic;
 }
 
 /* type selector */
@@ -443,6 +443,23 @@ body{
   <h1 class="welcome-title a2">JSON <span>Generator</span></h1>
   <p class="welcome-sub a3">You can generate a real event or hadith as JSON here. It will save to localstorage on that browser.</p>
 
+  <div class="a3 flex justify-center my-6">
+  <a href="./simulatedDialogue.html" 
+     target="_blank" 
+     rel="noopener noreferrer"
+     class="group relative inline-flex items-center gap-3 px-6 py-3 border border-[var(--border)] rounded-xl text-[var(--gold)] font-medium tracking-wide bg-[var(--surface2)] shadow-sm backdrop-blur-sm overflow-hidden transition-all duration-300 ease-out hover:border-[var(--gold)] hover:text-[var(--gold-lt)] hover:shadow-[0_4px_20px_rgba(196,154,48,0.15)] hover:-translateY-0.5 active:translate-y-0 active:scale-[0.98]">
+    
+    <span class="absolute inset-0 bg-gradient-to-r from-[var(--gold-dim)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></span>
+    
+    <i class="fa fa-comments text-[var(--gold-dk)] group-hover:text-[var(--gold)] transition-colors duration-300 text-sm"></i>
+    
+    <span class="relative z-10 font-sans text-sm tracking-wide font-semibold">
+      Try Dialogue Simulator
+    </span>
+    
+    <i class="fa fa-arrow-up-right-from-square text-xs text-[var(--ink-mute)] transition-all duration-300 transform group-hover:text-[var(--gold)] group-hover:translate-x-1 group-hover:-translate-y-0.5"></i>
+  </a>
+</div>
   <div class="a3" id="draftNoticeWrap"></div>
 
   <button class="resume-btn a3" onclick="openResumeModal()">
