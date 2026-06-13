@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
@@ -6,26 +7,22 @@
 <title>Dialogue Generator — Safeenah</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/motion@latest/dist/motion.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 :root{
-  --f-head:'Libre Baskerville',Georgia,serif;
-  --f-body:'Cormorant Garamond',Georgia,serif;
-  --f-label:'Cinzel',serif;
+  --f-display:'Playfair Display',Georgia,serif;
   --f-bn:'Hind Siliguri',sans-serif;
   --f-mono:'JetBrains Mono',monospace;
 }
 [data-theme="dark"]{
   --bg:#0d0b08;--surface:#1a1610;--surface2:#221e14;--surface3:#2a2518;
-  --border:rgba(180,135,45,.22);--border2:rgba(180,135,45,.12);
+  --border:rgba(180,135,45,.2);--border2:rgba(180,135,45,.1);
   --gold:#c49a30;--gold-lt:#e0b84a;--gold-dk:#8a6518;--gold-dim:rgba(196,154,48,.1);
   --ink:#f0e4cc;--ink-body:#d8c8a8;--ink-sub:#a89878;--ink-mute:#6a5a42;
-  --card:rgba(26,22,16,.95);--input-bg:rgba(34,30,20,.88);
-  --shadow:0 8px 40px rgba(0,0,0,.65);--code-bg:#0c0a06;--danger:#c0613a;
-  --danger-dim:rgba(192,97,58,.12);
+  --card:rgba(26,22,16,.95);--input-bg:rgba(34,30,20,.85);
+  --shadow:0 8px 40px rgba(0,0,0,.65);--code-bg:#0c0a06;--danger:#c0613a;--danger-dim:rgba(192,97,58,.1);
 }
 [data-theme="light"]{
   --bg:#f8f0dc;--surface:#fffbf0;--surface2:#f5e8c8;--surface3:#ede0b0;
@@ -33,1112 +30,1227 @@
   --gold:#8a6010;--gold-lt:#a87820;--gold-dk:#6a4808;--gold-dim:rgba(138,96,16,.1);
   --ink:#1a1006;--ink-body:#2a1c08;--ink-sub:#5a3e18;--ink-mute:#9a7a48;
   --card:rgba(255,251,240,.98);--input-bg:rgba(248,240,220,.92);
-  --shadow:0 6px 28px rgba(120,90,20,.14);--code-bg:#f0e8d0;--danger:#b04030;
-  --danger-dim:rgba(176,64,48,.1);
+  --shadow:0 6px 28px rgba(120,90,20,.14);--code-bg:#f0e8d0;--danger:#b04030;--danger-dim:rgba(176,64,48,.1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{
-  background:var(--bg);color:var(--ink-body);
-  font-family:var(--f-body);font-size:16px;line-height:1.7;
-  min-height:100vh;overflow-x:hidden;
-  transition:background .3s,color .3s;
-}
-::-webkit-scrollbar{width:5px;}
+body{background:var(--bg);color:var(--ink-body);font-family:var(--f-display);font-size:16px;line-height:1.7;min-height:100vh;overflow-x:hidden;transition:background .3s,color .3s;}
+::-webkit-scrollbar{width:4px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--gold-dk);border-radius:3px;}
 
+button, [role="button"] {
+  outline: none !important; /* Removes the harsh browser outline */
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); /* Creates a clean, modern dual-ring effect */
+}
+
 /* ── TOPBAR ── */
-.topbar{
-  position:sticky;top:0;z-index:300;
-  background:var(--surface);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.65rem 1.25rem;backdrop-filter:blur(16px);gap:.6rem;
-}
-.topbar-logo{
-  font-family:var(--f-label);font-size:.85rem;font-weight:700;
-  color:var(--gold);letter-spacing:.12em;text-transform:uppercase;
-  white-space:nowrap;display:flex;align-items:center;gap:.5rem;
-}
+.topbar{position:sticky;top:0;z-index:300;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:.65rem 1.25rem;backdrop-filter:blur(16px);gap:.5rem;}
+.topbar-logo{font-family:var(--f-display);font-size:1rem;font-weight:700;color:var(--gold);letter-spacing:.04em;text-decoration:none;white-space:nowrap;flex-shrink:0;}
 .topbar-right{display:flex;align-items:center;gap:.45rem;flex-shrink:0;}
-.icon-btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:34px;height:34px;border-radius:7px;cursor:pointer;
-  background:none;border:1px solid var(--border);color:var(--ink-sub);
-  transition:all .2s;flex-shrink:0;
-}
-.icon-btn:hover{border-color:var(--gold-dk);color:var(--gold);background:var(--gold-dim);}
-.icon-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
-.btn-label-xs{
-  display:inline-flex;align-items:center;gap:.35rem;
-  padding:.32rem .75rem;border-radius:6px;cursor:pointer;
-  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
-  transition:all .2s;border:1px solid var(--border);
-  background:none;color:var(--ink-sub);white-space:nowrap;
-}
-.btn-label-xs:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
-.btn-primary-sm{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:.38rem .9rem;border-radius:6px;cursor:pointer;
-  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--gold);color:#0d0b08;border:none;
-  font-weight:700;transition:all .2s;white-space:nowrap;
-}
-.btn-primary-sm:hover{background:var(--gold-lt);box-shadow:0 4px 14px rgba(196,154,48,.3);}
+.theme-toggle{display:flex;align-items:center;gap:.4rem;cursor:pointer;background:none;border:1px solid var(--border);border-radius:50px;padding:.28rem .75rem;color:var(--ink-sub);font-family:var(--f-display);font-size:.8rem;transition:all .2s;white-space:nowrap;}
+.theme-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.draft-saved{display:none;align-items:center;gap:.35rem;font-size:.75rem;color:var(--gold-dk);font-family:var(--f-display);white-space:nowrap;}
+.draft-saved.show{display:inline-flex;}
+.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:6px;padding:.3rem .45rem;color:var(--ink-sub);cursor:pointer;font-size:.9rem;}
+@media(max-width:600px){.hamburger{display:flex;align-items:center;}}
+@media(max-width:600px){.topbar-desk-actions{display:none;}}
 
-/* ── LAYOUT ── */
-.main-layout{
-  display:grid;
-  grid-template-columns:1fr 360px;
-  min-height:calc(100vh - 52px);
-}
-@media(max-width:900px){
-  .main-layout{grid-template-columns:1fr;}
-}
+/* ── MOBILE MENU ── */
+.mob-menu{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);}
+.mob-menu.open{display:flex;align-items:flex-end;}
+.mob-menu-box{background:var(--surface);border-top:1px solid var(--border);width:100%;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem;}
+.mob-menu-title{font-family:var(--f-display);font-size:.8rem;color:var(--ink-mute);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem;}
+.mob-menu-btn{display:flex;align-items:center;gap:.65rem;padding:.65rem .85rem;border-radius:8px;border:1px solid var(--border);background:none;color:var(--ink-body);font-family:var(--f-display);font-size:.92rem;cursor:pointer;transition:all .2s;text-align:left;}
+.mob-menu-btn:hover{border-color:var(--gold-dk);background:var(--gold-dim);color:var(--gold-dk);}
+.mob-menu-btn i{width:18px;color:var(--gold-dk);}
+.mob-menu-close{align-self:flex-end;background:none;border:none;color:var(--ink-mute);font-size:1.1rem;cursor:pointer;padding:.2rem;}
 
-/* ── LEFT PANEL ── */
-.panel-left{
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes stepIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.a1{animation:fadeUp .5s .04s ease both;}
+.a2{animation:fadeUp .5s .1s ease both;}
+.a3{animation:fadeUp .5s .18s ease both;}
+.a4{animation:fadeUp .5s .26s ease both;}
+.a5{animation:fadeUp .5s .34s ease both;}
+
+/* ── SCREEN SYSTEM ── */
+#screen-welcome{display:flex;}
+#screen-editor{display:none;}
+
+/* ══════════════════════════════════════
+   WELCOME SCREEN
+══════════════════════════════════════ */
+#screen-welcome{
   min-height:calc(100vh - 52px);
+  flex-direction:column;align-items:center;
+  justify-content:center;padding:3rem 1.25rem 2rem;text-align:center;
 }
-.panel-header{
-  padding:.9rem 1.25rem .7rem;
-  border-bottom:1px solid var(--border2);
+.welcome-eyebrow{font-family:var(--f-display);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:.75rem;}
+.welcome-title{font-family:var(--f-display);font-size:clamp(2rem,7vw,3.8rem);font-weight:900;color:var(--ink);line-height:1.05;margin-bottom:.65rem;letter-spacing:-.02em;}
+.welcome-title span{color:var(--gold);}
+.welcome-sub{font-family:var(--f-display);font-size:clamp(.9rem,2.5vw,1.05rem);color:var(--ink-sub);max-width:540px;line-height:1.8;margin-bottom:2.5rem;font-style:italic;}
+
+/* draft notice */
+.draft-notice-wrap{width:100%;max-width:540px;margin-bottom:1.25rem;}
+.draft-notice{display:flex;align-items:center;justify-content:center;gap:.6rem;flex-wrap:wrap;padding:.7rem 1rem;background:var(--gold-dim);border:1px solid var(--border);border-radius:8px;font-family:var(--f-display);font-size:.85rem;color:var(--ink-sub);}
+.draft-notice button{background:none;border:none;cursor:pointer;color:var(--gold-dk);font-family:var(--f-display);font-size:.85rem;font-weight:700;text-decoration:underline;}
+.draft-notice .dis-btn{color:var(--ink-mute);font-weight:400;text-decoration:none;font-size:.78rem;}
+
+/* resume btn */
+.resume-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.58rem 1.2rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:none;color:var(--ink-sub);font-family:var(--f-display);font-size:.88rem;transition:all .2s;margin-bottom:1.5rem;}
+.resume-btn:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+
+/* start btn */
+.btn-primary{display:inline-flex;align-items:center;gap:.55rem;padding:.72rem 2rem;background:var(--gold);color:#0d0b08;border:none;border-radius:8px;font-family:var(--f-display);font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.btn-primary:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 5px 20px rgba(196,154,48,.28);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* skeleton preview */
+.skel-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;max-width:760px;width:100%;margin-top:2.75rem;text-align:left;}
+@media(max-width:540px){.skel-grid{grid-template-columns:1fr;}}
+.skel-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.skel-head{padding:.6rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border2);font-family:var(--f-display);font-size:.72rem;font-weight:700;color:var(--gold-dk);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:.45rem;}
+.skel-body{padding:.8rem 1rem;display:flex;flex-direction:column;gap:.45rem;}
+.skel-row{display:flex;align-items:center;gap:.55rem;}
+.skel-k{font-family:var(--f-mono);font-size:.62rem;color:var(--gold-dk);min-width:90px;flex-shrink:0;}
+.skel-v{height:8px;border-radius:3px;flex:1;background:linear-gradient(90deg,rgba(196,154,48,.07) 0%,rgba(196,154,48,.2) 50%,rgba(196,154,48,.07) 100%);background-size:200% 100%;animation:shimmer 1.8s infinite;}
+.skel-v.s{flex:0 0 45px;}.skel-v.m{flex:0 0 110px;}
+.skel-tag{display:inline-block;height:18px;border-radius:4px;background:linear-gradient(90deg,rgba(196,154,48,.07) 0%,rgba(196,154,48,.2) 50%,rgba(196,154,48,.07) 100%);background-size:200% 100%;animation:shimmer 1.8s infinite;}
+
+/* ══════════════════════════════════════
+   EDITOR SCREEN
+══════════════════════════════════════ */
+#screen-editor{flex-direction:column;}
+
+/* editor topbar */
+.editor-bar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:.6rem 1.25rem;
   display:flex;align-items:center;justify-content:space-between;gap:.6rem;
-  flex-shrink:0;
-}
-.panel-title{
-  font-family:var(--f-label);font-size:.55rem;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--gold-dk);
-}
-
-/* ── SPEAKER SELECT ── */
-.speaker-row{
-  display:flex;gap:.5rem;padding:.9rem 1.25rem .6rem;
-  border-bottom:1px solid var(--border2);flex-shrink:0;flex-wrap:wrap;
-}
-.spk-btn{
-  display:inline-flex;align-items:center;gap:.35rem;
-  padding:.4rem .85rem;border-radius:20px;cursor:pointer;
-  font-family:var(--f-label);font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;
-  border:1.5px solid var(--border);background:var(--surface);
-  color:var(--ink-sub);transition:all .2s;font-weight:600;
-}
-.spk-btn.active-a{border-color:#7a3b20;background:rgba(122,59,32,.18);color:#d4855a;}
-.spk-btn.active-b{border-color:#2a5c6a;background:rgba(42,92,106,.18);color:#5aacbe;}
-.spk-btn.active-c{border-color:#4a4a38;background:rgba(74,74,56,.22);color:#9a9a78;}
-.spk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.dot-a{background:#7a3b20;}.dot-b{background:#2a5c6a;}.dot-c{background:#4a4a38;}
-
-/* ── COMPOSE AREA ── */
-.compose-wrap{
-  padding:.9rem 1.25rem;
-  border-bottom:1px solid var(--border2);flex-shrink:0;
-}
-.compose-inner{
-  background:var(--input-bg);border:1px solid var(--border);
-  border-radius:10px;overflow:hidden;
-  transition:border-color .2s;
-}
-.compose-inner:focus-within{border-color:var(--gold-dk);}
-.compose-ta{
-  width:100%;min-height:80px;max-height:200px;
-  background:transparent;border:none;outline:none;
-  color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.7;
-  padding:.75rem 1rem;resize:vertical;
-}
-.compose-ta::placeholder{color:var(--ink-mute);font-style:italic;}
-.compose-ta:lang(bn){font-family:var(--f-bn) !important;line-height:1.9;}
-.compose-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.4rem .75rem .4rem 1rem;
-  border-top:1px solid var(--border2);gap:.5rem;
   flex-wrap:wrap;
 }
-.compose-hint{font-size:.72rem;color:var(--ink-mute);font-family:var(--f-label);letter-spacing:.06em;}
-.add-btn{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:.38rem 1rem;border-radius:6px;cursor:pointer;
-  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
-  background:var(--gold);color:#0d0b08;border:none;font-weight:700;transition:all .2s;
-}
-.add-btn:hover{background:var(--gold-lt);}
-.add-btn:disabled{opacity:.4;cursor:not-allowed;}
+.editor-bar-left{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+.editor-bar-right{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
+.ebar-label{font-family:var(--f-display);font-size:.72rem;color:var(--ink-mute);font-style:italic;}
 
-/* ── DIALOGUE LIST ── */
-.dlg-list{flex:1;overflow-y:auto;padding:1rem 1.25rem;}
-.dlg-list-empty{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:220px;color:var(--ink-mute);text-align:center;gap:.6rem;
-}
-.dlg-list-empty-icon{color:var(--border);opacity:.5;}
-.dlg-list-empty p{font-size:.85rem;font-style:italic;font-family:var(--f-body);}
+.btn-sm{display:inline-flex;align-items:center;gap:.35rem;padding:.36rem .85rem;border-radius:7px;cursor:pointer;font-family:var(--f-display);font-size:.8rem;font-weight:600;transition:all .2s;white-space:nowrap;}
+.btn-sm.outline{background:none;border:0.5px solid var(--border);color:var(--ink-sub);}
+.btn-sm.outline:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+.btn-sm.solid{background:var(--gold);border:none;color:#0d0b08;}
+.btn-sm.solid:hover{background:var(--gold-lt);}
+.btn-sm.danger{background:none;border:1px solid var(--border);color:var(--ink-mute);}
+.btn-sm.danger:hover{border-color:var(--danger);color:var(--danger);background:var(--danger-dim);}
 
-/* ── DIALOGUE ITEM CARD ── */
+/* editor layout */
+.editor-layout{display:flex;flex:1;min-height:0;}
+@media(max-width:900px){.editor-layout{flex-direction:column;}}
+
+/* ── COMPOSE SIDE ── */
+.compose-side{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+  border-right:1px solid var(--border);
+}
+@media(max-width:900px){.compose-side{border-right:none;border-bottom:1px solid var(--border);}}
+
+/* speaker selector */
+.spk-bar{padding:.75rem 1.25rem;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;flex-shrink:0;}
+.spk-bar-label{font-family:var(--f-display);font-size:.75rem;color:var(--ink-mute);flex-shrink:0;}
+.spk-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .85rem;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-family:var(--f-display);font-size:.8rem;color:var(--ink-sub);cursor:pointer;transition:all .2s;}
+.spk-btn:hover{border-color:var(--gold-dk);}
+.spk-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-a{background:#7a3b20;}.dot-b{background:#2a5c6a;}.dot-c{background:#4a4a38;}
+.spk-btn.active-a{border-color:#7a3b20;background:rgba(122,59,32,.15);color:#d4855a;}
+.spk-btn.active-b{border-color:#2a5c6a;background:rgba(42,92,106,.15);color:#5aacbe;}
+.spk-btn.active-c{border-color:#4a4a38;background:rgba(74,74,56,.18);color:#9a9a78;}
+
+/* format options */
+.fmt-bar{padding:.5rem 1.25rem;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;flex-shrink:0;}
+.fmt-label{font-family:var(--f-display);font-size:.7rem;color:var(--ink-mute);}
+.fmt-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .6rem;border-radius:5px;border:1px solid var(--border);background:none;color:var(--ink-mute);font-family:var(--f-display);font-size:.72rem;cursor:pointer;transition:all .18s;}
+.fmt-btn:hover{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+.fmt-btn.on{border-color:var(--gold-dk);color:var(--gold-dk);background:var(--gold-dim);}
+
+/* compose area */
+.compose-area{padding:.85rem 1.25rem;border-bottom:1px solid var(--border2);flex-shrink:0;}
+.compose-box{background:var(--input-bg);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s;}
+.compose-box:focus-within{border-color:var(--gold-dk);}
+.compose-ta{width:100%;min-height:90px;max-height:200px;background:transparent;border:none;outline:none;color:var(--ink);font-family:var(--f-display);font-size:.97rem;line-height:1.75;padding:.75rem 1rem;resize:vertical;}
+.compose-ta::placeholder{color:var(--ink-mute);font-style:italic;}
+.compose-footer{display:flex;align-items:center;justify-content:space-between;padding:.38rem .85rem .38rem 1rem;border-top:1px solid var(--border2);gap:.5rem;flex-wrap:wrap;}
+.compose-hint{font-family:var(--f-display);font-size:.74rem;color:var(--ink-mute);font-style:italic;}
+.char-count{font-family:var(--f-mono);font-size:.65rem;color:var(--ink-mute);}
+.add-line-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.36rem .95rem;background:var(--gold);color:#0d0b08;border:none;border-radius:7px;font-family:var(--f-display);font-size:.8rem;font-weight:700;cursor:pointer;transition:all .18s;}
+.add-line-btn:hover{background:var(--gold-lt);}
+.add-line-btn:disabled{opacity:.35;cursor:not-allowed;}
+
+/* list controls */
+.list-ctrl{padding:.5rem 1.25rem;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-shrink:0;flex-wrap:wrap;}
+.list-ctrl-label{font-family:var(--f-display);font-size:.72rem;color:var(--gold-dk);letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:.4rem;}
+.list-ctrl-right{display:flex;gap:.35rem;flex-wrap:wrap;}
+
+/* stats */
+.stats-bar{display:flex;gap:.85rem;padding:.38rem 1.25rem;border-bottom:1px solid var(--border2);flex-wrap:wrap;flex-shrink:0;}
+.stat-item{display:flex;align-items:center;gap:.28rem;}
+.stat-label{font-family:var(--f-display);font-size:.65rem;color:var(--ink-mute);}
+.stat-val{font-family:var(--f-mono);font-size:.68rem;color:var(--gold-dk);font-weight:600;}
+
+/* dialogue list */
+.dlg-list{flex:1;overflow-y:auto;padding:.85rem 1.25rem;min-height:200px;-webkit-overflow-scrolling:touch;}
+.dlg-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:220px;gap:.65rem;color:var(--ink-mute);text-align:center;}
+.dlg-empty i{font-size:2rem;opacity:.25;}
+.dlg-empty p{font-size:.88rem;font-style:italic;line-height:1.7;}
+
+/* ── DIALOGUE ITEM ── */
 .dlg-item{
-  display:flex;gap:.6rem;margin-bottom:.65rem;
+  display:flex;gap:.6rem;align-items:flex-start;
   background:var(--surface);border:1px solid var(--border2);
-  border-radius:10px;padding:.7rem .85rem;
-  transition:border-color .2s, box-shadow .2s;
+  border-radius:10px;padding:.65rem .8rem;margin-bottom:.55rem;
+  transition:border-color .18s,box-shadow .18s;
   position:relative;
 }
-.dlg-item:hover{border-color:var(--border);box-shadow:0 2px 14px rgba(0,0,0,.2);}
-.dlg-item.editing{border-color:var(--gold-dk);box-shadow:0 0 0 2px rgba(196,154,48,.1);}
-.dlg-item-left{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.3rem;padding-top:.15rem;}
-.dlg-spk-badge{
-  font-family:var(--f-label);font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;
-  padding:.18em .55em;border-radius:3px;color:#fff;white-space:nowrap;font-weight:600;
-}
-.badge-a{background:#7a3b20;}.badge-b{background:#2a5c6a;}.badge-c{background:#4a4a38;}
-.dlg-seq{font-family:var(--f-mono);font-size:.55rem;color:var(--ink-mute);}
-.dlg-item-body{flex:1;min-width:0;}
-.dlg-text{
-  font-family:var(--f-body);font-size:.95rem;line-height:1.7;
-  color:var(--ink-body);word-break:break-word;
-}
-.dlg-text-bn{font-family:var(--f-bn) !important;font-size:.9rem;line-height:1.9 !important;}
-.dlg-edit-ta{
-  width:100%;min-height:60px;background:var(--input-bg);
-  border:1px solid var(--gold-dk);border-radius:6px;outline:none;
-  color:var(--ink);font-family:var(--f-body);font-size:.95rem;line-height:1.7;
-  padding:.5rem .7rem;resize:vertical;display:none;
-}
-.dlg-actions{
-  display:flex;align-items:center;gap:.2rem;flex-shrink:0;
-  opacity:0;transition:opacity .2s;padding-top:.1rem;
-}
-.dlg-item:hover .dlg-actions{opacity:1;}
-.dlg-item.editing .dlg-actions{opacity:1;}
-.act-btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:26px;height:26px;border-radius:5px;cursor:pointer;
-  background:none;border:none;color:var(--ink-mute);transition:all .15s;
-}
-.act-btn:hover{color:var(--gold);background:var(--gold-dim);}
-.act-btn.danger:hover{color:var(--danger);background:var(--danger-dim);}
-.act-btn.save-act:hover{color:#4a9a5a;background:rgba(74,154,90,.12);}
-
-/* drag handle */
-.drag-handle{
-  cursor:grab;color:var(--border);transition:color .15s;
-  display:flex;align-items:center;justify-content:center;
-  height:20px;
-}
-.drag-handle:hover{color:var(--gold-dk);}
-.dlg-item.dragging{opacity:.5;border-style:dashed;}
+.dlg-item:hover{border-color:var(--border);box-shadow:0 2px 16px rgba(0,0,0,.18);}
+.dlg-item.editing{border-color:var(--gold-dk);box-shadow:0 0 0 3px rgba(196,154,48,.1);}
+.dlg-item.dragging{opacity:.4;border-style:dashed;}
 .dlg-item.drag-over{border-color:var(--gold);background:var(--gold-dim);}
 
-/* move btns */
-.move-btns{display:flex;flex-direction:column;gap:.1rem;}
+.item-left{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.28rem;min-width:46px;}
+.item-badge{font-family:var(--f-display);font-size:.48rem;letter-spacing:.08em;text-transform:uppercase;padding:.18em .55em;border-radius:3px;color:#fff;font-weight:700;white-space:nowrap;}
+.badge-a{background:#7a3b20;}.badge-b{background:#2a5c6a;}.badge-c{background:#4a4a38;}
+.item-num{font-family:var(--f-mono);font-size:.52rem;color:var(--ink-mute);}
+.drag-grip{color:var(--border);cursor:grab;padding:.1rem;transition:color .15s;line-height:1;}
+.drag-grip:hover{color:var(--gold-dk);}
 
-/* ── RIGHT PANEL ── */
-.panel-right{
+.item-body{flex:1;min-width:0;}
+.item-text{font-family:var(--f-display);font-size:.95rem;line-height:1.75;color:var(--ink-body);word-break:break-word;}
+.item-text.bn{font-family:var(--f-bn) !important;line-height:1.9 !important;font-size:.92rem;}
+.item-text .bq-line{display:block;border-left:2.5px solid var(--gold-dk);padding:.15rem .6rem;margin:.2rem 0;background:var(--gold-dim);font-style:italic;color:var(--ink-sub);border-radius:0 3px 3px 0;}
+.item-text .ar-line{display:block;direction:rtl;text-align:right;font-size:1.05rem;line-height:2;color:var(--gold-lt);padding:.3rem .6rem;background:var(--gold-dim);border-right:2.5px solid var(--gold);margin:.2rem 0;border-radius:2px 0 0 2px;}
+
+.item-edit-ta{display:none;width:100%;min-height:68px;background:var(--input-bg);border:1px solid var(--gold-dk);border-radius:7px;outline:none;color:var(--ink);font-family:var(--f-display);font-size:.95rem;line-height:1.75;padding:.5rem .7rem;resize:vertical;}
+
+.item-actions{flex-shrink:0;display:flex;flex-direction:column;gap:.2rem;opacity:0;transition:opacity .15s;}
+.dlg-item:hover .item-actions,.dlg-item.editing .item-actions{opacity:1;}
+@media(max-width:900px){.item-actions{opacity:1;}}
+.ia{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:5px;background:none;border:none;color:var(--ink-mute);cursor:pointer;transition:all .14s;}
+.ia:hover{color:var(--gold-dk);background:var(--gold-dim);}
+.ia.red:hover{color:var(--danger);background:var(--danger-dim);}
+.ia.grn:hover{color:#4a9a5a;background:rgba(74,154,90,.12);}
+
+/* section break item */
+.break-item{display:flex;align-items:center;gap:.5rem;margin:.4rem 0 .35rem;padding:.1rem 0;}
+.break-line{flex:1;height:1px;background:var(--border2);}
+.break-label{font-family:var(--f-display);font-size:.62rem;color:var(--ink-mute);font-style:italic;white-space:nowrap;}
+.break-label span{color:var(--gold-dk);}
+.break-actions{display:flex;gap:.2rem;}
+
+/* collapsible marker */
+.collapse-marker{
+  display:flex;align-items:center;gap:.5rem;margin:.3rem 0;
+  padding:.3rem .65rem;background:var(--gold-dim);border:1px solid var(--border);
+  border-radius:6px;font-family:var(--f-display);font-size:.72rem;color:var(--gold-dk);
+}
+.collapse-marker i{font-size:.75rem;}
+.collapse-remove{background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:.7rem;margin-left:auto;transition:color .15s;}
+.collapse-remove:hover{color:var(--danger);}
+
+/* ── PREVIEW SIDE ── */
+.preview-side{
+  width:380px;flex-shrink:0;
   display:flex;flex-direction:column;
   background:var(--surface);
-  min-height:calc(100vh - 52px);
 }
-@media(max-width:900px){
-  .panel-right{border-top:1px solid var(--border);}
-}
-.panel-right .panel-header{
-  border-bottom:1px solid var(--border);
-}
+@media(max-width:900px){.preview-side{width:100%;border-top:1px solid var(--border);}}
 
-/* ── PREVIEW ── */
-.preview-wrap{
-  flex:1;overflow-y:auto;padding:1rem;
-}
-.preview-dialogue-wrap{
-  background:var(--surface2);border:1px solid var(--border2);border-radius:8px;
-  padding:.75rem;
-}
-/* app dialogue classes for preview */
-.dialogue-wrap{}
-.dlg-row{
-  display:flex;gap:.55rem;padding:.55rem .3rem;
-  border-radius:6px;transition:background .15s;
-}
-.dlg-row:nth-child(even){background:var(--gold-dim);}
-.dlg-label{
-  font-family:var(--f-label);font-size:.58rem;letter-spacing:.1em;
-  color:var(--gold-dk);flex-shrink:0;padding-top:.3rem;min-width:18px;
-  text-transform:uppercase;
-}
-.dlg-bubble{
-  font-family:var(--f-body);font-size:.9rem;line-height:1.75;
-  color:var(--ink-body);
-}
-.sec-head{
-  font-family:var(--f-label);font-size:.58rem;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--gold);
-  padding:.4rem 0 .2rem;margin:.5rem 0 .3rem;
-  border-bottom:1px solid var(--border2);
-}
-blockquote{
-  border-left:3px solid var(--gold);
-  background:var(--gold-dim);padding:.6rem .9rem;border-radius:0 4px 4px 0;
-  margin:.5rem 0;
-}
-blockquote p{color:var(--ink-body);font-style:italic;}
-.preview-empty{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  min-height:200px;gap:.6rem;color:var(--ink-mute);text-align:center;
-}
+/* mobile tabs for editor */
+.mob-editor-tabs{display:none;background:var(--surface);border-bottom:1px solid var(--border);}
+@media(max-width:900px){.mob-editor-tabs{display:flex;}}
+.met{flex:1;padding:.55rem .5rem;text-align:center;background:none;border:none;border-bottom:2px solid transparent;font-family:var(--f-display);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mute);cursor:pointer;transition:all .18s;}
+.met.on{color:var(--gold);border-bottom-color:var(--gold);}
+
+.preview-header{padding:.65rem 1.1rem;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.preview-title{font-family:var(--f-display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-dk);}
+
+.preview-body{flex:1;overflow-y:auto;padding:.9rem;-webkit-overflow-scrolling:touch;}
+.preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px;gap:.55rem;color:var(--ink-mute);text-align:center;}
+.preview-empty i{font-size:1.6rem;opacity:.25;}
 .preview-empty p{font-size:.82rem;font-style:italic;}
+.preview-shell{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:.8rem;}
 
-/* ── CODE OUTPUT ── */
+/* app dialogue classes used in preview */
+.dialogue-wrap{}
+.dlg-row{display:flex;gap:.5rem;padding:.48rem .3rem;border-radius:5px;transition:background .1s;}
+.dlg-row:nth-child(even){background:var(--gold-dim);}
+.dlg-label{font-family:'Playfair Display',Georgia,serif;font-size:.58rem;letter-spacing:.06em;color:var(--gold-dk);flex-shrink:0;padding-top:.28rem;min-width:16px;text-transform:uppercase;}
+.dlg-bubble{font-family:'Playfair Display',Georgia,serif;font-size:.88rem;line-height:1.75;color:var(--ink-body);}
+.dlg-bubble .bn-text{font-family:'Hind Siliguri',sans-serif;line-height:1.9;}
+.sec-head{font-family:'Playfair Display',Georgia,serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);padding:.35rem 0 .18rem;margin:.45rem 0 .25rem;border-bottom:1px solid var(--border2);}
+.preview-more-btn{display:block;width:100%;margin-top:.5rem;background:none;border:1px solid var(--border);color:var(--gold-dk);cursor:pointer;font-family:'Playfair Display',Georgia,serif;font-size:.48rem;letter-spacing:.15em;text-transform:uppercase;padding:.35rem;border-radius:2px;transition:color .18s,border-color .18s;}
+.preview-more-btn:hover{color:var(--gold);border-color:var(--gold);}
+blockquote{border-left:3px solid var(--gold);background:var(--gold-dim);padding:.5rem .85rem;border-radius:0 4px 4px 0;margin:.4rem 0;}
+blockquote p{color:var(--ink-sub);font-style:italic;font-size:.88rem;}
+
+/* ── CODE OUTPUT PANEL ── */
 .code-panel{
-  border-top:1px solid var(--border);background:var(--code-bg);
-  max-height:0;overflow:hidden;transition:max-height .4s ease;
-  flex-shrink:0;
+  background:var(--code-bg);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;margin:1.25rem;flex-shrink:0;
 }
-.code-panel.open{max-height:420px;}
-.code-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.55rem .85rem;border-bottom:1px solid var(--border);
-  position:sticky;top:0;background:var(--code-bg);z-index:2;
-}
-.code-header-label{
-  font-family:var(--f-label);font-size:.48rem;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--gold-dk);display:flex;align-items:center;gap:.4rem;
-}
-.code-area{
-  max-height:360px;overflow-y:auto;padding:.75rem 1rem;
-}
-.code-block{
-  font-family:var(--f-mono);font-size:.68rem;line-height:1.75;
-  color:var(--ink-sub);white-space:pre-wrap;word-break:break-all;
-}
-/* syntax colors */
-.ht{color:var(--gold-dk);}/* tag */
-.ha{color:#7aade0;}/* attr */
-.hv{color:#8acd8a;}/* value */
-.hc{color:var(--ink-mute);}/* comment */
+@media(max-width:900px){.code-panel{margin:.85rem;}}
+.code-panel.hidden{display:none;}
+.code-toolbar{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--surface2);border-bottom:1px solid var(--border2);flex-wrap:wrap;gap:.5rem;}
+.code-toolbar-left{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;}
+.code-file-badge{font-family:var(--f-mono);font-size:.68rem;color:var(--gold-dk);}
+.code-line-count{font-family:var(--f-mono);font-size:.65rem;color:var(--ink-mute);}
+.code-toolbar-right{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;}
+.code-action{display:inline-flex;align-items:center;gap:.38rem;padding:.38rem .9rem;border-radius:7px;cursor:pointer;font-family:var(--f-display);font-size:.78rem;font-weight:600;transition:all .2s;white-space:nowrap;}
+.code-action.copy-btn{background:var(--surface3);border:1px solid var(--border);color:var(--ink-sub);}
+.code-action.copy-btn:hover{border-color:var(--gold-dk);color:var(--gold-dk);}
+.code-action.dl-btn{background:var(--gold);border:none;color:#0d0b08;}
+.code-action.dl-btn:hover{background:var(--gold-lt);}
+.code-scroll{max-height:460px;overflow:auto;}
+.code-pre{font-family:var(--f-mono);font-size:.75rem;line-height:1.8;color:var(--ink-sub);padding:1rem 1.2rem;white-space:pre;overflow-x:auto;}
+.code-empty{display:flex;align-items:center;justify-content:center;min-height:100px;color:var(--ink-mute);font-style:italic;font-size:.85rem;}
+.copied-toast{display:none;font-size:.72rem;color:var(--gold);align-items:center;gap:.3rem;padding:.35rem .65rem;background:var(--gold-dim);border-radius:6px;border:1px solid var(--border);white-space:nowrap;}
+.copied-toast.show{display:inline-flex;}
 
-/* ── IMPORT MODAL ── */
-.modal-overlay{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,.72);backdrop-filter:blur(6px);
-  display:none;align-items:center;justify-content:center;padding:1rem;
-}
-.modal-overlay.open{display:flex;}
-.modal-box{
-  background:var(--surface);border:1px solid var(--border);border-radius:12px;
-  width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;
-  box-shadow:var(--shadow);
-}
-.modal-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:.85rem 1.1rem;border-bottom:1px solid var(--border);
-}
-.modal-title{font-family:var(--f-label);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);}
-.modal-body{flex:1;overflow-y:auto;padding:1.1rem;}
-.modal-foot{
-  padding:.75rem 1.1rem;border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:flex-end;gap:.5rem;
-}
+/* generate section */
+.generate-section{padding:1.25rem;border-top:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:.75rem;flex-wrap:wrap;}
+@media(max-width:900px){.generate-section{padding:.85rem;}}
+.generate-section-label{font-family:var(--f-display);font-size:.82rem;color:var(--ink-mute);font-style:italic;}
+.generate-btns{display:flex;gap:.45rem;flex-wrap:wrap;}
 
-/* import textarea */
-.import-ta{
-  width:100%;min-height:160px;background:var(--input-bg);
-  border:1px solid var(--border);border-radius:8px;outline:none;
-  color:var(--ink);font-family:var(--f-mono);font-size:.72rem;line-height:1.65;
-  padding:.75rem 1rem;resize:vertical;
-  transition:border-color .2s;
-}
+/* opts row */
+.opts-row{padding:.5rem 1.1rem;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;flex-shrink:0;}
+.opts-row-label{font-family:var(--f-display);font-size:.68rem;color:var(--ink-mute);}
+.opt-tog{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .55rem;border-radius:5px;border:1px solid transparent;background:none;font-family:var(--f-display);font-size:.68rem;color:var(--ink-mute);cursor:pointer;transition:all .18s;}
+.opt-tog.on{border-color:var(--border);background:var(--gold-dim);color:var(--gold-dk);}
+.opt-tog-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .18s;flex-shrink:0;}
+.opt-tog.on .opt-tog-dot{background:var(--gold);}
+
+/* ── MODALS ── */
+.modal-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);backdrop-filter:blur(7px);display:none;align-items:flex-end;justify-content:center;padding:0;}
+.modal-ov.open{display:flex;}
+@media(min-width:560px){.modal-ov{align-items:center;padding:1rem;}}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 0 0;width:100%;max-width:560px;max-height:92vh;display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:hidden;margin:auto;}
+@media(min-width:560px){.modal-box{border-radius:12px;}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.1rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.modal-title{font-family:var(--f-display);font-size:1.05rem;font-weight:700;color:var(--ink);}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--ink-mute);font-size:1rem;transition:color .18s;padding:.2rem;}
+.modal-close:hover{color:var(--ink);}
+.modal-body{flex:1;overflow-y:auto;padding:1.1rem;-webkit-overflow-scrolling:touch;}
+.modal-foot{padding:.75rem 1.1rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:.45rem;flex-shrink:0;flex-wrap:wrap;}
+
+/* import UI */
+.drop-zone{border:1.5px dashed var(--border);border-radius:9px;padding:1.3rem;text-align:center;cursor:pointer;transition:all .18s;margin-bottom:.9rem;position:relative;}
+.drop-zone:hover,.drop-zone.dz-active{border-color:var(--gold-dk);background:var(--gold-dim);}
+.drop-zone input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;}
+.drop-zone-ico{color:var(--gold-dk);font-size:1.6rem;margin-bottom:.4rem;}
+.drop-zone p{font-size:.88rem;color:var(--ink-sub);font-style:italic;line-height:1.6;}
+.drop-zone p strong{color:var(--gold-dk);font-style:normal;}
+.import-lbl{font-family:var(--f-display);font-size:.76rem;font-weight:700;color:var(--ink);display:block;margin-bottom:.4rem;}
+.import-ta{width:100%;min-height:140px;background:var(--input-bg);border:1.5px solid var(--border);border-radius:8px;outline:none;color:var(--ink);font-family:var(--f-mono);font-size:.72rem;line-height:1.7;padding:.7rem .9rem;resize:vertical;transition:border-color .18s;}
 .import-ta:focus{border-color:var(--gold-dk);}
-.import-ta::placeholder{color:var(--ink-mute);font-family:var(--f-body);font-style:italic;font-size:.82rem;}
-.import-label{
-  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--gold-dk);display:block;margin-bottom:.45rem;
-}
-.file-drop{
-  border:1.5px dashed var(--border);border-radius:8px;padding:1.2rem;
-  text-align:center;cursor:pointer;transition:all .2s;margin-bottom:.85rem;
-}
-.file-drop:hover{border-color:var(--gold-dk);background:var(--gold-dim);}
-.file-drop p{font-size:.82rem;color:var(--ink-sub);font-style:italic;}
-.file-drop p span{color:var(--gold-dk);font-style:normal;font-weight:600;}
+.import-ta::placeholder{color:var(--ink-mute);font-family:var(--f-display);font-style:italic;font-size:.85rem;}
+.import-note{margin-top:.8rem;padding:.75rem .9rem;background:var(--gold-dim);border:1px solid var(--border2);border-radius:7px;}
+.import-note p{font-size:.82rem;color:var(--ink-sub);line-height:1.7;}
+.import-note code{font-family:var(--f-mono);font-size:.72rem;color:var(--gold-dk);background:var(--surface3);padding:.05em .28em;border-radius:3px;}
 
-/* ── TOAST ── */
-.toast{
-  position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);
-  background:var(--surface2);border:1px solid var(--border);border-radius:8px;
-  padding:.55rem 1.1rem;
-  font-family:var(--f-label);font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--gold);display:flex;align-items:center;gap:.45rem;
-  opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap;
-  box-shadow:var(--shadow);
-}
+/* break modal */
+.break-modal-label{font-family:var(--f-display);font-size:.82rem;font-weight:700;color:var(--ink);display:block;margin-bottom:.4rem;}
+.break-modal-input{width:100%;background:var(--input-bg);border:1.5px solid var(--border);border-radius:8px;padding:.65rem .9rem;font-family:var(--f-display);font-size:.93rem;color:var(--ink);outline:none;transition:border-color .18s;}
+.break-modal-input:focus{border-color:var(--gold-dk);}
+.break-modal-hint{font-size:.78rem;color:var(--ink-mute);margin-top:.4rem;font-style:italic;line-height:1.5;}
+.collapse-toggle-row{display:flex;align-items:center;gap:.55rem;margin-top:1rem;padding:.65rem .85rem;background:var(--surface2);border-radius:7px;border:1px solid var(--border2);}
+.collapse-toggle-row label{font-family:var(--f-display);font-size:.85rem;color:var(--ink-sub);cursor:pointer;flex:1;}
+.collapse-chk{width:16px;height:16px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
+
+/* toast */
+.toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(14px);background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem 1rem;font-family:var(--f-display);font-size:.78rem;color:var(--gold);display:flex;align-items:center;gap:.4rem;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:999;white-space:nowrap;box-shadow:var(--shadow);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── MOBILE TABS ── */
-.mobile-tabs{
-  display:none;
-  border-bottom:1px solid var(--border);
-  background:var(--surface);
-}
-@media(max-width:900px){.mobile-tabs{display:flex;}}
-.mob-tab{
-  flex:1;padding:.65rem .5rem;text-align:center;cursor:pointer;
-  font-family:var(--f-label);font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink-mute);border-bottom:2px solid transparent;transition:all .2s;
-  background:none;border:none;border-bottom:2px solid transparent;
-}
-.mob-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
-@media(max-width:900px){
-  .panel-left,.panel-right{min-height:auto;}
-  .panel-right{border-right:none;}
-  #panel-right-mob{display:none;}
-  #panel-right-mob.active{display:flex;}
-  #panel-left-mob.hidden{display:none;}
-}
-
-/* ── DIVIDER ── */
-.part-divider{
-  display:flex;align-items:center;gap:.75rem;margin:.7rem 0;
-}
-.part-divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);}
-.part-divider-dot{font-size:.6rem;color:var(--ink-mute);}
-
-/* ── STATS BAR ── */
-.stats-bar{
-  display:flex;gap:1rem;padding:.5rem 1.25rem;
-  border-bottom:1px solid var(--border2);flex-shrink:0;flex-wrap:wrap;
-}
-.stat-item{display:flex;align-items:center;gap:.3rem;}
-.stat-label{font-family:var(--f-label);font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-mute);}
-.stat-val{font-family:var(--f-mono);font-size:.65rem;color:var(--gold-dk);font-weight:600;}
-
-/* ── OPTIONS ROW ── */
-.options-row{
-  display:flex;align-items:center;gap:.5rem;padding:.55rem 1.25rem;
-  border-bottom:1px solid var(--border2);flex-shrink:0;flex-wrap:wrap;
-}
-.opt-toggle{
-  display:inline-flex;align-items:center;gap:.35rem;
-  font-family:var(--f-label);font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink-mute);cursor:pointer;padding:.25rem .55rem;border-radius:5px;
-  border:1px solid transparent;transition:all .2s;
-}
-.opt-toggle.on{color:var(--gold-dk);border-color:var(--border);background:var(--gold-dim);}
-.opt-toggle:hover{color:var(--gold-dk);}
-.toggle-dot{
-  width:8px;height:8px;border-radius:50%;background:var(--border);
-  transition:background .2s;flex-shrink:0;
-}
-.opt-toggle.on .toggle-dot{background:var(--gold);}
-
-/* ── COLLAPSE TOGGLE in PREVIEW ── */
-.preview-collapse-btn{
-  display:block;width:100%;margin-top:.5rem;
-  background:none;border:1px solid var(--border);
-  color:var(--gold-dk);cursor:pointer;
-  font-family:var(--f-label);font-size:.48rem;
-  letter-spacing:.15em;text-transform:uppercase;
-  padding:.38rem;border-radius:2px;
-  transition:color .2s,border-color .2s;
-}
-.preview-collapse-btn:hover{color:var(--gold);border-color:var(--gold);}
-
-/* ── CHAR COUNT ── */
-.char-count{font-size:.68rem;color:var(--ink-mute);font-family:var(--f-mono);}
-
-/* ── DRAG GHOST ── */
-@keyframes pulse-border{0%,100%{border-color:var(--gold-dk);}50%{border-color:var(--gold-lt);}}
-.dlg-item.drag-target{animation:pulse-border 1s infinite;}
-
-/* ── SECTION HEADER IN LIST ── */
-.section-marker{
-  display:flex;align-items:center;gap:.5rem;
-  margin:.5rem 0 .35rem;
-}
-.section-marker-line{flex:1;height:1px;background:var(--border2);}
-.section-marker-label{
-  font-family:var(--f-label);font-size:.42rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink-mute);
-}
-
-/* ── SCROLLBAR CODE AREA ── */
-.code-area::-webkit-scrollbar{width:3px;}
-.code-area::-webkit-scrollbar-thumb{background:var(--gold-dk);}
-
-/* ── RESPONSIVE ── */
-@media(max-width:640px){
-  .topbar{padding:.55rem .85rem;}
-  .speaker-row{padding:.65rem .85rem .5rem;}
-  .compose-wrap{padding:.65rem .85rem;}
-  .dlg-list{padding:.75rem .85rem;}
-  .stats-bar{padding:.4rem .85rem;}
-  .options-row{padding:.4rem .85rem;}
-  .panel-header{padding:.7rem .85rem .6rem;}
-}
+/* utils */
+.sep-line{height:1px;background:var(--border2);margin:.5rem 0;}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="topbar-logo">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    Dialogue Generator
-  </div>
+<!-- ══════════ TOPBAR ══════════ -->
+<header class="topbar">
+  <a href="./index.html" class="topbar-logo">Safeenah</a>
   <div class="topbar-right">
-    <button class="btn-label-xs" onclick="openImportModal()" title="Import existing dialogue">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Import
+    <span id="draftSaved" class="draft-saved"><i class="fa fa-check-circle"></i> Saved</span>
+    <!-- desktop actions -->
+    <div class="topbar-desk-actions" style="display:flex;align-items:center;gap:.45rem;">
+      <button class="btn-sm outline" onclick="openImportModal()"><i class="fa fa-upload"></i> Import</button>
+      <button class="btn-sm outline" onclick="saveToStorage()"><i class="fa fa-save"></i> Save</button>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+      <i class="fa fa-sun" id="themeIcon"></i>
+      <span id="themeLbl">Light</span>
     </button>
-    <button class="btn-label-xs" onclick="saveDraft()" title="Save to localStorage">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Save
-    </button>
-    <button class="btn-primary-sm" onclick="toggleCodePanel()" id="generateBtn">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      Generate HTML
-    </button>
-    <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">
-      <svg id="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    </button>
-    <button class="icon-btn" onclick="clearAll()" title="Clear all">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-    </button>
+    <button class="hamburger" onclick="openMobMenu()"><i class="fa fa-bars"></i></button>
+  </div>
+</header>
+
+<!-- ══════════ MOBILE MENU ══════════ -->
+<div class="mob-menu" id="mobMenu" onclick="if(event.target===this)closeMobMenu()">
+  <div class="mob-menu-box">
+    <button class="mob-menu-close" onclick="closeMobMenu()"><i class="fa fa-times"></i></button>
+    <div class="mob-menu-title">Tools</div>
+    <button class="mob-menu-btn" onclick="closeMobMenu();openImportModal()"><i class="fa fa-upload"></i> Import Dialogue</button>
+    <button class="mob-menu-btn" onclick="closeMobMenu();saveToStorage()"><i class="fa fa-save"></i> Save Draft</button>
+    <button class="mob-menu-btn" onclick="closeMobMenu();doGenerate()"><i class="fa fa-code"></i> Generate HTML</button>
+    <button class="mob-menu-btn" onclick="closeMobMenu();goToWelcome()"><i class="fa fa-home"></i> Back to Welcome</button>
   </div>
 </div>
 
-<!-- MOBILE TABS -->
-<div class="mobile-tabs">
-  <button class="mob-tab active" id="tab-compose" onclick="switchMobTab('compose')">Compose</button>
-  <button class="mob-tab" id="tab-preview" onclick="switchMobTab('preview')">Preview</button>
-</div>
+<!-- ══════════════════════════════════════
+     WELCOME SCREEN
+══════════════════════════════════════ -->
+<div id="screen-welcome">
 
-<!-- MAIN LAYOUT -->
-<div class="main-layout">
+  <div class="welcome-eyebrow a1">Safeenah Archive Tools</div>
+  <h1 class="welcome-title a2">Dialogue <span>Generator</span></h1>
+  <p class="welcome-sub a3">
+    Create formatted simulated dialogue for the Safeenah hadith section.
+    Compose line by line, add section breaks, format quotes — then export clean production HTML.
+  </p>
 
-  <!-- LEFT PANEL -->
-  <div class="panel-left" id="panel-left-mob">
+  <div class="draft-notice-wrap a3" id="draftNoticeWrap"></div>
 
-    <!-- SPEAKER SELECT -->
-    <div class="speaker-row">
-      <div class="panel-title" style="margin-right:.3rem;padding-top:.25rem;">Speaker:</div>
-      <button class="spk-btn" id="spk-a" onclick="selectSpeaker('A')">
-        <span class="spk-dot dot-a"></span> Person A
-      </button>
-      <button class="spk-btn" id="spk-b" onclick="selectSpeaker('B')">
-        <span class="spk-dot dot-b"></span> Person B
-      </button>
-      <button class="spk-btn" id="spk-c" onclick="selectSpeaker('C')">
-        <span class="spk-dot dot-c"></span> Person C
-      </button>
+  <button class="resume-btn a3" onclick="openImportModal()">
+    <i class="fa fa-upload"></i> Import an existing dialogue file
+  </button>
+
+  <button class="btn-primary a4" onclick="goToEditor()">
+    Let's Start <i class="fa fa-arrow-right"></i>
+  </button>
+
+  <!-- Skeleton previews -->
+  <div class="skel-grid a5">
+    <div class="skel-card">
+      <div class="skel-head"><i class="fa fa-comments"></i> Dialogue HTML structure</div>
+      <div class="skel-body">
+        <div class="skel-row"><span class="skel-k">&lt;div&gt;</span><div class="skel-tag" style="width:110px;"></div></div>
+        <div class="skel-row"><span class="skel-k">.dialogue-wrap</span><div class="skel-v"></div></div>
+        <div class="skel-row"><span class="skel-k">.dlg-row</span><div class="skel-v m"></div></div>
+        <div class="skel-row"><span class="skel-k">.dlg-label</span><div class="skel-v s"></div></div>
+        <div class="skel-row"><span class="skel-k">.dlg-bubble</span><div class="skel-v"></div></div>
+        <div class="skel-row"><span class="skel-k">.sec-head</span><div class="skel-v m"></div></div>
+        <div class="skel-row"><span class="skel-k">collapsible</span><div class="skel-v"></div></div>
+      </div>
     </div>
+    <div class="skel-card">
+      <div class="skel-head"><i class="fa fa-magic"></i> Supported formats</div>
+      <div class="skel-body">
+        <div class="skel-row"><span class="skel-k">Person A / B / C</span><div class="skel-v m"></div></div>
+        <div class="skel-row"><span class="skel-k">Bengali text</span><div class="skel-v"></div></div>
+        <div class="skel-row"><span class="skel-k">Blockquote</span><div class="skel-v m"></div></div>
+        <div class="skel-row"><span class="skel-k">Arabic block</span><div class="skel-v"></div></div>
+        <div class="skel-row"><span class="skel-k">Section break</span><div class="skel-v m"></div></div>
+        <div class="skel-row"><span class="skel-k">Collapsible</span><div class="skel-v s"></div></div>
+        <div class="skel-row"><span class="skel-k">Export HTML</span><div class="skel-v"></div></div>
+      </div>
+    </div>
+  </div>
 
-    <!-- COMPOSE -->
-    <div class="compose-wrap">
-      <div class="compose-inner" id="composeBox">
-        <textarea
-          class="compose-ta"
-          id="composeTa"
-          placeholder="Type the dialogue line here… (Enter to add, Shift+Enter for new line)"
-          oninput="handleComposeInput(this)"
-          onkeydown="handleComposeKey(event)"
-        ></textarea>
-        <div class="compose-footer">
-          <div style="display:flex;align-items:center;gap:.6rem;">
-            <span class="compose-hint" id="activeSpeakerHint">Select a speaker above</span>
-            <span class="char-count" id="charCount">0</span>
+</div><!-- /screen-welcome -->
+
+<!-- ══════════════════════════════════════
+     EDITOR SCREEN
+══════════════════════════════════════ -->
+<div id="screen-editor">
+
+  <!-- Editor top bar -->
+  <div class="editor-bar">
+    <div class="editor-bar-left">
+      <span class="ebar-label">Dialogue Generator</span>
+      <span style="color:var(--border);">·</span>
+      <span id="lineCountBadge" style="font-family:var(--f-mono);font-size:.72rem;color:var(--gold-dk);">0 lines</span>
+    </div>
+    <div class="editor-bar-right">
+      <button class="btn-sm outline" onclick="openImportModal()"><i class="fa fa-upload"></i><span class="hide-xs"> Import</span></button>
+      <button class="btn-sm outline" onclick="saveToStorage()"><i class="fa fa-save"></i><span class="hide-xs"> Save</span></button>
+      <button class="btn-sm solid" onclick="doGenerate()"><i class="fa fa-code"></i><span class="hide-xs"> Generate HTML</span></button>
+    </div>
+  </div>
+
+  <!-- Mobile tabs (compose / preview / code) -->
+  <div class="mob-editor-tabs">
+    <button class="met on" id="met-compose" onclick="mobEditorTab('compose')">Compose</button>
+    <button class="met" id="met-preview" onclick="mobEditorTab('preview')">Preview</button>
+    <button class="met" id="met-code" onclick="mobEditorTab('code')">HTML</button>
+  </div>
+
+  <!-- Editor layout -->
+  <div class="editor-layout" id="editorLayout">
+
+    <!-- ════ COMPOSE SIDE ════ -->
+    <div class="compose-side" id="composeSide">
+
+      <!-- Speaker row -->
+      <div class="spk-bar">
+        <span class="spk-bar-label">Speaker:</span>
+        <button class="spk-btn" id="spk-A" onclick="setSpeaker('A')"><span class="spk-dot dot-a"></span>Person A</button>
+        <button class="spk-btn" id="spk-B" onclick="setSpeaker('B')"><span class="spk-dot dot-b"></span>Person B</button>
+        <button class="spk-btn" id="spk-C" onclick="setSpeaker('C')"><span class="spk-dot dot-c"></span>Person C</button>
+      </div>
+
+      <!-- Format options -->
+      <div class="fmt-bar">
+        <span class="fmt-label">Format:</span>
+        <button class="fmt-btn" id="fmt-normal" onclick="setFmt('normal')" title="Normal text"><i class="fa fa-font"></i> Normal</button>
+        <button class="fmt-btn" id="fmt-blockquote" onclick="setFmt('blockquote')" title="Blockquote"><i class="fa fa-quote-right"></i> Quote</button>
+        <button class="fmt-btn" id="fmt-arabic" onclick="setFmt('arabic')" title="Arabic/transliteration"><span style="font-size:.82rem;">ع</span> Arabic</button>
+      </div>
+
+      <!-- Compose textarea -->
+      <div class="compose-area">
+        <div class="compose-box" id="composeBox">
+          <textarea
+            class="compose-ta" id="composeTa"
+            placeholder="Type dialogue line here… (Enter = add · Shift+Enter = new line)"
+            oninput="onComposeInput(this)"
+            onkeydown="onComposeKey(event)"
+          ></textarea>
+          <div class="compose-footer">
+            <div style="display:flex;align-items:center;gap:.55rem;">
+              <span class="compose-hint" id="composeHint">Select a speaker to begin</span>
+              <span class="char-count" id="charCount">0</span>
+            </div>
+            <button class="add-line-btn" id="addLineBtn" onclick="addLine()" disabled>
+              <i class="fa fa-plus"></i> Add Line
+            </button>
           </div>
-          <button class="add-btn" id="addBtn" onclick="addLine()" disabled>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add Line
+        </div>
+      </div>
+
+      <!-- List controls -->
+      <div class="list-ctrl">
+        <span class="list-ctrl-label"><i class="fa fa-list" style="opacity:.5;"></i> Lines</span>
+        <div class="list-ctrl-right">
+          <button class="btn-sm outline" onclick="openBreakModal()" title="Add a section break with title">
+            <i class="fa fa-minus"></i> Add Break
           </button>
         </div>
       </div>
-    </div>
 
-    <!-- OPTIONS -->
-    <div class="options-row">
-      <div class="panel-title">Options:</div>
-      <button class="opt-toggle" id="opt-collapsible" onclick="toggleOpt('collapsible')">
-        <span class="toggle-dot"></span> Collapsible
-      </button>
-      <button class="opt-toggle" id="opt-sections" onclick="toggleOpt('sections')">
-        <span class="toggle-dot"></span> Section Breaks
-      </button>
-    </div>
-
-    <!-- STATS -->
-    <div class="stats-bar">
-      <div class="stat-item"><span class="stat-label">Lines</span><span class="stat-val" id="stat-lines">0</span></div>
-      <div class="stat-item"><span class="stat-label">Person A</span><span class="stat-val" id="stat-a">0</span></div>
-      <div class="stat-item"><span class="stat-label">Person B</span><span class="stat-val" id="stat-b">0</span></div>
-      <div class="stat-item"><span class="stat-label">Person C</span><span class="stat-val" id="stat-c">0</span></div>
-    </div>
-
-    <!-- HEADER -->
-    <div class="panel-header">
-      <span class="panel-title">Dialogue Lines</span>
-      <div style="display:flex;gap:.4rem;">
-        <button class="btn-label-xs" onclick="addSectionBreak()" title="Add section break">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Add Break
-        </button>
+      <!-- Stats -->
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-item"><span class="stat-label">Total</span><span class="stat-val" id="st-total">0</span></div>
+        <div class="stat-item"><span class="stat-label">A</span><span class="stat-val" id="st-a">0</span></div>
+        <div class="stat-item"><span class="stat-label">B</span><span class="stat-val" id="st-b">0</span></div>
+        <div class="stat-item"><span class="stat-label">C</span><span class="stat-val" id="st-c">0</span></div>
       </div>
-    </div>
 
-    <!-- LIST -->
-    <div class="dlg-list" id="dlgList">
-      <div class="dlg-list-empty" id="emptyState">
-        <svg class="dlg-list-empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <p>No dialogue yet.<br/>Select a speaker and start typing.</p>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="panel-right" id="panel-right-mob">
-
-    <div class="panel-header">
-      <span class="panel-title">Live Preview</span>
-      <button class="btn-label-xs" onclick="refreshPreview()">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-        Refresh
-      </button>
-    </div>
-
-    <div class="preview-wrap" id="previewWrap">
-      <div class="preview-empty" id="previewEmpty">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--border);opacity:.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="3"/></svg>
-        <p>Preview appears here as you build.</p>
-      </div>
-      <div id="previewContent" style="display:none;"></div>
-    </div>
-
-    <!-- CODE PANEL -->
-    <div class="code-panel" id="codePanel">
-      <div class="code-header">
-        <span class="code-header-label">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Generated HTML
-        </span>
-        <div style="display:flex;gap:.4rem;">
-          <button class="btn-label-xs" onclick="copyHTML()" id="copyHtmlBtn">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Copy HTML
-          </button>
-          <button class="icon-btn" onclick="toggleCodePanel()" title="Close" style="width:26px;height:26px;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </button>
+      <!-- Dialogue list -->
+      <div class="dlg-list" id="dlgList">
+        <div class="dlg-empty" id="dlgEmpty">
+          <i class="fa fa-comments"></i>
+          <p>No dialogue yet.<br/>Select a speaker and start composing.</p>
         </div>
       </div>
-      <div class="code-area" id="codeArea">
-        <pre class="code-block" id="codeBlock"></pre>
+
+    </div><!-- /compose-side -->
+
+    <!-- ════ PREVIEW SIDE ════ -->
+    <div class="preview-side" id="previewSide">
+
+      <!-- opts -->
+      <div class="opts-row">
+        <span class="opts-row-label">Options:</span>
+        <button class="opt-tog" id="opt-collapse" onclick="togOpt('collapse')"><span class="opt-tog-dot"></span>Collapsible</button>
       </div>
-    </div>
 
-  </div>
-</div>
+      <div class="preview-header">
+        <span class="preview-title">Live Preview</span>
+        <button class="btn-sm outline" style="padding:.28rem .65rem;font-size:.72rem;" onclick="refreshPreview()"><i class="fa fa-sync" style="font-size:.68rem;"></i></button>
+      </div>
+      <div class="preview-body" id="previewBody">
+        <div class="preview-empty" id="previewEmpty">
+          <i class="fa fa-eye"></i>
+          <p>Preview updates as you compose.</p>
+        </div>
+        <div class="preview-shell" id="previewShell" style="display:none;"></div>
+      </div>
 
-<!-- IMPORT MODAL -->
-<div class="modal-overlay" id="importModal">
+      <!-- Generate / code output -->
+      <div class="generate-section">
+        <span class="generate-section-label">Ready to export?</span>
+        <div class="generate-btns">
+          <button class="btn-sm outline" onclick="doGenerate()"><i class="fa fa-code"></i> Generate</button>
+        </div>
+      </div>
+
+      <!-- Code panel (hidden until generate) -->
+      <div class="code-panel hidden" id="codePanel">
+        <div class="code-toolbar">
+          <div class="code-toolbar-left">
+            <span class="code-file-badge"><i class="fa fa-file-code"></i> dialogue.html</span>
+            <span class="code-line-count" id="codeLineCount">—</span>
+            <span class="copied-toast" id="copiedToast"><i class="fa fa-check"></i> Copied!</span>
+          </div>
+          <div class="code-toolbar-right">
+            <button class="code-action copy-btn" onclick="copyCode()"><i class="fa fa-copy"></i> Copy</button>
+            <button class="code-action dl-btn" onclick="downloadCode()"><i class="fa fa-download"></i> Download</button>
+            <button class="code-action copy-btn" onclick="closeCodePanel()" style="padding:.38rem .6rem;"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+        <div class="code-scroll">
+          <div class="code-empty" id="codeEmpty">Add dialogue lines to generate HTML.</div>
+          <pre class="code-pre" id="codePre" style="display:none;"></pre>
+        </div>
+      </div>
+
+    </div><!-- /preview-side -->
+
+  </div><!-- /editor-layout -->
+
+</div><!-- /screen-editor -->
+
+<!-- ══════════ IMPORT MODAL ══════════ -->
+<div class="modal-ov" id="importModal">
   <div class="modal-box">
     <div class="modal-head">
-      <span class="modal-title">Import Existing Dialogue</span>
-      <button class="icon-btn" onclick="closeImportModal()" style="width:28px;height:28px;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <span class="modal-title">Import Dialogue</span>
+      <button class="modal-close" onclick="closeImportModal()"><i class="fa fa-times"></i></button>
     </div>
     <div class="modal-body">
-      <div class="file-drop" id="fileDrop" onclick="document.getElementById('fileInput').click()" ondragover="handleDragOver(event)" ondrop="handleFileDrop(event)">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold-dk);margin:0 auto .4rem;display:block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <p>Drop a <span>.html</span> or <span>.txt</span> file, or <span>click to browse</span></p>
-        <input type="file" id="fileInput" accept=".html,.txt,.json" style="display:none;" onchange="handleFileInput(event)"/>
+      <div class="drop-zone" id="dropZone"
+        ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event)">
+        <input type="file" accept=".html,.htm,.txt,.json" onchange="dzFile(event)" id="fileInput"/>
+        <div class="drop-zone-ico"><i class="fa fa-cloud-upload-alt"></i></div>
+        <p>Drop a <strong>.html</strong> or <strong>.txt</strong> file here, or <strong>tap to browse</strong></p>
       </div>
-      <label class="import-label">Or paste dialogue text / HTML below</label>
-      <textarea class="import-ta" id="importTa" placeholder="Paste raw text (each line = one exchange), or paste existing HTML dialogue markup…"></textarea>
-      <div style="margin-top:.75rem;">
-        <label class="import-label">Format hint</label>
-        <p style="font-size:.8rem;color:var(--ink-mute);line-height:1.65;font-style:italic;">
-          For plain text: each paragraph or line will become a separate entry. Speaker is auto-detected from prefixes like <strong style="color:var(--gold-dk);">A:</strong>, <strong style="color:var(--gold-dk);">B:</strong>, <strong style="color:var(--gold-dk);">Person A:</strong> etc.<br/>
-          For HTML: existing <code style="font-family:var(--f-mono);font-size:.75rem;color:var(--gold-dk);">.dlg-bubble</code> blocks are parsed.
+      <label class="import-lbl">Or paste dialogue text / HTML below</label>
+      <textarea class="import-ta" id="importTa" placeholder="Paste plain text with A: B: C: prefixes, or existing HTML containing .dlg-row / .dlg-bubble markup…"></textarea>
+      <div class="import-note">
+        <p>
+          <strong style="color:var(--gold-dk);">Plain text:</strong> prefix each line with <code>A:</code>, <code>B:</code>, <code>C:</code> or <code>Person A:</code>. Lines without a prefix alternate A↔B automatically. Use <code>---</code> for a section break.<br/><br/>
+          <strong style="color:var(--gold-dk);">HTML:</strong> The parser looks for <code>.dlg-row</code>, <code>.dlg-bubble</code>, <code>.dlg-label</code>, <code>[data-id]</code>, and text elements containing <code>A: / B: / C:</code> speaker patterns. It tries hard to recover dialogue from any format.
         </p>
       </div>
     </div>
     <div class="modal-foot">
-      <button class="btn-label-xs" onclick="closeImportModal()">Cancel</button>
-      <button class="btn-primary-sm" onclick="processImport()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Import Dialogue
-      </button>
+      <button class="btn-sm outline" onclick="closeImportModal()">Cancel</button>
+      <button class="btn-sm solid" onclick="doImport()"><i class="fa fa-check"></i> Import</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ BREAK MODAL ══════════ -->
+<div class="modal-ov" id="breakModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">Add Section Break</span>
+      <button class="modal-close" onclick="closeBreakModal()"><i class="fa fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <label class="break-modal-label">Section title <span style="color:var(--gold);">*</span></label>
+      <input class="break-modal-input" type="text" id="breakLabelInput"
+        placeholder="e.g. Part Two — The Scholar's Response"
+        onkeydown="if(event.key==='Enter')confirmBreak()"/>
+      <p class="break-modal-hint">This appears as a styled heading dividing the dialogue into sections. Example: <em>Part One — Introduction</em></p>
+
+      <div class="collapse-toggle-row">
+        <input type="checkbox" class="collapse-chk" id="collapseHereChk"/>
+        <label for="collapseHereChk">Start collapsible section from here<br/><span style="font-size:.75rem;color:var(--ink-mute);">Lines after this break will be hidden behind "Show more"</span></label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sm outline" onclick="closeBreakModal()">Cancel</button>
+      <button class="btn-sm solid" onclick="confirmBreak()"><i class="fa fa-plus"></i> Add Break</button>
     </div>
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast">
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-  <span id="toastMsg">Copied!</span>
-</div>
+<div class="toast" id="globalToast"><i class="fa fa-check-circle"></i><span id="toastMsg">Done</span></div>
+
+<style>
+@media(max-width:500px){.hide-xs{display:none;}}
+</style>
 
 <script>
-/* ═══════════════════ STATE ═══════════════════ */
-const DRAFT_KEY = 'safeenah_dlg_draft_v2';
-let dialogue = []; // [{id, type:'line'|'break', speaker:'A'|'B'|'C', text, label}]
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
+const DKEY = 'safeenah_dlg_v4';
+let D = [];
+/*
+  D item: {
+    id: number,
+    type: 'line' | 'break' | 'collapse-start',
+    speaker: 'A'|'B'|'C',    // for line
+    text: string,              // for line
+    fmt: 'normal'|'blockquote'|'arabic',  // for line
+    label: string,             // for break
+    collapseFrom: bool,        // for break — marks collapse start
+  }
+*/
 let activeSpeaker = null;
+let activeFmt = 'normal';
+let opts = { collapse: false };
+let uid = 0;
 let dragSrcIdx = null;
-let opts = { collapsible: false, sections: false };
-let editingId = null;
-let idCounter = 0;
+let _pendingBreakCollapse = false;
 
-/* ═══════════════════ INIT ═══════════════════ */
+/* ════════════════════════════════════════════
+   BOOT
+════════════════════════════════════════════ */
 window.addEventListener('load', () => {
-  loadDraftSilent();
-  render();
+  // Check for draft
+  try {
+    const raw = localStorage.getItem(DKEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      if (s && Array.isArray(s.D) && s.D.length > 0) {
+        window._savedDraft = s;
+        const lines = s.D.filter(x => x.type === 'line').length;
+        const wrap = document.getElementById('draftNoticeWrap');
+        wrap.innerHTML = `<div class="draft-notice">
+          <i class="fa fa-history" style="color:var(--gold-dk);"></i>
+          Draft found — <strong>${lines} line${lines !== 1 ? 's' : ''}</strong> of dialogue.
+          <button onclick="loadDraft()">Resume draft</button>
+          <button class="dis-btn" onclick="this.closest('.draft-notice-wrap').innerHTML=''">Dismiss</button>
+        </div>`;
+      }
+    }
+  } catch (e) {}
+  renderList();
   refreshPreview();
 });
 
-/* ═══════════════════ SPEAKER ═══════════════════ */
-function selectSpeaker(s) {
-  activeSpeaker = s;
-  document.querySelectorAll('.spk-btn').forEach(b => {
-    b.className = 'spk-btn';
+/* ════════════════════════════════════════════
+   SCREEN NAVIGATION
+════════════════════════════════════════════ */
+function goToEditor() {
+  document.getElementById('screen-welcome').style.display = 'none';
+  document.getElementById('screen-editor').style.display = 'flex';
+}
+function goToWelcome() {
+  document.getElementById('screen-editor').style.display = 'none';
+  document.getElementById('screen-welcome').style.display = 'flex';
+}
+
+/* ════════════════════════════════════════════
+   MOBILE MENU
+════════════════════════════════════════════ */
+function openMobMenu() { document.getElementById('mobMenu').classList.add('open'); }
+function closeMobMenu() { document.getElementById('mobMenu').classList.remove('open'); }
+
+/* ════════════════════════════════════════════
+   MOBILE EDITOR TABS
+════════════════════════════════════════════ */
+function mobEditorTab(tab) {
+  ['compose','preview','code'].forEach(t => {
+    document.getElementById('met-' + t).classList.toggle('on', t === tab);
   });
-  const btn = document.getElementById('spk-' + s.toLowerCase());
-  if (btn) btn.className = 'spk-btn active-' + s.toLowerCase();
-  document.getElementById('activeSpeakerHint').textContent = 'Speaking as Person ' + s;
+  const compose = document.getElementById('composeSide');
+  const preview = document.getElementById('previewSide');
+
+  if (tab === 'compose') {
+    compose.style.display = 'flex';
+    preview.style.display = 'none';
+  } else if (tab === 'preview') {
+    compose.style.display = 'none';
+    preview.style.display = 'flex';
+    document.getElementById('codePanel').classList.add('hidden');
+    refreshPreview();
+  } else {
+    compose.style.display = 'none';
+    preview.style.display = 'flex';
+    doGenerate();
+    document.getElementById('codePanel').classList.remove('hidden');
+  }
+}
+
+/* ════════════════════════════════════════════
+   THEME
+════════════════════════════════════════════ */
+function toggleTheme() {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+  document.getElementById('themeIcon').className = dark ? 'fa fa-moon' : 'fa fa-sun';
+  document.getElementById('themeLbl').textContent = dark ? 'Dark' : 'Light';
+}
+
+/* ════════════════════════════════════════════
+   SPEAKER & FORMAT
+════════════════════════════════════════════ */
+function setSpeaker(s) {
+  activeSpeaker = s;
+  ['A','B','C'].forEach(x => {
+    document.getElementById('spk-' + x).className = 'spk-btn';
+  });
+  document.getElementById('spk-' + s).classList.add('active-' + s);
+  document.getElementById('composeHint').textContent = 'Speaking as Person ' + s;
   updateAddBtn();
   document.getElementById('composeTa').focus();
 }
 
-/* ═══════════════════ COMPOSE ═══════════════════ */
-function handleComposeInput(ta) {
-  const len = ta.value.length;
-  document.getElementById('charCount').textContent = len;
-  updateAddBtn();
-  detectBengali(ta);
+function setFmt(f) {
+  activeFmt = f;
+  document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('fmt-' + f).classList.add('on');
+  const ta = document.getElementById('composeTa');
+  if (f === 'arabic') {
+    ta.placeholder = 'Enter Arabic text or transliteration…';
+    ta.style.direction = 'rtl';
+    ta.style.textAlign = 'right';
+  } else if (f === 'blockquote') {
+    ta.placeholder = 'Enter quoted text…';
+    ta.style.direction = '';
+    ta.style.textAlign = '';
+  } else {
+    ta.placeholder = 'Type dialogue line here… (Enter = add · Shift+Enter = new line)';
+    ta.style.direction = '';
+    ta.style.textAlign = '';
+  }
 }
 
-function detectBengali(ta) {
-  const bengaliRange = /[\u0980-\u09FF]/;
-  if (bengaliRange.test(ta.value)) {
-    ta.style.fontFamily = "'Hind Siliguri', sans-serif";
+/* ════════════════════════════════════════════
+   COMPOSE
+════════════════════════════════════════════ */
+function onComposeInput(ta) {
+  document.getElementById('charCount').textContent = ta.value.length;
+  updateAddBtn();
+  const isBn = /[\u0980-\u09FF]/.test(ta.value);
+  if (isBn && activeFmt === 'normal') {
+    ta.style.fontFamily = "'Hind Siliguri',sans-serif";
     ta.style.lineHeight = '1.9';
-  } else {
+  } else if (activeFmt !== 'arabic') {
     ta.style.fontFamily = '';
     ta.style.lineHeight = '';
   }
 }
-
-function handleComposeKey(e) {
+function onComposeKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
-    if (!document.getElementById('addBtn').disabled) addLine();
+    if (!document.getElementById('addLineBtn').disabled) addLine();
   }
 }
-
 function updateAddBtn() {
   const ta = document.getElementById('composeTa');
-  const hasText = ta.value.trim().length > 0;
-  const hasSpeaker = !!activeSpeaker;
-  document.getElementById('addBtn').disabled = !(hasText && hasSpeaker);
+  document.getElementById('addLineBtn').disabled = !(ta.value.trim() && activeSpeaker);
 }
-
 function addLine() {
   const ta = document.getElementById('composeTa');
   const text = ta.value.trim();
   if (!text || !activeSpeaker) return;
-  dialogue.push({ id: ++idCounter, type: 'line', speaker: activeSpeaker, text });
+  D.push({ id: ++uid, type: 'line', speaker: activeSpeaker, text, fmt: activeFmt });
   ta.value = '';
   document.getElementById('charCount').textContent = '0';
   updateAddBtn();
-  render();
+  renderList();
   refreshPreview();
-  saveDraftSilent();
-  scrollListToBottom();
-}
-
-function scrollListToBottom() {
+  saveSilent();
   const list = document.getElementById('dlgList');
-  setTimeout(() => { list.scrollTop = list.scrollHeight; }, 50);
+  setTimeout(() => list.scrollTop = list.scrollHeight, 60);
 }
 
-/* ═══════════════════ SECTION BREAK ═══════════════════ */
-function addSectionBreak() {
-  const label = prompt('Section label (e.g. "Part Two — Topic"):', 'Part ' + romanize(countBreaks() + 1));
-  if (label === null) return;
-  dialogue.push({ id: ++idCounter, type: 'break', label: label || ('Section ' + (countBreaks() + 1)) });
-  render();
+/* ════════════════════════════════════════════
+   SECTION BREAK
+════════════════════════════════════════════ */
+function openBreakModal() {
+  document.getElementById('breakLabelInput').value = '';
+  document.getElementById('collapseHereChk').checked = false;
+  _pendingBreakCollapse = false;
+  document.getElementById('breakModal').classList.add('open');
+  setTimeout(() => document.getElementById('breakLabelInput').focus(), 80);
+}
+function closeBreakModal() { document.getElementById('breakModal').classList.remove('open'); }
+function confirmBreak() {
+  const label = document.getElementById('breakLabelInput').value.trim();
+  if (!label) { showToast('Enter a section title.'); return; }
+  const collapseFrom = document.getElementById('collapseHereChk').checked;
+  D.push({ id: ++uid, type: 'break', label, collapseFrom });
+  closeBreakModal();
+  renderList();
   refreshPreview();
-  saveDraftSilent();
+  saveSilent();
 }
 
-function countBreaks() {
-  return dialogue.filter(d => d.type === 'break').length;
-}
-
-function romanize(n) {
-  const r = ['One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten'];
-  return r[n - 1] || String(n);
-}
-
-/* ═══════════════════ OPTIONS ═══════════════════ */
-function toggleOpt(key) {
-  opts[key] = !opts[key];
-  const btn = document.getElementById('opt-' + key);
-  btn.classList.toggle('on', opts[key]);
+/* ════════════════════════════════════════════
+   OPTIONS
+════════════════════════════════════════════ */
+function togOpt(k) {
+  opts[k] = !opts[k];
+  document.getElementById('opt-' + k).classList.toggle('on', opts[k]);
   refreshPreview();
-  if (document.getElementById('codePanel').classList.contains('open')) generateHTML();
 }
 
-/* ═══════════════════ RENDER LIST ═══════════════════ */
-function render() {
+/* ════════════════════════════════════════════
+   RENDER LIST
+════════════════════════════════════════════ */
+function renderList() {
   const list = document.getElementById('dlgList');
-  const empty = document.getElementById('emptyState');
+  const empty = document.getElementById('dlgEmpty');
+  const lines = D.filter(x => x.type === 'line');
 
-  if (dialogue.length === 0) {
-    empty.style.display = 'flex';
-    // clear all but empty
-    Array.from(list.children).forEach(c => { if (c !== empty) c.remove(); });
-    updateStats();
-    return;
-  }
-  empty.style.display = 'none';
+  empty.style.display = D.length ? 'none' : 'flex';
 
-  // rebuild
-  const existing = {};
-  Array.from(list.querySelectorAll('[data-dlg-id]')).forEach(el => {
-    existing[el.dataset.dlgId] = el;
+  // clear all except empty state
+  Array.from(list.children).forEach(c => { if (c !== empty) c.remove(); });
+
+  D.forEach((item, idx) => {
+    const el = document.createElement('div');
+    el.innerHTML = item.type === 'line'
+      ? buildLineEl(item, idx)
+      : buildBreakEl(item, idx);
+    list.appendChild(el.firstElementChild);
   });
 
-  // remove items not in dialogue
-  Array.from(list.querySelectorAll('[data-dlg-id]')).forEach(el => {
-    if (!dialogue.find(d => String(d.id) === el.dataset.dlgId)) el.remove();
-  });
-
-  // insert/update in order
-  dialogue.forEach((item, idx) => {
-    let el = list.querySelector('[data-dlg-id="' + item.id + '"]');
-    const html = item.type === 'break' ? renderBreakEl(item, idx) : renderLineEl(item, idx);
-
-    if (!el) {
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = html;
-      el = wrapper.firstElementChild;
-      list.appendChild(el);
-      // animate in
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(6px)';
-      requestAnimationFrame(() => {
-        el.style.transition = 'opacity .25s, transform .25s';
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      });
-    } else {
-      el.outerHTML = html;
-    }
-  });
-
-  // ensure order matches dialogue array
-  dialogue.forEach(item => {
-    const el = list.querySelector('[data-dlg-id="' + item.id + '"]');
-    if (el) list.appendChild(el); // reorder
-  });
-
-  updateStats();
+  // Stats
+  document.getElementById('st-total').textContent = lines.length;
+  document.getElementById('st-a').textContent = lines.filter(x => x.speaker === 'A').length;
+  document.getElementById('st-b').textContent = lines.filter(x => x.speaker === 'B').length;
+  document.getElementById('st-c').textContent = lines.filter(x => x.speaker === 'C').length;
+  document.getElementById('lineCountBadge').textContent = lines.length + ' line' + (lines.length !== 1 ? 's' : '');
 }
 
-function renderLineEl(item, idx) {
-  const cls = item.speaker === 'A' ? 'badge-a' : item.speaker === 'B' ? 'badge-b' : 'badge-c';
-  const lbl = 'Person ' + item.speaker;
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function buildLineEl(item, idx) {
+  const bc = item.speaker === 'A' ? 'badge-a' : item.speaker === 'B' ? 'badge-b' : 'badge-c';
   const isBn = /[\u0980-\u09FF]/.test(item.text);
-  const textCls = isBn ? 'dlg-text dlg-text-bn' : 'dlg-text';
-  const escaped = esc(item.text);
-  return `<div class="dlg-item" data-dlg-id="${item.id}" draggable="true"
-    ondragstart="onDragStart(event,${idx})" ondragover="onDragOver(event,${idx})"
-    ondrop="onDrop(event,${idx})" ondragleave="onDragLeave(event)" ondragend="onDragEnd(event)">
-    <div class="dlg-item-left">
-      <span class="dlg-spk-badge ${cls}">${lbl}</span>
-      <span class="dlg-seq">#${idx + 1}</span>
-      <div class="drag-handle" title="Drag to reorder">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/></svg>
-      </div>
+  let textDisplay = esc(item.text);
+  if (item.fmt === 'blockquote') {
+    textDisplay = `<span class="bq-line">${esc(item.text)}</span>`;
+  } else if (item.fmt === 'arabic') {
+    textDisplay = `<span class="ar-line">${esc(item.text)}</span>`;
+  }
+  const txtCls = (item.fmt === 'normal' && isBn) ? 'item-text bn' : 'item-text';
+  const fmtIcon = item.fmt === 'blockquote' ? '<i class="fa fa-quote-right" style="font-size:.58rem;color:var(--gold-dk);margin-left:.3rem;opacity:.7;"></i>' :
+                  item.fmt === 'arabic' ? '<span style="font-size:.65rem;color:var(--gold-dk);margin-left:.3rem;opacity:.8;">ع</span>' : '';
+  const isFirst = idx === 0;
+  const isLast = idx === D.length - 1;
+  return `<div class="dlg-item" data-id="${item.id}" draggable="true"
+    ondragstart="dStart(event,${idx})" ondragover="dOver(event,${idx})"
+    ondrop="dDrop(event,${idx})" ondragleave="dLeave(event)" ondragend="dEnd()">
+    <div class="item-left">
+      <span class="item-badge ${bc}">Person ${item.speaker}</span>
+      <span class="item-num">#${idx+1}</span>
+      <span class="drag-grip" title="Drag to reorder">
+        <svg width="10" height="16" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="3" cy="2.5" r="1.2" fill="currentColor"/><circle cx="7" cy="2.5" r="1.2" fill="currentColor"/>
+          <circle cx="3" cy="9" r="1.2" fill="currentColor"/><circle cx="7" cy="9" r="1.2" fill="currentColor"/>
+          <circle cx="3" cy="15.5" r="1.2" fill="currentColor"/><circle cx="7" cy="15.5" r="1.2" fill="currentColor"/>
+        </svg>
+      </span>
     </div>
-    <div class="dlg-item-body">
-      <div class="${textCls}" id="text-${item.id}">${escaped}</div>
-      <textarea class="dlg-edit-ta" id="edit-${item.id}" onkeydown="editKey(event,${item.id})">${esc(item.text)}</textarea>
+    <div class="item-body">
+      <div class="${txtCls}" id="txt-${item.id}">${textDisplay}${fmtIcon}</div>
+      <textarea class="item-edit-ta" id="eta-${item.id}"
+        onkeydown="etaKey(event,${item.id})">${esc(item.text)}</textarea>
     </div>
-    <div class="dlg-actions">
-      <div class="move-btns">
-        <button class="act-btn" onclick="moveUp(${idx})" title="Move up" ${idx===0?'style="opacity:.3;pointer-events:none;"':''}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-        </button>
-        <button class="act-btn" onclick="moveDown(${idx})" title="Move down" ${idx===dialogue.length-1?'style="opacity:.3;pointer-events:none;"':''}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-      </div>
-      <button class="act-btn" onclick="startEdit(${item.id})" title="Edit">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    <div class="item-actions">
+      <button class="ia" title="Move up" onclick="mvUp(${idx})" ${isFirst?'style="opacity:.22;pointer-events:none;"':''}>
+        <i class="fa fa-chevron-up" style="font-size:.65rem;"></i>
       </button>
-      <button class="act-btn save-act" id="save-act-${item.id}" onclick="saveEdit(${item.id})" title="Save edit" style="display:none;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <button class="ia" title="Move down" onclick="mvDn(${idx})" ${isLast?'style="opacity:.22;pointer-events:none;"':''}>
+        <i class="fa fa-chevron-down" style="font-size:.65rem;"></i>
       </button>
-      <button class="act-btn" onclick="changeSpeaker(${item.id})" title="Change speaker">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <button class="ia" title="Edit" onclick="startEdit(${item.id})">
+        <i class="fa fa-pen" style="font-size:.65rem;"></i>
       </button>
-      <button class="act-btn danger" onclick="deleteLine(${item.id})" title="Delete">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+      <button class="ia grn" title="Save edit" id="sav-${item.id}" onclick="saveEdit(${item.id})" style="display:none;">
+        <i class="fa fa-check" style="font-size:.65rem;"></i>
+      </button>
+      <button class="ia" title="Cycle speaker" onclick="cycleSpeaker(${item.id})">
+        <i class="fa fa-user-friends" style="font-size:.6rem;"></i>
+      </button>
+      <button class="ia red" title="Delete" onclick="delItem(${item.id})">
+        <i class="fa fa-trash" style="font-size:.6rem;"></i>
       </button>
     </div>
   </div>`;
 }
 
-function renderBreakEl(item, idx) {
-  return `<div class="section-marker" data-dlg-id="${item.id}">
-    <div class="section-marker-line"></div>
-    <span class="section-marker-label">${esc(item.label)}</span>
-    <div class="section-marker-line"></div>
-    <button class="act-btn" onclick="editBreak(${item.id})" title="Edit label" style="opacity:0.6;">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-    </button>
-    <button class="act-btn danger" onclick="deleteLine(${item.id})" title="Delete break" style="opacity:0.6;">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-    </button>
+function buildBreakEl(item, idx) {
+  const colIcon = item.collapseFrom
+    ? '<i class="fa fa-compress-alt" style="color:var(--gold-dk);font-size:.65rem;"></i> Collapse starts here &nbsp;·&nbsp; '
+    : '';
+  return `<div class="break-item" data-id="${item.id}">
+    <div class="break-line"></div>
+    <span class="break-label">${colIcon}<span>${esc(item.label)}</span></span>
+    <div class="break-actions">
+      <button class="ia" title="Edit label" onclick="editBreak(${item.id})" style="width:22px;height:22px;">
+        <i class="fa fa-pen" style="font-size:.58rem;"></i>
+      </button>
+      <button class="ia red" title="Delete" onclick="delItem(${item.id})" style="width:22px;height:22px;">
+        <i class="fa fa-trash" style="font-size:.58rem;"></i>
+      </button>
+    </div>
+    <div class="break-line"></div>
   </div>`;
 }
 
-/* ═══════════════════ EDIT ═══════════════════ */
+/* ════════════════════════════════════════════
+   EDIT
+════════════════════════════════════════════ */
 function startEdit(id) {
-  const item = document.querySelector('[data-dlg-id="' + id + '"]');
-  if (!item) return;
-  item.classList.add('editing');
-  const textEl = document.getElementById('text-' + id);
-  const ta = document.getElementById('edit-' + id);
-  const saveBtn = document.getElementById('save-act-' + id);
-  if (textEl) textEl.style.display = 'none';
-  if (ta) { ta.style.display = 'block'; ta.focus(); ta.select(); }
-  if (saveBtn) saveBtn.style.display = 'inline-flex';
-  editingId = id;
+  const el = document.querySelector('[data-id="'+id+'"]');
+  if (!el) return;
+  el.classList.add('editing');
+  document.getElementById('txt-' + id).style.display = 'none';
+  const ta = document.getElementById('eta-' + id);
+  ta.style.display = 'block'; ta.focus(); ta.select();
+  const sav = document.getElementById('sav-' + id);
+  if (sav) sav.style.display = 'inline-flex';
 }
-
 function saveEdit(id) {
-  const item = dialogue.find(d => d.id === id);
-  const ta = document.getElementById('edit-' + id);
+  const item = D.find(x => x.id === id);
+  const ta = document.getElementById('eta-' + id);
   if (!item || !ta) return;
   item.text = ta.value.trim() || item.text;
-  editingId = null;
-  render();
-  refreshPreview();
-  saveDraftSilent();
+  renderList(); refreshPreview(); saveSilent();
 }
-
-function editKey(e, id) {
+function etaKey(e, id) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); saveEdit(id); }
-  if (e.key === 'Escape') { editingId = null; render(); }
+  if (e.key === 'Escape') renderList();
 }
-
 function editBreak(id) {
-  const item = dialogue.find(d => d.id === id);
+  const item = D.find(x => x.id === id);
   if (!item) return;
-  const newLabel = prompt('Section label:', item.label);
-  if (newLabel !== null) { item.label = newLabel; render(); refreshPreview(); saveDraftSilent(); }
+  const v = prompt('Section label:', item.label);
+  if (v !== null) { item.label = v; renderList(); refreshPreview(); saveSilent(); }
 }
 
-/* ═══════════════════ CHANGE SPEAKER ═══════════════════ */
-function changeSpeaker(id) {
-  const item = dialogue.find(d => d.id === id);
+/* ════════════════════════════════════════════
+   ACTIONS
+════════════════════════════════════════════ */
+function cycleSpeaker(id) {
+  const item = D.find(x => x.id === id);
   if (!item) return;
-  const spks = ['A','B','C'];
-  const curr = spks.indexOf(item.speaker);
-  item.speaker = spks[(curr + 1) % 3];
-  render();
-  refreshPreview();
-  saveDraftSilent();
+  item.speaker = item.speaker === 'A' ? 'B' : item.speaker === 'B' ? 'C' : 'A';
+  renderList(); refreshPreview(); saveSilent();
 }
-
-/* ═══════════════════ DELETE ═══════════════════ */
-function deleteLine(id) {
-  dialogue = dialogue.filter(d => d.id !== id);
-  render();
-  refreshPreview();
-  saveDraftSilent();
+function delItem(id) {
+  D = D.filter(x => x.id !== id);
+  renderList(); refreshPreview(); saveSilent();
 }
-
-/* ═══════════════════ MOVE ═══════════════════ */
-function moveUp(idx) {
+function mvUp(idx) {
   if (idx === 0) return;
-  [dialogue[idx - 1], dialogue[idx]] = [dialogue[idx], dialogue[idx - 1]];
-  render(); refreshPreview(); saveDraftSilent();
+  [D[idx-1], D[idx]] = [D[idx], D[idx-1]];
+  renderList(); refreshPreview(); saveSilent();
 }
-function moveDown(idx) {
-  if (idx >= dialogue.length - 1) return;
-  [dialogue[idx], dialogue[idx + 1]] = [dialogue[idx + 1], dialogue[idx]];
-  render(); refreshPreview(); saveDraftSilent();
+function mvDn(idx) {
+  if (idx >= D.length - 1) return;
+  [D[idx], D[idx+1]] = [D[idx+1], D[idx]];
+  renderList(); refreshPreview(); saveSilent();
 }
 
-/* ═══════════════════ DRAG ═══════════════════ */
-function onDragStart(e, idx) {
+/* ════════════════════════════════════════════
+   DRAG
+════════════════════════════════════════════ */
+function dStart(e, idx) {
   dragSrcIdx = idx;
-  e.target.closest('.dlg-item').classList.add('dragging');
+  e.target.closest('.dlg-item')?.classList.add('dragging');
   e.dataTransfer.effectAllowed = 'move';
 }
-function onDragOver(e, idx) {
+function dOver(e, idx) {
   e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
   document.querySelectorAll('.dlg-item').forEach(el => el.classList.remove('drag-over'));
   if (dragSrcIdx !== idx) {
-    const target = e.target.closest('.dlg-item');
-    if (target) target.classList.add('drag-over');
+    const t = e.target.closest('.dlg-item');
+    if (t) t.classList.add('drag-over');
   }
 }
-function onDragLeave(e) {
-  const target = e.target.closest('.dlg-item');
-  if (target) target.classList.remove('drag-over');
-}
-function onDrop(e, idx) {
+function dLeave(e) { e.target.closest?.('.dlg-item')?.classList.remove('drag-over'); }
+function dDrop(e, idx) {
   e.preventDefault();
   if (dragSrcIdx === null || dragSrcIdx === idx) return;
-  const moved = dialogue.splice(dragSrcIdx, 1)[0];
-  dialogue.splice(idx, 0, moved);
+  const moved = D.splice(dragSrcIdx, 1)[0];
+  D.splice(idx, 0, moved);
   dragSrcIdx = null;
-  render(); refreshPreview(); saveDraftSilent();
+  renderList(); refreshPreview(); saveSilent();
 }
-function onDragEnd(e) {
-  document.querySelectorAll('.dlg-item').forEach(el => {
-    el.classList.remove('dragging','drag-over');
-  });
+function dEnd() {
+  document.querySelectorAll('.dlg-item').forEach(el => el.classList.remove('dragging','drag-over'));
   dragSrcIdx = null;
 }
 
-/* ═══════════════════ STATS ═══════════════════ */
-function updateStats() {
-  const lines = dialogue.filter(d => d.type === 'line');
-  document.getElementById('stat-lines').textContent = lines.length;
-  document.getElementById('stat-a').textContent = lines.filter(d => d.speaker === 'A').length;
-  document.getElementById('stat-b').textContent = lines.filter(d => d.speaker === 'B').length;
-  document.getElementById('stat-c').textContent = lines.filter(d => d.speaker === 'C').length;
-}
-
-/* ═══════════════════ PREVIEW ═══════════════════ */
+/* ════════════════════════════════════════════
+   PREVIEW
+════════════════════════════════════════════ */
 function refreshPreview() {
-  const lines = dialogue.filter(d => d.type === 'line');
-  const previewEmpty = document.getElementById('previewEmpty');
-  const previewContent = document.getElementById('previewContent');
-
-  if (lines.length === 0) {
-    previewEmpty.style.display = 'flex';
-    previewContent.style.display = 'none';
-    return;
+  const lines = D.filter(x => x.type === 'line');
+  const pvEmpty = document.getElementById('previewEmpty');
+  const pvShell = document.getElementById('previewShell');
+  if (!lines.length) {
+    pvEmpty.style.display = 'flex'; pvShell.style.display = 'none'; return;
   }
-  previewEmpty.style.display = 'none';
-  previewContent.style.display = 'block';
-  previewContent.innerHTML = '<div class="preview-dialogue-wrap">' + buildPreviewHTML() + '</div>';
+  pvEmpty.style.display = 'none'; pvShell.style.display = 'block';
+  pvShell.innerHTML = buildPreviewHTML();
 }
 
 function buildPreviewHTML() {
-  let html = '<div class="dialogue-wrap">\n';
-  const splitAt = opts.collapsible ? Math.max(2, Math.floor(dialogue.filter(d=>d.type==='line').length / 2)) : null;
-  let lineCount = 0;
-  let collapsibleStarted = false;
+  let html = '<div class="dialogue-wrap">';
+  // find collapse break index
+  const colBreakIdx = D.findIndex(x => x.type === 'break' && x.collapseFrom);
+  let colStarted = false;
+  let lineCountForCollapse = 0;
 
-  dialogue.forEach(item => {
+  D.forEach((item, idx) => {
     if (item.type === 'break') {
-      html += buildBreakHTML(item.label);
+      html += buildPvBreak(item);
+      if (item.collapseFrom && !colStarted) {
+        html += '<div id="pv-more" style="display:none;">';
+        colStarted = true;
+      }
       return;
     }
-    lineCount++;
-    if (opts.collapsible && lineCount === splitAt + 1 && !collapsibleStarted) {
-      html += '\n<div id="dlg-more-preview" style="display:none;">\n';
-      collapsibleStarted = true;
+    // line
+    if (opts.collapse && !colStarted && colBreakIdx === -1) {
+      const lineItems = D.filter(x => x.type === 'line');
+      const split = Math.max(2, Math.ceil(lineItems.length / 2));
+      lineCountForCollapse++;
+      if (lineCountForCollapse === split + 1) {
+        html += '<div id="pv-more" style="display:none;">';
+        colStarted = true;
+      }
     }
-    html += buildRowHTML(item, false);
+    html += buildPvRow(item);
   });
 
-  if (collapsibleStarted) {
-    html += '</div>\n';
-    html += `<button onclick="(function(b,t){var o=b.style.display==='none';b.style.display=o?'block':'none';t.textContent=o?'Show less ▲':'Show more ▾';})(document.getElementById('dlg-more-preview'),this)" class="preview-collapse-btn">Show more ▾</button>\n`;
+  if (colStarted) {
+    html += '</div>';
+    html += `<button class="preview-more-btn" onclick="(function(b,t){var o=b.style.display==='none';b.style.display=o?'block':'none';t.textContent=o?'Show less ▲':'Show more ▾';})(document.getElementById('pv-more'),this)">Show more ▾</button>`;
   }
-
   html += '</div>';
   return html;
 }
 
-function buildBreakHTML(label) {
-  return `<div style="display:flex;align-items:center;gap:.75rem;margin:1.2rem 0;">
-  <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>
-  <span style="font-size:.6rem;color:var(--ink-mute);">◆</span>
-  <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>
-</div>
-<p class="sec-head">${esc(label)}</p>\n`;
+function buildPvBreak(item) {
+  return `<div style="display:flex;align-items:center;gap:.75rem;margin:1rem 0;">
+    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold-dim),transparent);"></div>
+    <span style="font-size:.6rem;color:var(--ink-mute);">◆</span>
+    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold-dim),transparent);"></div>
+  </div>
+  <p class="sec-head">${esc(item.label)}</p>`;
 }
 
-function buildRowHTML(item, forCode) {
-  const isBn = /[\u0980-\u09FF]/.test(item.text);
-  const badgeBg = item.speaker === 'A' ? '#7a3b20' : item.speaker === 'B' ? '#2a5c6a' : '#4a4a38';
+function buildPvRow(item) {
   const lbl = item.speaker + ':';
-  const spkName = 'Person ' + item.speaker;
-  const textStyle = isBn ? ' style="font-family:\'Hind Siliguri\',sans-serif;line-height:1.9;"' : '';
-  const badge = `<span style="display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.15em .6em;border-radius:3px;margin-bottom:.3rem;background:${badgeBg};color:#fff;">${spkName}</span><br/>`;
-  return `  <div class="dlg-row">
+  const bg = item.speaker==='A'?'#7a3b20':item.speaker==='B'?'#2a5c6a':'#4a4a38';
+  const name = 'Person ' + item.speaker;
+  const isBn = /[\u0980-\u09FF]/.test(item.text);
+  const bubStyle = isBn ? ' style="font-family:\'Hind Siliguri\',sans-serif;line-height:1.9;"' : '';
+  let content = esc(item.text);
+  if (item.fmt === 'blockquote') {
+    content = `<blockquote><p>${esc(item.text)}</p></blockquote>`;
+  } else if (item.fmt === 'arabic') {
+    content = `<div style="direction:rtl;text-align:right;font-size:1.1rem;line-height:2.1;color:var(--gold-lt);padding:.5rem .8rem;background:var(--gold-dim);border-right:3px solid var(--gold);border-radius:0 2px 2px 0;margin:.4rem 0;">${esc(item.text)}</div>`;
+  }
+  const badge = `<span style="display:inline-block;font-family:'Playfair Display',Georgia,serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.15em .6em;border-radius:3px;margin-bottom:.28rem;background:${bg};color:#fff;">${name}</span><br/>`;
+  return `<div class="dlg-row">
     <span class="dlg-label">${lbl}</span>
-    <div class="dlg-bubble"${textStyle}>
-      ${badge}${forCode ? escapeForCode(item.text) : esc(item.text)}
-    </div>
-  </div>\n`;
+    <div class="dlg-bubble"${bubStyle}>${badge}${content}</div>
+  </div>`;
 }
 
-/* ═══════════════════ GENERATE HTML ═══════════════════ */
-function generateHTML() {
-  const lines = dialogue.filter(d => d.type === 'line');
-  if (lines.length === 0) { showToast('No dialogue to generate.'); return; }
+/* ════════════════════════════════════════════
+   CODE GENERATION
+════════════════════════════════════════════ */
+function doGenerate() {
+  const lines = D.filter(x => x.type === 'line');
+  const panel = document.getElementById('codePanel');
+  const pre = document.getElementById('codePre');
+  const empty = document.getElementById('codeEmpty');
+  const lc = document.getElementById('codeLineCount');
 
-  const splitAt = opts.collapsible ? Math.max(2, Math.floor(lines.length / 2)) : null;
+  panel.classList.remove('hidden');
+
+  if (!lines.length) {
+    pre.style.display = 'none';
+    empty.style.display = 'flex';
+    lc.textContent = '—';
+    return;
+  }
+
+  const code = buildCode();
+  pre.textContent = code;
+  pre.style.display = 'block';
+  empty.style.display = 'none';
+  const lineCount = code.split('\n').length;
+  lc.textContent = lineCount + ' lines';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function buildCode() {
+  const lines = D.filter(x => x.type === 'line');
+  if (!lines.length) return '';
+
+  const colBreakIdx = D.findIndex(x => x.type === 'break' && x.collapseFrom);
+  let colStarted = false;
+  let lineCountForCollapse = 0;
   let code = '<div class="dialogue-wrap">\n\n';
-  let lineCount = 0;
-  let collapsibleStarted = false;
-  let breakCount = 0;
+  let colId = 1;
 
-  dialogue.forEach(item => {
+  D.forEach((item) => {
     if (item.type === 'break') {
-      breakCount++;
       code += `  <!-- ── Section Break ── -->\n`;
       code += `  <div style="display:flex;align-items:center;gap:.75rem;margin:1.2rem 0;">\n`;
       code += `    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>\n`;
       code += `    <span style="font-size:.6rem;color:var(--ink-mute);">◆</span>\n`;
       code += `    <div style="flex:1;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent);"></div>\n`;
       code += `  </div>\n`;
-      code += `  <p class="sec-head">${escapeForCode(item.label)}</p>\n\n`;
+      code += `  <p class="sec-head">${esc(item.label)}</p>\n\n`;
+      if (item.collapseFrom && !colStarted) {
+        code += `  <!-- ── Collapsible section starts ── -->\n`;
+        code += `  <div id="dlg-more-${colId}" style="display:none;">\n\n`;
+        colStarted = true;
+      }
       return;
     }
 
-    lineCount++;
-    if (opts.collapsible && lineCount === splitAt + 1 && !collapsibleStarted) {
-      code += `  <!-- ── Collapsed section ── -->\n`;
-      code += `  <div id="dlg-more-1" style="display:none;">\n\n`;
-      collapsibleStarted = true;
+    // auto-collapse if no break marker but opts.collapse is on
+    if (opts.collapse && !colStarted && colBreakIdx === -1) {
+      const split = Math.max(2, Math.ceil(lines.length / 2));
+      lineCountForCollapse++;
+      if (lineCountForCollapse === split + 1) {
+        code += `  <!-- ── Collapsible section starts ── -->\n`;
+        code += `  <div id="dlg-more-${colId}" style="display:none;">\n\n`;
+        colStarted = true;
+      }
     }
 
-    const indent = collapsibleStarted ? '    ' : '  ';
-    const isBn = /[\u0980-\u09FF]/.test(item.text);
-    const badgeBg = item.speaker === 'A' ? '#7a3b20' : item.speaker === 'B' ? '#2a5c6a' : '#4a4a38';
+    const ind = colStarted ? '    ' : '  ';
     const lbl = item.speaker + ':';
-    const spkName = 'Person ' + item.speaker;
-    const textAttr = isBn ? '\n' + indent + '      style="font-family:\'Hind Siliguri\',sans-serif;line-height:1.9;"' : '';
-    const badge = `<span style="display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.15em .6em;border-radius:3px;margin-bottom:.3rem;background:${badgeBg};color:#fff;">${spkName}</span><br/>`;
+    const bg = item.speaker==='A'?'#7a3b20':item.speaker==='B'?'#2a5c6a':'#4a4a38';
+    const name = 'Person ' + item.speaker;
+    const isBn = /[\u0980-\u09FF]/.test(item.text);
+    const bubAttr = isBn ? `\n${ind}      style="font-family:'Hind Siliguri',sans-serif;line-height:1.9;"` : '';
+    const badge = `<span style="display:inline-block;font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding:.15em .6em;border-radius:3px;margin-bottom:.3rem;background:${bg};color:#fff;">${name}</span><br/>`;
 
-    code += `${indent}<div class="dlg-row">\n`;
-    code += `${indent}  <span class="dlg-label">${lbl}</span>\n`;
-    code += `${indent}  <div class="dlg-bubble"${textAttr}>\n`;
-    code += `${indent}    ${badge}\n`;
-    code += `${indent}    ${escapeForCode(item.text)}\n`;
-    code += `${indent}  </div>\n`;
-    code += `${indent}</div>\n\n`;
+    let bubContent = '';
+    if (item.fmt === 'blockquote') {
+      bubContent = `<blockquote><p>${esc(item.text)}</p></blockquote>`;
+    } else if (item.fmt === 'arabic') {
+      bubContent = `<div style="direction:rtl;text-align:right;font-family:'Hind Siliguri',sans-serif;font-size:1.2rem;line-height:2.2;color:var(--gold-lt);padding:.8rem 1.1rem;background:var(--gold-dim);border-right:3px solid var(--gold);border-radius:0 2px 2px 0;margin:.8rem 0;">${esc(item.text)}</div>`;
+    } else {
+      bubContent = esc(item.text);
+    }
+
+    code += `${ind}<div class="dlg-row">\n`;
+    code += `${ind}  <span class="dlg-label">${lbl}</span>\n`;
+    code += `${ind}  <div class="dlg-bubble"${bubAttr}>\n`;
+    code += `${ind}    ${badge}\n`;
+    code += `${ind}    ${bubContent}\n`;
+    code += `${ind}  </div>\n`;
+    code += `${ind}</div>\n\n`;
   });
 
-  if (collapsibleStarted) {
-    code += `  </div><!-- /#dlg-more-1 -->\n\n`;
+  if (colStarted) {
+    code += `  </div><!-- /#dlg-more-${colId} -->\n\n`;
     code += `  <button\n`;
-    code += `    onclick="(function(b,t){var o=b.style.display==='none';b.style.display=o?'block':'none';t.textContent=o?'Show less ▲':'Show more ▾';})(document.getElementById('dlg-more-1'),this)"\n`;
+    code += `    onclick="(function(b,t){var o=b.style.display==='none';b.style.display=o?'block':'none';t.textContent=o?'Show less ▲':'Show more ▾';})(document.getElementById('dlg-more-${colId}'),this)"\n`;
     code += `    style="display:block;width:100%;margin-top:.6rem;background:none;border:1px solid var(--border);color:var(--gold-dk);cursor:pointer;font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.4rem;border-radius:2px;transition:color .2s,border-color .2s;"\n`;
     code += `    onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'"\n`;
     code += `    onmouseout="this.style.color='var(--gold-dk)';this.style.borderColor='var(--border)'"\n`;
@@ -1146,211 +1258,242 @@ function generateHTML() {
   }
 
   code += '</div>';
-
-  document.getElementById('codeBlock').textContent = code;
   return code;
 }
 
-function toggleCodePanel() {
-  const panel = document.getElementById('codePanel');
-  const isOpen = panel.classList.contains('open');
-  if (!isOpen) {
-    generateHTML();
-    panel.classList.add('open');
-  } else {
-    panel.classList.remove('open');
-  }
+function closeCodePanel() { document.getElementById('codePanel').classList.add('hidden'); }
+
+function copyCode() {
+  const pre = document.getElementById('codePre');
+  if (!pre.textContent.trim()) { showToast('Nothing to copy — generate first.'); return; }
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    const t = document.getElementById('copiedToast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+    showToast('HTML copied to clipboard!');
+  });
 }
 
-/* ═══════════════════ COPY HTML ═══════════════════ */
-function copyHTML() {
-  const code = generateHTML();
-  if (!code) return;
-  navigator.clipboard.writeText(code).then(() => showToast('HTML copied to clipboard!'));
+function downloadCode() {
+  const pre = document.getElementById('codePre');
+  if (!pre.textContent.trim()) { doGenerate(); }
+  const code = pre.textContent;
+  if (!code.trim()) { showToast('Nothing to download.'); return; }
+  const blob = new Blob([code], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'safeenah-dialogue-' + Date.now() + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('File downloaded!');
 }
 
-/* ═══════════════════ IMPORT ═══════════════════ */
+/* ════════════════════════════════════════════
+   IMPORT
+════════════════════════════════════════════ */
 function openImportModal() { document.getElementById('importModal').classList.add('open'); }
 function closeImportModal() { document.getElementById('importModal').classList.remove('open'); }
 
-function handleDragOver(e) { e.preventDefault(); }
-function handleFileDrop(e) {
-  e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file) readFile(file);
-}
-function handleFileInput(e) {
-  const file = e.target.files[0];
-  if (file) readFile(file);
-}
-function readFile(file) {
+function dzOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('dz-active'); }
+function dzLeave() { document.getElementById('dropZone').classList.remove('dz-active'); }
+function dzDrop(e) { e.preventDefault(); dzLeave(); const f = e.dataTransfer.files[0]; if (f) readFile(f); }
+function dzFile(e) { const f = e.target.files[0]; if (f) readFile(f); }
+function readFile(f) {
   const r = new FileReader();
   r.onload = ev => { document.getElementById('importTa').value = ev.target.result; };
-  r.readAsText(file);
+  r.readAsText(f);
 }
 
-function processImport() {
+function doImport() {
   const raw = document.getElementById('importTa').value.trim();
-  if (!raw) { showToast('Nothing to import.'); return; }
+  if (!raw) { showToast('Paste content or upload a file first.'); return; }
 
   let parsed = [];
+  const looksHTML = /<[a-z]/i.test(raw);
 
-  // Try HTML parse first
-  if (raw.includes('dlg-bubble') || raw.includes('dlg-row') || raw.includes('<div')) {
-    parsed = parseHTMLDialogue(raw);
-  } else {
-    parsed = parsePlainText(raw);
-  }
+  if (looksHTML) parsed = parseHTMLDialogue(raw);
+  if (!parsed.length) parsed = parsePlainText(raw);
 
-  if (parsed.length === 0) { showToast('Could not parse any dialogue.'); return; }
+  if (!parsed.length) { showToast('Could not find any dialogue. Try plain text.'); return; }
+  if (D.length && !confirm('Replace current dialogue (' + D.length + ' items)? This will clear your work.')) return;
 
-  if (dialogue.length > 0) {
-    if (!confirm('This will replace the current dialogue (' + dialogue.length + ' items). Continue?')) return;
-  }
+  D = parsed.map(p => ({
+    id: ++uid,
+    type: p.type || 'line',
+    speaker: p.speaker || 'A',
+    text: p.text || '',
+    fmt: p.fmt || 'normal',
+    label: p.label || '',
+    collapseFrom: p.collapseFrom || false,
+  }));
 
-  dialogue = parsed.map(p => ({ id: ++idCounter, type: p.type || 'line', speaker: p.speaker, text: p.text, label: p.label }));
   closeImportModal();
   document.getElementById('importTa').value = '';
-  render();
-  refreshPreview();
-  saveDraftSilent();
-  showToast('Imported ' + dialogue.filter(d=>d.type==='line').length + ' lines!');
+  document.getElementById('fileInput').value = '';
+  if (D.length) goToEditor();
+  renderList(); refreshPreview(); saveSilent();
+  showToast('Imported ' + D.filter(x => x.type === 'line').length + ' lines!');
 }
 
+/* ── HTML parser — aggressive recovery ── */
 function parseHTMLDialogue(html) {
   const tmp = document.createElement('div');
   tmp.innerHTML = html;
+  const result = [];
+
+  // Strategy 1: .dlg-row with .dlg-label + .dlg-bubble
   const rows = tmp.querySelectorAll('.dlg-row');
-  const result = [];
-  rows.forEach(row => {
-    const labelEl = row.querySelector('.dlg-label');
-    const bubbleEl = row.querySelector('.dlg-bubble');
-    if (!bubbleEl) return;
-    // remove badge spans from text
-    bubbleEl.querySelectorAll('span[style*="border-radius"]').forEach(s => s.remove());
-    const rawText = (bubbleEl.textContent || '').trim().replace(/\n\s+/g,' ');
-    if (!rawText) return;
-    let speaker = 'A';
-    if (labelEl) {
-      const l = labelEl.textContent.trim().replace(':','').toUpperCase();
-      if (l === 'B') speaker = 'B';
-      else if (l === 'C') speaker = 'C';
+  if (rows.length) {
+    rows.forEach(row => {
+      const lblEl = row.querySelector('.dlg-label');
+      const bubEl = row.querySelector('.dlg-bubble');
+      if (!bubEl) return;
+      // remove speaker badge spans (they have a colored background)
+      bubEl.querySelectorAll('span[style*="background:#"]').forEach(s => s.remove());
+      bubEl.querySelectorAll('br').forEach(b => b.replaceWith(' '));
+      // check for blockquote
+      let fmt = 'normal';
+      let text = '';
+      const bq = bubEl.querySelector('blockquote');
+      const arDiv = bubEl.querySelector('div[style*="direction:rtl"]');
+      if (bq) { fmt = 'blockquote'; text = bq.textContent.trim(); }
+      else if (arDiv) { fmt = 'arabic'; text = arDiv.textContent.trim(); }
+      else { text = bubEl.textContent.trim().replace(/\s+/g, ' '); }
+      if (!text) return;
+      let speaker = 'A';
+      if (lblEl) {
+        const l = lblEl.textContent.replace(':','').trim().toUpperCase();
+        speaker = l === 'B' ? 'B' : l === 'C' ? 'C' : 'A';
+      }
+      result.push({ type: 'line', speaker, text, fmt });
+    });
+
+    // also look for sec-head breaks
+    tmp.querySelectorAll('.sec-head').forEach(sh => {
+      result.push({ type: 'break', label: sh.textContent.trim() });
+    });
+
+    if (result.filter(x => x.type === 'line').length) return result;
+  }
+
+  // Strategy 2: .dlg-bubble only
+  const bubbles = tmp.querySelectorAll('.dlg-bubble');
+  if (bubbles.length) {
+    bubbles.forEach((bub, i) => {
+      bub.querySelectorAll('span[style*="background:#"]').forEach(s => s.remove());
+      bub.querySelectorAll('br').forEach(b => b.replaceWith(' '));
+      const text = bub.textContent.trim().replace(/\s+/g, ' ');
+      if (!text) return;
+      const row = bub.closest('.dlg-row');
+      const lbl = row?.querySelector('.dlg-label');
+      let speaker = 'A';
+      if (lbl) { const l = lbl.textContent.replace(':','').trim().toUpperCase(); speaker = l==='B'?'B':l==='C'?'C':'A'; }
+      else speaker = i % 2 === 0 ? 'A' : 'B';
+      result.push({ type: 'line', speaker, text, fmt: 'normal' });
+    });
+    if (result.length) return result;
+  }
+
+  // Strategy 3: [data-id] items from this tool's own output
+  const dataItems = tmp.querySelectorAll('[data-id]');
+  if (dataItems.length) {
+    dataItems.forEach(item => {
+      const badge = item.querySelector('.item-badge,.spk-badge,.badge-a,.badge-b,.badge-c');
+      const textEl = item.querySelector('.item-text,.dlg-text');
+      if (textEl) {
+        const text = textEl.textContent.trim();
+        if (!text) return;
+        let speaker = 'A';
+        if (badge) { const b = badge.textContent.trim().toUpperCase(); speaker = b.includes('B')?'B':b.includes('C')?'C':'A'; }
+        result.push({ type: 'line', speaker, text, fmt: 'normal' });
+      }
+    });
+    if (result.length) return result;
+  }
+
+  // Strategy 4: any element with "A:" "B:" "C:" prefix text
+  const allEls = tmp.querySelectorAll('p,li,td,div,span,blockquote');
+  allEls.forEach(el => {
+    if (el.children.length > 3) return;
+    const txt = el.textContent.trim();
+    if (!txt || txt.length < 4) return;
+    const m = txt.match(/^(?:Person\s*)?([A-Ca-c])[\s]*[:：.)\]]\s*([\s\S]+)/i);
+    if (m) {
+      const sp = m[1].toUpperCase();
+      result.push({ type: 'line', speaker: sp==='B'?'B':sp==='C'?'C':'A', text: m[2].trim().replace(/\s+/g,' '), fmt: 'normal' });
     }
-    result.push({ type: 'line', speaker, text: rawText });
   });
+
   return result;
 }
 
+/* ── Plain text parser ── */
 function parsePlainText(text) {
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const result = [];
-  const speakerMap = {'A':[],'B':[],'C':[]};
+  // Split by paragraphs first, fall back to lines
+  const byPara = text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+  const byLine = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const src = byPara.length >= 2 ? byPara : byLine;
 
-  lines.forEach(line => {
-    // Detect speaker prefix: "A:", "B:", "C:", "Person A:", "Person B:", "Student:", etc.
-    const match = line.match(/^(?:Person\s*)?([A-Ca-c])\s*[:：]\s*(.*)/i)
-      || line.match(/^([A-Ca-c])\s*[.)\]]\s*(.*)/i);
-    if (match) {
-      const spk = match[1].toUpperCase();
-      const txt = match[2].trim();
-      if (txt) result.push({ type: 'line', speaker: spk === 'A' ? 'A' : spk === 'B' ? 'B' : 'C', text: txt });
-    } else if (/^[-—–]{3,}/.test(line) || /^={3,}/.test(line)) {
-      // section break
+  src.forEach(line => {
+    if (/^[-—=*]{3,}\s*$/.test(line)) {
       result.push({ type: 'break', label: 'Section Break' });
-    } else {
-      // assign alternating A/B
-      const lastLine = result.filter(r => r.type === 'line').slice(-1)[0];
-      const spk = (!lastLine || lastLine.speaker === 'B') ? 'A' : 'B';
-      result.push({ type: 'line', speaker: spk, text: line });
+      return;
     }
+    const m = line.match(/^(?:Person\s*)?([A-Ca-c])[\s]*[:：.)\]]\s*([\s\S]+)/i);
+    if (m) {
+      const sp = m[1].toUpperCase();
+      const text = m[2].trim();
+      const fmt = /[\u0600-\u06FF]/.test(text) ? 'arabic' : 'normal';
+      result.push({ type: 'line', speaker: sp==='B'?'B':sp==='C'?'C':'A', text, fmt });
+      return;
+    }
+    // no prefix — alternate
+    const last = result.filter(x => x.type === 'line').slice(-1)[0];
+    const sp = (!last || last.speaker === 'B') ? 'A' : 'B';
+    result.push({ type: 'line', speaker: sp, text: line, fmt: 'normal' });
   });
-
   return result;
 }
 
-/* ═══════════════════ DRAFT ═══════════════════ */
-function saveDraft() {
-  localStorage.setItem(DRAFT_KEY, JSON.stringify({ dialogue, opts, idCounter }));
+/* ════════════════════════════════════════════
+   DRAFT / STORAGE
+════════════════════════════════════════════ */
+function saveToStorage() {
+  saveSilent();
+  const el = document.getElementById('draftSaved');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2200);
   showToast('Draft saved!');
 }
-function saveDraftSilent() {
-  try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ dialogue, opts, idCounter })); } catch(e){}
+function saveSilent() {
+  try { localStorage.setItem(DKEY, JSON.stringify({ D, opts, uid, activeSpeaker, activeFmt })); } catch(e) {}
 }
-function loadDraftSilent() {
-  try {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if (!raw) return;
-    const saved = JSON.parse(raw);
-    if (saved.dialogue && Array.isArray(saved.dialogue)) {
-      dialogue = saved.dialogue;
-      opts = saved.opts || opts;
-      idCounter = saved.idCounter || dialogue.length;
-      // restore opt toggles
-      Object.keys(opts).forEach(k => {
-        document.getElementById('opt-' + k)?.classList.toggle('on', opts[k]);
-      });
-    }
-  } catch(e) {}
-}
-
-/* ═══════════════════ CLEAR ═══════════════════ */
-function clearAll() {
-  if (dialogue.length === 0) return;
-  if (!confirm('Clear all dialogue? This cannot be undone.')) return;
-  dialogue = [];
-  activeSpeaker = null;
-  document.querySelectorAll('.spk-btn').forEach(b => b.className = 'spk-btn');
-  document.getElementById('activeSpeakerHint').textContent = 'Select a speaker above';
-  document.getElementById('composeTa').value = '';
-  document.getElementById('charCount').textContent = '0';
-  updateAddBtn();
-  document.getElementById('codePanel').classList.remove('open');
-  localStorage.removeItem(DRAFT_KEY);
-  render();
-  refreshPreview();
+function loadDraft() {
+  const s = window._savedDraft;
+  if (!s) return;
+  D = s.D || [];
+  opts = s.opts || opts;
+  uid = s.uid || D.length;
+  if (s.activeSpeaker) setSpeaker(s.activeSpeaker);
+  if (s.activeFmt) setFmt(s.activeFmt);
+  Object.keys(opts).forEach(k => {
+    document.getElementById('opt-' + k)?.classList.toggle('on', opts[k]);
+  });
+  document.getElementById('draftNoticeWrap').innerHTML = '';
+  goToEditor();
+  renderList(); refreshPreview();
+  showToast('Draft restored!');
 }
 
-/* ═══════════════════ THEME ═══════════════════ */
-function toggleTheme() {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-  document.getElementById('theme-icon-moon').style.display = isDark ? 'none' : '';
-  document.getElementById('theme-icon-sun').style.display = isDark ? '' : 'none';
-}
-
-/* ═══════════════════ MOBILE TABS ═══════════════════ */
-function switchMobTab(tab) {
-  document.getElementById('tab-compose').classList.toggle('active', tab === 'compose');
-  document.getElementById('tab-preview').classList.toggle('active', tab === 'preview');
-  const left = document.getElementById('panel-left-mob');
-  const right = document.getElementById('panel-right-mob');
-  if (tab === 'compose') {
-    left.classList.remove('hidden');
-    right.classList.remove('active');
-  } else {
-    left.classList.add('hidden');
-    right.classList.add('active');
-    refreshPreview();
-  }
-}
-
-/* ═══════════════════ TOAST ═══════════════════ */
+/* ════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════ */
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  const t = document.getElementById('globalToast');
   document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
-}
-
-/* ═══════════════════ UTILS ═══════════════════ */
-function esc(s) {
-  return String(s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;');
-}
-function escapeForCode(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  setTimeout(() => t.classList.remove('show'), 2300);
 }
 </script>
 </body>
