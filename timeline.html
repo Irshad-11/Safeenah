@@ -426,7 +426,7 @@ body {
 
 // Points to the data folder; tracks explicitly where your event files reside
 const DATA_BASE_DIR = '../data/events/';
-const EVENT_FILES = ['test.json'];
+const EVENT_FILES = ['test.json', 'রাসূলের ﷺ বংশধরত্বে হাজ্জাজের অস্বীকার.json', 'মিম্বার থেকে আলী-কে গালিগালাজের প্রথা.json'];
 
 /* ── Parse a year string to a sortable integer ── */
 function parseYear(str) {
@@ -446,7 +446,7 @@ function normalisePayload(data) {
     .map(e => ({
       slug:        e.slug || e.id || slugify(e.title || ''),
       title:       e.title || e.name || 'Untitled',
-      year:        e.year  || e.date || '',
+      year:        e.yearNumeric  || e.date || '',
       yearNumeric: e.yearNumeric != null ? e.yearNumeric : parseYear(e.year || e.date || '0'),
       thumb:       e.thumb || e.image || e.thumbnail || '',
       summary:     e.summary || e.description || e.excerpt || '',
