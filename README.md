@@ -50,23 +50,139 @@ That is the entire reason Safeenah exists.
 ## Instruction for Contributor
 
 This project is open for contributions. If you have information, references, or content that you think should be included, please feel free to submit a pull request. Here are some guidelines:
+
 1. **Accuracy**: Please ensure that any information you contribute is accurate and well-referenced. Include sources for any claims or events you add.
+
 2. **Neutrality**: The content should be presented in a neutral and objective manner. Avoid any language that could be seen as biased or inflammatory.
+
 3. **Format**: You can Create a new JSON file following this link [JSON GENERATOR](https://irshad-11.github.io/Safeenah/generatejson.html) - Download the generated JSON file and add it to the appropriate folder in the repository (e.g., `events`, `hadiths`, etc.).
-4. **Add to the Folder Explorer**: Since this is frontend only project, you will need to update the array with this new JSON file name in particular file . 
+
+4. **Add to the Folder Explorer**: Since this is a frontend-only project, all pages are driven by arrays that tell the website which JSON files exist. To make this process easier, the repository includes an automatic synchronization script (`update.js`) that scans the folders and updates all necessary pages for you.
+
    If you add new Event, then follow this process:
-    - Open `data/events/`
-    - Place the new JSON file in this folder.
-    - Open `timeline.html` and find this line `const EVENT_FILES = [...];` , add the name of your new JSON file to this array.
-    - Open `event/index.html` and find this line `const EVENT_FILES = [...];` , add the name of your new JSON file to this array.
-  
-  If you add new Hadith, then follow this process:
-    - Open `data/hadith/`
-    - Place the new JSON file in this folder.
-    - Open `hadiths.html` and find this line `const HADITH_FILES = [...];` , add the name of your new JSON file to this array.
-    - Open `hadith/index.html` and find this line `const HADITH_FILES = [...];` , add the name of your new JSON file to this array.
-5. **Testing**: After adding your content, please test it locally to ensure that it displays correctly and that all links and references work as intended.
-6. **Pull Request**: When you are ready, submit a pull request with a clear description of the changes you made and the content you added. The maintainers will review your contribution and may provide feedback or request changes before merging it into the main branch.
+
+   * Open `data/events/`
+   * Place the new JSON file in this folder.
+   * Run:
+
+   ```bash
+   node update.js
+   ```
+
+   This command will automatically:
+
+   * Scan `data/events/`
+   * Update `timeline.html`
+   * Update `event/index.html`
+   * Update `home.html`
+   * Add the new filename to every required `EVENT_FILES` array
+
+   No manual editing is necessary.
+
+   If you add new Hadith, then follow this process:
+
+   * Open `data/hadith/`
+   * Place the new JSON file in this folder.
+   * Run:
+
+   ```bash
+   node update.js
+   ```
+
+   This command will automatically:
+
+   * Scan `data/hadith/`
+   * Update `hadith.html`
+   * Update `hadith/index.html`
+   * Update `home.html`
+   * Add the new filename to every required `HADITH_FILES` array
+
+   No manual editing is necessary.
+
+5. **Synchronization Tool**
+
+   The project contains an automatic content synchronization script:
+
+   ```text
+   update.js
+   ```
+
+   Its purpose is to keep every page synchronized with the contents of the data folders.
+
+   It scans:
+
+   * `data/events/`
+   * `data/hadith/`
+
+   and automatically updates:
+
+   * `timeline.html`
+   * `event/index.html`
+   * `hadith.html`
+   * `hadith/index.html`
+   * `home.html`
+
+   The script only replaces the `EVENT_FILES` and `HADITH_FILES` arrays and leaves the rest of the files untouched.
+
+6. **Synchronization Cache**
+
+   The repository also contains:
+
+   ```text
+   .sync-cache.json
+   ```
+
+   This file stores information from the previous synchronization.
+
+   Its purpose is to:
+
+   * Detect newly added files.
+   * Produce user-friendly reports.
+   * Show which files were added since the previous run.
+   * Provide summary information after synchronization.
+
+   Contributors normally do not need to edit this file manually.
+
+7. **Console Report**
+
+   After running:
+
+   ```bash
+   node update.js
+   ```
+
+   the script prints a detailed report showing:
+
+   * Number of Event files found.
+   * Number of Hadith files found.
+   * Newly added files.
+   * Which HTML files were updated.
+   * Whether any update failed.
+   * A summary of the synchronization.
+
+   Example:
+
+   ```text
+   EVENTS
+   Source Folder : data/events
+   Files Found   : 5
+   New Files     : 1
+
+   Added Files
+     + new-event.json
+
+   Updated Files
+     ✓ timeline.html
+     ✓ event/index.html
+     ✓ home.html
+   ```
+
+   Any errors are reported clearly so contributors can quickly identify missing files or incorrect configurations.
+
+8. **Testing**: After adding your content, please test it locally to ensure that it displays correctly and that all links and references work as intended. Running `node update.js` before testing is recommended so that all pages remain synchronized.
+
+9. **Pull Request**: When you are ready, submit a pull request with a clear description of the changes you made and the content you added. The maintainers will review your contribution and may provide feedback or request changes before merging it into the main branch.
+
 
 
 ## What You Will Find Here

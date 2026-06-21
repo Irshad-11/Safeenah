@@ -721,8 +721,17 @@ document.addEventListener('keydown', e => { if (e.key==='Escape') { closeMob(); 
 /* ══════════════════════════════════════════
    DATA — ALL FILES
 ══════════════════════════════════════════ */
-const HADITH_FILES = ['data/hadith/index.json','data/hadith/extrasample.json'];
-const EVENT_FILES  = ['data/events/index.json','data/events/more.json','data/events/more10.json'];
+const HADITH_FILES = [
+    'data/hadith/hadith-ali-ibn-abi-talib-surah-maryam-96.json',
+    'data/hadith/prophet-last-illness-medicine-ledud.json',
+    'data/hadith/shane-nuzul-surah-yunus-35-ali-judgment.json'
+];
+const EVENT_FILES = [
+    'data/events/hujor-ibn-ali-o-sathi-der-hotta-kando.json',
+    'data/events/imam-husayn-ah-long-speech.json',
+    'data/events/mimbar_theke_ali_ke_gali_protha.json',
+    'data/events/rasuler_bongshodhor_hajjajer_oswikar.json'
+];
 
 let allHadith = [], allEvents = [], allItems = [];
 let fuseAll, fuseHadith, fuseEvents;
