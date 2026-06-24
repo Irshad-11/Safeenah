@@ -14,7 +14,7 @@
 
 <style>
 /* ══════════════════════════════════════════
-   TOKENS
+   DESIGN TOKENS
 ══════════════════════════════════════════ */
 :root {
   --f-head:  'Libre Baskerville', Georgia, serif;
@@ -23,48 +23,54 @@
   --f-bn:    'Hind Siliguri', sans-serif;
 }
 [data-theme="dark"] {
-  --bg:       #0c0a08;
-  --surface:  #181410;
-  --surface2: #1f1b13;
-  --surface3: #252018;
-  --border:   rgba(180,140,60,0.15);
-  --border2:  rgba(180,140,60,0.08);
-  --gold:     #c49a30;
-  --gold-lt:  #e0b84a;
-  --gold-dk:  #8a6518;
-  --gold-dim: rgba(196,154,48,0.09);
-  --ink:      #ede0c8;
-  --ink-2:    #cdbf9f;
-  --ink-3:    #8a7a5f;
-  --ink-4:    #4e4232;
-  --nav-bg:   rgba(5,4,2,0.97);
-  --card-sh:  0 4px 24px rgba(0,0,0,0.55);
-  --tag-bg:   rgba(196,154,48,0.08);
-  --sem-glow: rgba(120,200,255,0.12);
-  --sem-col:  #7bc8ff;
-  --sem-dk:   #4a9fd4;
+  --bg:        #0c0a08;
+  --surface:   #181410;
+  --surface2:  #1f1b13;
+  --surface3:  #252018;
+  --border:    rgba(180,140,60,0.15);
+  --border2:   rgba(180,140,60,0.08);
+  --gold:      #c49a30;
+  --gold-lt:   #e0b84a;
+  --gold-dk:   #8a6518;
+  --gold-dim:  rgba(196,154,48,0.09);
+  --ink:       #ede0c8;
+  --ink-2:     #cdbf9f;
+  --ink-3:     #8a7a5f;
+  --ink-4:     #4e4232;
+  --nav-bg:    rgba(5,4,2,0.97);
+  --card-sh:   0 4px 24px rgba(0,0,0,0.55);
+  --tag-bg:    rgba(196,154,48,0.08);
+  --sem-glow:  rgba(100,180,255,0.10);
+  --sem-col:   #7bc8ff;
+  --sem-dk:    #4a9fd4;
+  --sem-border:rgba(100,180,255,0.22);
+  --hi-basic:  rgba(196,154,48,0.28);
+  --hi-sem:    rgba(100,180,255,0.22);
 }
 [data-theme="light"] {
-  --bg:       #f4ead0;
-  --surface:  #fdf6e6;
-  --surface2: #f5e8ca;
-  --surface3: #edddba;
-  --border:   rgba(140,100,30,0.18);
-  --border2:  rgba(140,100,30,0.1);
-  --gold:     #9a6e10;
-  --gold-lt:  #b88820;
-  --gold-dk:  #7a5208;
-  --gold-dim: rgba(140,100,20,0.08);
-  --ink:      #1a1006;
-  --ink-2:    #2e1e08;
-  --ink-3:    #5a3e18;
-  --ink-4:    #9a7a48;
-  --nav-bg:   rgba(244,234,208,0.97);
-  --card-sh:  0 4px 18px rgba(140,100,20,0.1);
-  --tag-bg:   rgba(140,100,20,0.07);
-  --sem-glow: rgba(30,120,210,0.1);
-  --sem-col:  #1a6fa8;
-  --sem-dk:   #155a8a;
+  --bg:        #f4ead0;
+  --surface:   #fdf6e6;
+  --surface2:  #f5e8ca;
+  --surface3:  #edddba;
+  --border:    rgba(140,100,30,0.18);
+  --border2:   rgba(140,100,30,0.1);
+  --gold:      #9a6e10;
+  --gold-lt:   #b88820;
+  --gold-dk:   #7a5208;
+  --gold-dim:  rgba(140,100,20,0.08);
+  --ink:       #1a1006;
+  --ink-2:     #2e1e08;
+  --ink-3:     #5a3e18;
+  --ink-4:     #9a7a48;
+  --nav-bg:    rgba(244,234,208,0.97);
+  --card-sh:   0 4px 18px rgba(140,100,20,0.1);
+  --tag-bg:    rgba(140,100,20,0.07);
+  --sem-glow:  rgba(20,100,200,0.07);
+  --sem-col:   #1a6fa8;
+  --sem-dk:    #155a8a;
+  --sem-border:rgba(20,100,200,0.18);
+  --hi-basic:  rgba(200,140,20,0.22);
+  --hi-sem:    rgba(20,100,200,0.15);
 }
 
 /* BASE */
@@ -86,7 +92,7 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--gold-dk); border-radius: 3px; }
 
-/* NAVBAR */
+/* ══ NAVBAR ══ */
 .navbar {
   position: fixed; top:0; left:0; right:0; z-index:900;
   background: var(--nav-bg); backdrop-filter: blur(20px);
@@ -109,7 +115,7 @@ body {
 #mob .nav-a:hover, #mob .nav-a.active { color:var(--gold); }
 @media(max-width:640px) { #ham { display:block; } .nav-links { display:none; } }
 
-/* PAGE HEADER */
+/* ══ PAGE HEADER ══ */
 .page-head { padding:5.5rem 1.5rem 1.5rem; text-align:center; position:relative; z-index:2; }
 .page-head h1 { font-family:var(--f-head); font-size:clamp(1.5rem,4vw,2.4rem); font-weight:700; color:var(--ink); letter-spacing:0.01em; line-height:1.15; }
 .head-rule { display:flex; align-items:center; justify-content:center; gap:0.8rem; margin:0.6rem auto 0; max-width:380px; }
@@ -117,153 +123,78 @@ body {
 .head-rule::after  { content:''; flex:1; height:1px; background:linear-gradient(to left,transparent,var(--gold-dk)); }
 .head-rule span { font-family:var(--f-label); font-size:0.9rem; letter-spacing:0.02em; color:var(--gold-dk); text-transform:uppercase; }
 
-/* ══════════════════════════════════════════
-   SEARCH MODE TOGGLE
-══════════════════════════════════════════ */
+/* ══ SEARCH MODE TOGGLE ══ */
 .search-mode-wrap {
   max-width: 820px; margin: 0 auto 0.85rem;
   padding: 0 1.5rem;
-  display: flex; align-items: center; gap: 0.5rem;
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
 }
-.mode-label {
-  font-family: var(--f-label); font-size: 0.58rem;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--ink-4); flex-shrink: 0;
-}
-.mode-pills {
-  display: flex; background: var(--surface2);
-  border: 1px solid var(--border); border-radius: 50px;
-  padding: 3px; gap: 2px; position: relative;
-}
-.mode-pill {
-  position: relative; z-index: 1;
-  font-family: var(--f-label); font-size: 0.56rem;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 0.3rem 0.85rem; border-radius: 50px;
-  border: none; background: none; cursor: pointer;
-  color: var(--ink-3); transition: color 0.2s;
-  display: flex; align-items: center; gap: 0.3rem;
-  white-space: nowrap;
-}
+.mode-label { font-family: var(--f-label); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-4); flex-shrink: 0; }
+.mode-pills { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 3px; gap: 2px; position: relative; }
+.mode-pill { position: relative; z-index: 1; font-family: var(--f-label); font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3rem 0.85rem; border-radius: 50px; border: none; background: none; cursor: pointer; color: var(--ink-3); transition: color 0.2s; display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
 .mode-pill.active { color: var(--ink); }
-.mode-pill-bg {
-  position: absolute; top: 3px; bottom: 3px;
-  border-radius: 50px; transition: all 0.3s cubic-bezier(.4,0,.2,1);
-  pointer-events: none;
-}
+.mode-pill-bg { position: absolute; top: 3px; bottom: 3px; border-radius: 50px; transition: all 0.3s cubic-bezier(.4,0,.2,1); pointer-events: none; }
 .mode-pill-bg.basic    { background: var(--gold-dim); border: 1px solid var(--border); }
-.mode-pill-bg.semantic { background: var(--sem-glow); border: 1px solid rgba(120,200,255,0.2); }
-.sem-badge {
-  display: inline-block; background: var(--sem-glow);
-  border: 1px solid rgba(120,200,255,0.25);
-  color: var(--sem-col); font-size: 0.44rem;
-  padding: 0.05rem 0.35rem; border-radius: 50px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  font-family: var(--f-label);
-}
-[data-theme="light"] .sem-badge { background: rgba(30,120,210,0.08); border-color: rgba(30,120,210,0.2); }
+.mode-pill-bg.semantic { background: var(--sem-glow); border: 1px solid var(--sem-border); }
+.sem-badge { display: inline-block; background: var(--sem-glow); border: 1px solid var(--sem-border); color: var(--sem-col); font-size: 0.52rem; padding: 0.05rem 0.35rem; border-radius: 50px; letter-spacing: 0.1em; text-transform: uppercase; font-family: var(--f-label); }
 
-/* ══════════════════════════════════════════
-   SEARCH BAR
-══════════════════════════════════════════ */
+/* ══ SEMANTIC INFO PANEL ══ */
+.sem-info-panel {
+  max-width: 820px; margin: 0 auto 0.9rem; padding: 0 1.5rem;
+  display: none; opacity: 0; transition: opacity 0.25s;
+}
+.sem-info-panel.show { display: block; }
+.sem-info-panel.visible { opacity: 1; }
+.sem-info-inner {
+  background: var(--sem-glow); border: 1px solid var(--sem-border);
+  border-radius: 3px; padding: 0.8rem 1.1rem;
+  display: grid; grid-template-columns: auto 1fr; gap: 0.6rem 0.9rem; align-items: start;
+}
+.sem-info-icon { color: var(--sem-col); opacity: 0.8; margin-top: 2px; }
+.sem-info-text { font-family: var(--f-bn); font-size: 0.78rem; color: var(--ink-3); line-height: 1.55; }
+.sem-info-text strong { color: var(--sem-col); font-weight: 600; }
+.sem-info-text .model-name { font-size: 0.7rem; color: var(--ink-4); margin-top: 0.2rem; display: block; }
+
+/* ══ SEARCH BAR ══ */
 .search-wrap { max-width:820px; margin:0 auto 0.75rem; padding:0 1.5rem; position:relative; z-index:10; }
-.search-box {
-  display:flex; align-items:center; gap:0;
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:3px; overflow:hidden; box-shadow:var(--card-sh);
-  transition:border-color 0.2s, box-shadow 0.2s;
-}
-.search-box.semantic-mode {
-  border-color: rgba(120,200,255,0.2);
-}
-.search-box.semantic-mode:focus-within {
-  border-color: var(--sem-dk);
-  box-shadow: 0 0 0 3px rgba(120,200,255,0.1), var(--card-sh);
-}
-.search-box:focus-within {
-  border-color:var(--gold-dk);
-  box-shadow:0 0 0 3px rgba(196,154,48,0.12), var(--card-sh);
-}
-.search-icon { padding:0 0.75rem 0 1rem; color:var(--gold-dk); flex-shrink:0; }
+.search-box { display:flex; align-items:center; gap:0; background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; box-shadow:var(--card-sh); transition:border-color 0.2s, box-shadow 0.2s; }
+.search-box.semantic-mode { border-color: var(--sem-border); }
+.search-box.semantic-mode:focus-within { border-color: var(--sem-dk); box-shadow: 0 0 0 3px rgba(100,180,255,0.1), var(--card-sh); }
+.search-box:focus-within { border-color:var(--gold-dk); box-shadow:0 0 0 3px rgba(196,154,48,0.12), var(--card-sh); }
+.search-icon { padding:0 0.75rem 0 1rem; color:var(--gold-dk); flex-shrink:0; transition: color 0.2s; }
 .search-box.semantic-mode .search-icon { color: var(--sem-dk); }
-.search-inp {
-  flex:1; background:none; border:none; outline:none;
-  font-family:var(--f-bn); font-size:0.95rem; color:var(--ink);
-  padding:0.72rem 0; line-height:1;
-}
+.search-inp { flex:1; background:none; border:none; outline:none; font-family:var(--f-bn); font-size:0.95rem; color:var(--ink); padding:0.72rem 0; line-height:1; min-width:0; }
 .search-inp::placeholder { color:var(--ink-4); font-style:italic; font-family: var(--f-bn); }
 .search-clear { padding:0 0.7rem; background:none; border:none; cursor:pointer; color:var(--ink-3); transition:color 0.2s; display:none; flex-shrink:0; align-items:center; }
 .search-clear.show { display:flex; }
 .search-clear:hover { color:var(--gold); }
-.search-btn {
-  padding:0 1.1rem; background:var(--gold-dim); border:none;
-  border-left:1px solid var(--border); cursor:pointer;
-  font-family:var(--f-label); font-size:0.5rem; letter-spacing:0.1em;
-  text-transform:uppercase; color:var(--gold-dk);
-  transition:all 0.2s; height:100%; min-height:44px; white-space:nowrap;
-  display:flex; align-items:center; gap:0.3rem;
-}
+.search-btn { padding:0 1.1rem; background:var(--gold-dim); border:none; border-left:1px solid var(--border); cursor:pointer; font-family:var(--f-label); font-size:0.5rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-dk); transition:all 0.2s; height:100%; min-height:44px; white-space:nowrap; display:flex; align-items:center; gap:0.3rem; }
 @media(min-width:768px) { .search-btn { font-size:0.8rem; } }
 .search-btn:hover { background:rgba(196,154,48,0.18); color:var(--gold); }
-.search-btn.semantic-btn { background: var(--sem-glow); border-left-color: rgba(120,200,255,0.2); color: var(--sem-dk); }
-.search-btn.semantic-btn:hover { background: rgba(120,200,255,0.18); color: var(--sem-col); }
+.search-btn.semantic-btn { background: var(--sem-glow); border-left-color: var(--sem-border); color: var(--sem-dk); }
+.search-btn.semantic-btn:hover { background: rgba(100,180,255,0.18); color: var(--sem-col); }
 
-/* Search hint */
-.search-hint {
-  max-width:820px; margin:0 auto 1rem; padding:0 1.5rem;
-  font-family:var(--f-bn); font-size:0.8rem;
-  color:var(--ink-3); display:none; align-items:center; gap:0.5rem; flex-wrap: wrap;
-}
+/* ══ SEARCH HINT ══ */
+.search-hint { max-width:820px; margin:0 auto 1rem; padding:0 1.5rem; font-family:var(--f-bn); font-size:0.8rem; color:var(--ink-3); display:none; align-items:center; gap:0.5rem; flex-wrap:wrap; }
 .search-hint.show { display: flex; }
 
-/* Semantic description tooltip */
-.sem-desc {
-  max-width: 820px; margin: 0 auto 1rem; padding: 0 1.5rem;
-  display: none;
-}
-.sem-desc.show { display: block; }
-.sem-desc-inner {
-  background: var(--sem-glow); border: 1px solid rgba(120,200,255,0.15);
-  border-radius: 3px; padding: 0.6rem 1rem;
-  font-family: var(--f-bn); font-size: 0.8rem; color: var(--ink-3);
-  line-height: 1.5;
-}
-[data-theme="light"] .sem-desc-inner { background: rgba(30,120,210,0.05); border-color: rgba(30,120,210,0.12); }
-.sem-desc-inner strong { color: var(--sem-col); font-weight: 500; }
+/* ══ NO-VECTORS WARNING ══ */
+.no-vec-warn { max-width: 820px; margin: 0 auto 1rem; padding: 0 1.5rem; display: none; }
+.no-vec-warn.show { display: block; }
+.no-vec-inner { background: rgba(200,120,30,0.08); border: 1px solid rgba(200,120,30,0.2); border-radius: 3px; padding: 0.7rem 1rem; font-family: var(--f-bn); font-size: 0.8rem; color: var(--ink-3); line-height: 1.6; }
+.no-vec-inner code { font-family: monospace; color: var(--gold-dk); font-size: 0.85em; }
 
-/* ══════════════════════════════════════════
-   SEMANTIC PROGRESS
-══════════════════════════════════════════ */
-.sem-progress-wrap {
-  display: none; max-width: 820px; margin: 0 auto 1.25rem; padding: 0 1.5rem;
-}
+/* ══ SEMANTIC PROGRESS ══ */
+.sem-progress-wrap { display: none; max-width: 820px; margin: 0 auto 1.25rem; padding: 0 1.5rem; }
 .sem-progress-wrap.show { display: block; }
-.sem-progress-bar-bg {
-  height: 3px; background: var(--surface3); border-radius: 2px; overflow: hidden; margin-bottom: 0.5rem;
-}
-.sem-progress-bar {
-  height: 100%; width: 0%;
-  background: linear-gradient(to right, var(--sem-dk), var(--sem-col));
-  border-radius: 2px; transition: width 0.2s ease;
-}
-.sem-progress-msg {
-  font-family: var(--f-bn); font-size: 0.75rem; color: var(--ink-3);
-  display: flex; align-items: center; gap: 0.5rem;
-}
-.sem-spinner {
-  width: 14px; height: 14px; border-radius: 50%;
-  border: 1.5px solid rgba(120,200,255,0.2);
-  border-top-color: var(--sem-col);
-  animation: spin 0.8s linear infinite; flex-shrink: 0;
-}
+.sem-progress-bar-bg { height: 3px; background: var(--surface3); border-radius: 2px; overflow: hidden; margin-bottom: 0.55rem; }
+.sem-progress-bar { height: 100%; width: 0%; background: linear-gradient(to right, var(--sem-dk), var(--sem-col)); border-radius: 2px; transition: width 0.15s ease; }
+.sem-progress-msg { font-family: var(--f-bn); font-size: 0.75rem; color: var(--ink-3); display: flex; align-items: center; gap: 0.5rem; }
+.sem-spinner { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid rgba(100,180,255,0.2); border-top-color: var(--sem-col); animation: spin 0.8s linear infinite; flex-shrink: 0; }
+.sem-stage { font-family: var(--f-label); font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sem-dk); padding: 0.12rem 0.5rem; border: 1px solid var(--sem-border); border-radius: 50px; background: var(--sem-glow); }
 
-/* ══════════════════════════════════════════
-   STATS BAR
-══════════════════════════════════════════ */
-.stats-bar {
-  max-width:1200px; margin:0 auto 1.25rem; padding:0 1.5rem;
-  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;
-}
+/* ══ STATS BAR ══ */
+.stats-bar { max-width:1200px; margin:0 auto 1.25rem; padding:0 1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; }
 .stats-label { font-family:var(--f-label); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-3); }
 .stats-count { color:var(--gold); }
 .view-toggle-wrap { display: flex; gap: 0.4rem; }
@@ -271,26 +202,15 @@ body {
 .view-btn.active { border-color:var(--gold-dk); color:var(--gold-dk); background:var(--gold-dim); }
 .view-btn:hover { border-color:var(--gold-dk); color:var(--gold-dk); }
 
-/* ══════════════════════════════════════════
-   HADITH GRID (card view)
-══════════════════════════════════════════ */
-.hadith-grid {
-  max-width:1200px; margin:0 auto; padding:0 1.5rem 4rem;
-  display:grid; grid-template-columns:repeat(5,1fr); gap:1rem;
-}
+/* ══ HADITH GRID ══ */
+.hadith-grid { max-width:1200px; margin:0 auto; padding:0 1.5rem 4rem; display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; }
 @media(max-width:1100px) { .hadith-grid { grid-template-columns:repeat(4,1fr); } }
 @media(max-width:860px)  { .hadith-grid { grid-template-columns:repeat(3,1fr); } }
 @media(max-width:560px)  { .hadith-grid { grid-template-columns:repeat(2,1fr); gap:0.65rem; padding:0 1rem 3rem; } }
 @media(max-width:360px)  { .hadith-grid { grid-template-columns:1fr; } }
 
 /* HADITH CARD */
-.h-card {
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:3px; overflow:hidden; display:flex; flex-direction:column;
-  text-decoration:none; color:inherit; cursor:pointer; box-shadow:var(--card-sh);
-  transition:transform 0.25s cubic-bezier(.34,1.56,.64,1), border-color 0.25s, box-shadow 0.25s;
-  opacity:0; transform:translateY(14px); animation:cardIn 0.4s ease forwards;
-}
+.h-card { background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; display:flex; flex-direction:column; text-decoration:none; color:inherit; cursor:pointer; box-shadow:var(--card-sh); transition:transform 0.25s cubic-bezier(.34,1.56,.64,1), border-color 0.25s, box-shadow 0.25s; opacity:0; transform:translateY(14px); animation:cardIn 0.4s ease forwards; }
 @keyframes cardIn { to { opacity:1; transform:translateY(0); } }
 .h-card:hover { transform:translateY(-4px); border-color:var(--gold-dk); box-shadow:0 10px 36px rgba(0,0,0,0.5); }
 .h-cover-wrap { width:100%; aspect-ratio:1/1; overflow:hidden; position:relative; background:var(--surface2); flex-shrink:0; }
@@ -302,82 +222,57 @@ body {
 .h-body { padding:0.7rem 0.75rem 0.85rem; display:flex; flex-direction:column; gap:0.3rem; flex:1; }
 .h-title { font-family:var(--f-bn); font-size:0.78rem; font-weight:600; color:var(--ink); line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .h-card:hover .h-title { color:var(--gold); }
-.h-book { font-family:var(--f-label); font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-dk); line-height:1.2; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+.h-book { font-family:var(--f-label); font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-dk); line-height:1.2; }
 .h-detail { font-family:var(--f-bn); font-size:0.7rem; color:var(--ink-3); line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .h-footer { margin-top:auto; padding-top:0.5rem; border-top:1px solid var(--border2); display:flex; align-items:center; justify-content:space-between; }
 .h-year { font-family:var(--f-label); font-size:0.44rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-4); }
 .h-arrow { color:var(--gold-dk); transition:transform 0.2s; display:flex; align-items:center; }
 .h-card:hover .h-arrow { transform:translateX(3px); color:var(--gold); }
+/* Score badge on grid card (semantic) */
+.score-badge { position: absolute; top: 0.45rem; left: 0.45rem; font-family: var(--f-label); font-size: 0.62rem; padding: 0.18rem 0.5rem; border-radius: 50px; background: var(--bg); border: 1px solid var(--sem-border); color: var(--ink); backdrop-filter: blur(4px); white-space: nowrap; }
 
-/* score badge on card (semantic mode) */
-.score-badge {
-  position: absolute; top: 0.45rem; left: 0.45rem;
-  font-family: var(--f-label); font-size: 0.42rem; letter-spacing: 0.1em;
-  padding: 0.15rem 0.5rem; border-radius: 50px;
-  background: rgba(10,8,4,0.82); border: 1px solid rgba(120,200,255,0.3);
-  color: var(--sem-col); backdrop-filter: blur(4px); display: none;
-}
-
-/* ══════════════════════════════════════════
-   SEARCH RESULT LIST VIEW
-══════════════════════════════════════════ */
-.result-list {
-  max-width: 860px; margin: 0 auto; padding: 0 1.5rem 4rem;
-  display: flex; flex-direction: column; gap: 0.75rem;
-}
-.r-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 3px; display: flex; gap: 0; overflow: hidden;
-  text-decoration: none; color: inherit;
-  box-shadow: var(--card-sh);
-  transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
-  opacity: 0; transform: translateY(8px);
-  animation: cardIn 0.35s ease forwards;
-}
+/* ══ RESULT LIST ══ */
+.result-list { max-width: 860px; margin: 0 auto; padding: 0 1.5rem 4rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.r-card { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; display: flex; gap: 0; overflow: hidden; text-decoration: none; color: inherit; box-shadow: var(--card-sh); transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s; opacity: 0; transform: translateY(8px); animation: cardIn 0.35s ease forwards; }
 .r-card:hover { border-color: var(--gold-dk); box-shadow: 0 6px 28px rgba(0,0,0,0.45); transform: translateY(-2px); }
-.r-card.semantic-result { border-color: rgba(120,200,255,0.15); }
-.r-card.semantic-result:hover { border-color: var(--sem-dk); box-shadow: 0 6px 28px rgba(120,200,255,0.1); }
+.r-card.semantic-result { border-color: rgba(100,180,255,0.12); }
+.r-card.semantic-result:hover { border-color: var(--sem-dk); box-shadow: 0 6px 28px rgba(100,180,255,0.1); }
 .r-thumb { width: 80px; min-width: 80px; overflow: hidden; background: var(--surface2); flex-shrink: 0; }
 .r-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media(max-width:480px) { .r-thumb { width: 64px; min-width: 64px; } }
 .r-body { padding: 0.75rem 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
 .r-meta { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .r-book { font-family: var(--f-label); font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dk); }
-.r-score-pill {
-  font-family: var(--f-label); font-size: 0.46rem; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 0.1rem 0.45rem; border-radius: 50px;
-  background: var(--sem-glow); border: 1px solid rgba(120,200,255,0.2);
-  color: var(--sem-col); display: none;
-}
+.r-score-pill { font-family: var(--f-label); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.1rem 0.5rem; border-radius: 50px; background: var(--sem-glow); border: 1px solid var(--sem-border); color: var(--sem-col); display: none; }
 .r-score-pill.show { display: inline-block; }
+.r-match-type { font-family: var(--f-label); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.1rem 0.45rem; border-radius: 50px; border: 1px solid var(--border); color: var(--ink-4); background: var(--gold-dim); display: none; }
+.r-match-type.show { display: inline-block; }
 .r-title { font-family: var(--f-bn); font-size: 0.9rem; font-weight: 600; color: var(--ink); line-height: 1.4; }
 .r-card:hover .r-title { color: var(--gold); }
-.r-snippet { font-family: var(--f-bn); font-size: 0.8rem; color: var(--ink-3); line-height: 1.6; }
-.r-snippet-label { font-family: var(--f-label); font-size: 0.44rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); margin-top: 0.15rem; }
-.r-footer { margin-top: auto; padding-top: 0.4rem; display: flex; align-items: center; justify-content: space-between; }
+
+/* ── MATCHED SEGMENTS PANEL ── */
+.r-segments { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.15rem; }
+.r-seg {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 2px; padding: 0.5rem 0.7rem;
+  font-family: var(--f-bn); font-size: 0.79rem; color: var(--ink-3); line-height: 1.65;
+}
+.r-seg.sem-seg { border-color: var(--sem-border); background: var(--sem-glow); }
+.r-seg-label { font-family: var(--f-label); font-size: 0.42rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-4); margin-bottom: 0.25rem; display: block; }
+.r-seg.sem-seg .r-seg-label { color: var(--sem-dk); }
+
+.r-footer { margin-top: 0.3rem; display: flex; align-items: center; justify-content: space-between; }
 .r-tags { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 .r-tag { font-family: var(--f-bn); font-size: 0.65rem; color: var(--ink-4); background: var(--tag-bg); border: 1px solid var(--border2); border-radius: 50px; padding: 0.08rem 0.45rem; }
 .r-arrow { color: var(--gold-dk); display: flex; align-items: center; transition: transform 0.2s; }
 .r-card:hover .r-arrow { transform: translateX(3px); color: var(--gold); }
 
-/* ══════════════════════════════════════════
-   HIGHLIGHT
-══════════════════════════════════════════ */
-mark {
-  background: rgba(196,154,48,0.25); color: var(--gold);
-  border-radius: 1px; padding: 0 1px;
-}
-mark.sem-mark {
-  background: rgba(120,200,255,0.18); color: var(--sem-col);
-}
+/* ══ HIGHLIGHT ══ */
+mark { background: var(--hi-basic); color: var(--gold); border-radius: 1px; padding: 0 2px; font-weight: 600; }
+mark.sem-mark { background: var(--hi-sem); color: var(--sem-col); }
 
-/* ══════════════════════════════════════════
-   EMPTY / LOADING
-══════════════════════════════════════════ */
-.state-load, .state-empty {
-  grid-column:1/-1; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; padding:4rem 1rem; gap:1rem; text-align:center;
-}
+/* ══ EMPTY / LOADING ══ */
+.state-load, .state-empty { grid-column:1/-1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4rem 1rem; gap:1rem; text-align:center; }
 .spinner { width:30px; height:30px; border-radius:50%; border:1.5px solid rgba(196,154,48,0.15); border-top-color:var(--gold); animation:spin 0.85s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .state-msg { font-family:var(--f-bn); font-size:0.9rem; color:var(--ink-3); }
@@ -386,27 +281,32 @@ mark.sem-mark {
 .skel { background:linear-gradient(90deg,rgba(196,154,48,0.05) 25%,rgba(196,154,48,0.12) 50%,rgba(196,154,48,0.05) 75%); background-size:200% 100%; animation:shim 1.3s infinite; }
 @keyframes shim { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-/* DROPDOWN */
+/* ══ DROPDOWN ══ */
 .search-dropdown { position:absolute; top:calc(100% + 4px); left:1.5rem; right:1.5rem; background:var(--surface); border:1px solid var(--border); border-radius:3px; box-shadow:0 12px 40px rgba(0,0,0,0.5); max-height:280px; overflow-y:auto; z-index:500; display:none; }
 .search-dropdown.show { display:block; }
 .dd-section { padding:0.45rem 0.9rem 0.2rem; font-family:var(--f-label); font-size:0.46rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-4); border-bottom:1px solid var(--border2); }
 .dd-item { display:flex; align-items:center; gap:0.55rem; padding:0.5rem 0.9rem; cursor:pointer; transition:background 0.15s; }
 .dd-item:hover { background:var(--gold-dim); }
 .dd-item-icon { color:var(--gold-dk); flex-shrink:0; }
-.dd-item-text { font-family:var(--f-bn); font-size:0.82rem; color:var(--ink-2); display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+.dd-item-text { font-family:var(--f-bn); font-size:0.82rem; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0; }
 .dd-item-sub { font-family:var(--f-label); font-size:0.43rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-4); margin-left:auto; flex-shrink:0; white-space:nowrap; }
 
-/* No-vectors warning */
-.no-vec-warn {
-  max-width: 820px; margin: 0 auto 1rem; padding: 0 1.5rem; display: none;
+/* ══ MODEL LOADING OVERLAY ══ */
+.model-loading-wrap {
+  max-width: 820px; margin: 0 auto 1rem; padding: 0 1.5rem;
+  display: none;
 }
-.no-vec-warn.show { display: block; }
-.no-vec-inner {
-  background: rgba(200,120,30,0.08); border: 1px solid rgba(200,120,30,0.2);
-  border-radius: 3px; padding: 0.7rem 1rem;
-  font-family: var(--f-bn); font-size: 0.8rem; color: var(--ink-3); line-height: 1.6;
+.model-loading-wrap.show { display: block; }
+.model-loading-inner {
+  border: 1px solid var(--sem-border); border-radius: 3px;
+  padding: 0.9rem 1.1rem; background: var(--sem-glow);
+  font-family: var(--f-bn); font-size: 0.8rem; color: var(--ink-3);
+  display: flex; flex-direction: column; gap: 0.5rem;
 }
-.no-vec-inner code { font-family: monospace; color: var(--gold-dk); font-size: 0.85em; }
+.model-dl-bar-bg { height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+.model-dl-bar { height: 100%; width: 0%; background: linear-gradient(to right, var(--sem-dk), var(--sem-col)); border-radius: 2px; transition: width 0.2s; }
+.model-dl-msg { display: flex; align-items: center; gap: 0.5rem; }
+.model-dl-msg .sem-spinner { flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -462,19 +362,35 @@ mark.sem-mark {
   </div>
 </div>
 
-<!-- SEMANTIC DESCRIPTION -->
-<div class="sem-desc" id="semDesc">
-  <div class="sem-desc-inner">
-    <strong>Semantic Search</strong> TF-IDF Vector Space Model. Beta Version . Irshad Hossain
+<!-- SEMANTIC INFO PANEL -->
+<div class="sem-info-panel" id="semInfoPanel">
+  <div class="sem-info-inner">
+    <div class="sem-info-icon">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div class="sem-info-text">
+      <strong>Semantic AI Search</strong> — Advance Search Engine. It supports Bangla, Arabic, and English. Each result displays the percentage of match and highlighted passages.
+      <span class="model-name">Model: paraphrase-multilingual-MiniLM-L12-v2 · Browser-cached · Zero backend</span>
+    </div>
   </div>
 </div>
 
-<!-- NO VECTORS WARNING -->
+<!-- NO-VECTORS WARNING -->
 <div class="no-vec-warn" id="noVecWarn">
   <div class="no-vec-inner">
     ⚠ Semantic vector file not found (<code>data/vectors/hadith-vectors.json</code>).
-    Please run <code>node generate-vectors.js</code> locally and commit the output to GitHub.
-    Basic search is still fully available.
+    Run <code>node generate-vectors.js</code> locally and commit the output. Basic search is fully available.
+  </div>
+</div>
+
+<!-- MODEL DOWNLOADING INDICATOR -->
+<div class="model-loading-wrap" id="modelLoadingWrap">
+  <div class="model-loading-inner">
+    <div class="model-dl-msg">
+      <div class="sem-spinner"></div>
+      <span id="modelLoadMsg">AI model is loading — the first time will download ~120 MB, From now on it will load from cache…</span>
+    </div>
+    <div class="model-dl-bar-bg"><div class="model-dl-bar" id="modelDlBar"></div></div>
   </div>
 </div>
 
@@ -506,17 +422,15 @@ mark.sem-mark {
 </div>
 
 <!-- SEARCH HINT -->
-<div class="search-hint" id="searchHint">
-  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold-dk);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-  <span id="searchHintText"></span>
-</div>
+<div class="search-hint" id="searchHint"></div>
 
 <!-- SEMANTIC PROGRESS -->
 <div class="sem-progress-wrap" id="semProgress">
   <div class="sem-progress-bar-bg"><div class="sem-progress-bar" id="semBar"></div></div>
   <div class="sem-progress-msg">
     <div class="sem-spinner"></div>
-    <span id="semProgressMsg">সিমান্টিক বিশ্লেষণ চলছে…</span>
+    <span id="semProgressMsg">Sementic Analysis running...</span>
+    <span class="sem-stage" id="semStage">Embedding</span>
   </div>
 </div>
 
@@ -533,44 +447,42 @@ mark.sem-mark {
   </div>
 </div>
 
-<!-- GRID (card view — default) -->
+<!-- GRID (card view — default browse) -->
 <div class="hadith-grid" id="grid">
-  <!-- skeleton -->
-  <div class="skel-card"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:85%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:55%;border-radius:1px;"></div><div class="skel" style="height:0.65rem;width:100%;border-radius:1px;"></div></div></div>
-  <div class="skel-card"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:78%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:60%;border-radius:1px;"></div><div class="skel" style="height:0.65rem;width:95%;border-radius:1px;"></div></div></div>
-  <div class="skel-card"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:90%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:50%;border-radius:1px;"></div><div class="skel" style="height:0.65rem;width:88%;border-radius:1px;"></div></div></div>
-  <div class="skel-card" style="display:none;" class="sm-show"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:80%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:65%;border-radius:1px;"></div><div class="skel" style="height:0.65rem;width:92%;border-radius:1px;"></div></div></div>
+  <div class="skel-card"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:85%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:55%;border-radius:1px;"></div></div></div>
+  <div class="skel-card"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:78%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:60%;border-radius:1px;"></div></div></div>
+  <div class="skel-card"><div class="skel" style="aspect-ratio:1/1;"></div><div style="padding:0.7rem 0.75rem;display:flex;flex-direction:column;gap:0.4rem;"><div class="skel" style="height:0.75rem;width:90%;border-radius:1px;"></div><div class="skel" style="height:0.55rem;width:50%;border-radius:1px;"></div></div></div>
 </div>
 
-<!-- RESULT LIST (list view — active during search) -->
+<!-- RESULT LIST (search results) -->
 <div class="result-list" id="resultList" style="display:none;"></div>
 
-<script>
-/* ════════════════════════════════════════════════════
+<script type="module">
+/* ══════════════════════════════════════════════════════════════════
    THEME
-════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════ */
 const savedTheme = localStorage.getItem('sf-theme') || 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
 document.getElementById('themeBtn').textContent = savedTheme === 'dark' ? 'Light' : 'Dark';
-function toggleTheme() {
+window.toggleTheme = function() {
   const cur  = document.documentElement.getAttribute('data-theme');
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('sf-theme', next);
   document.getElementById('themeBtn').textContent = next === 'dark' ? 'Light' : 'Dark';
-}
+};
 
 /* Hamburger */
 const ham = document.getElementById('ham');
 const mobMenu = document.getElementById('mob');
 ham.addEventListener('click', e => { e.stopPropagation(); mobMenu.classList.toggle('show'); });
 document.addEventListener('click', e => { if (!mobMenu.contains(e.target) && !ham.contains(e.target)) mobMenu.classList.remove('show'); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') mobMenu.classList.remove('show'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { mobMenu.classList.remove('show'); hideDrop(); } });
 mobMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => mobMenu.classList.remove('show')));
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    DATA CONFIG — managed by update.js
-════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════ */
 const DATA_BASE   = 'data/hadith/';
 const VECTORS_URL = 'data/vectors/hadith-vectors.json';
 const HADITH_FILES = [
@@ -595,15 +507,14 @@ const HADITH_FILES = [
     'shane-nuzul-surah-yunus-35-ali-judgment.json'
 ];
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    PARSE / NORMALIZE JSON
-════════════════════════════════════════════════════ */
-function stripHtml(s) { return String(s||'').replace(/<[^>]+>/g,' ').replace(/&[a-z]+;/gi,' '); }
-function parseYear(str) {
-  if (typeof str === 'number') return str;
-  const s = String(str||'').toLowerCase();
-  const n = parseFloat(s.replace(/[^0-9.\-]/g,'')) || 0;
-  return (s.includes('bh')||s.includes('bce')||s.includes('bc')) ? -Math.abs(n) : n;
+══════════════════════════════════════════════════════════════════ */
+function stripHtml(s) {
+  return String(s||'')
+    .replace(/<br\s*\/?>/gi,'\n').replace(/<\/p>/gi,'\n')
+    .replace(/<[^>]+>/g,' ').replace(/&[a-z]+;/gi,' ')
+    .replace(/[ \t]+/g,' ').trim();
 }
 function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
 
@@ -611,21 +522,39 @@ function normalise(data, fileName) {
   return (Array.isArray(data) ? data : [data])
     .filter(h => h && (h.title || h.name))
     .map(h => {
-      const banglaText = h.bangla_script || '';
-      const arabicText = h.arabic_script || '';
-      const detailsRaw = stripHtml(h.details || '');
-      // Build a comprehensive searchable text blob (all fields)
+      const banglaText  = h.bangla_script || '';
+      const arabicText  = h.arabic_script || '';
+      const detailsRaw  = stripHtml(h.details || '');
+      const narrators   = Array.isArray(h.chain_of_narrator)
+        ? h.chain_of_narrator.map(n => n.name||'').join(' ')
+        : (h.narrator||'');
+      const tagsArr     = Array.isArray(h.tags) ? h.tags
+        : (h.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+      const imgTexts    = Array.isArray(h.images)
+        ? h.images.map(img => img.text||'').join(' ') : '';
+
+      /* A comprehensive blob covering every field — used by basic search */
       const searchBlob = [
-        h.title || '', h.subTitle || '',
-        banglaText, arabicText, detailsRaw,
-        h.book_name || '', h.book_author || '',
-        h.publication || '', h.edition || '',
-        h.enlist_author || '', h.enlist_date || '',
-        Array.isArray(h.chain_of_narrator) ? h.chain_of_narrator.map(n=>n.name||'').join(' ') : '',
-        Array.isArray(h.tags) ? h.tags.join(' ') : (h.tags||''),
-        h.author_manhaj || '', h.year || h.book_year || '',
-        Array.isArray(h.images) ? h.images.map(img=>img.text||'').join(' ') : '',
+        h.title||'', h.subTitle||'', banglaText, arabicText, detailsRaw,
+        h.book_name||'', h.book_author||'', h.publication||'', h.edition||'',
+        h.enlist_author||'', h.enlist_date||'', narrators,
+        tagsArr.join(' '), h.author_manhaj||'', h.year||h.book_year||'', imgTexts,
       ].join(' ');
+
+      /* Structured fields for per-field highlighting */
+      const fields = {
+        'শিরোনাম':        h.title || '',
+        'সাব-টাইটেল':     h.subTitle || '',
+        'বাংলা পাঠ':      banglaText,
+        'আরবি পাঠ':       arabicText,
+        'বিস্তারিত':      detailsRaw,
+        'কিতাব':          h.book_name || '',
+        'লেখক':           h.book_author || '',
+        'বর্ণনাকারী':     narrators,
+        'প্রকাশনা':       [h.publication, h.edition].filter(Boolean).join(' — '),
+        'ট্যাগ':          tagsArr.join(', '),
+        'ছবি-বর্ণনা':     imgTexts,
+      };
 
       return {
         slug:        h.slug || slugify(h.title || fileName || ''),
@@ -636,17 +565,16 @@ function normalise(data, fileName) {
         details:     detailsRaw,
         book:        h.book_name || h.book || h.source || '',
         bookAuthor:  h.book_author || '',
-        narrator:    Array.isArray(h.chain_of_narrator)
-                       ? h.chain_of_narrator.map(n=>n.name||'').join(', ')
-                       : (h.narrator||''),
+        narrator:    narrators,
         year:        h.year || h.book_year || '',
-        yearNumeric: parseYear(h.year || h.book_year || ''),
         thumb:       h.thumb || h.cover
-                       || (Array.isArray(h.images) && h.images[0] && (typeof h.images[0]==='string' ? h.images[0] : h.images[0].url))
+                       || (Array.isArray(h.images) && h.images[0]
+                         ? (typeof h.images[0]==='string' ? h.images[0] : h.images[0].url) : '')
                        || h.thumbnail || '',
         banner:      h.banner || '',
-        tags:        Array.isArray(h.tags) ? h.tags : (h.tags||'').split(',').map(t=>t.trim()).filter(Boolean),
-        searchBlob,  // used by basic search
+        tags:        tagsArr,
+        searchBlob,
+        fields,
         _raw: h,
       };
     });
@@ -660,85 +588,89 @@ async function loadHadith() {
       return normalise(await r.json(), fname);
     })
   );
-  const all = results.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);
-  return all;
+  return results.filter(r => r.status==='fulfilled').flatMap(r => r.value);
 }
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    STATE
-════════════════════════════════════════════════════ */
-let allHadith       = [];
-let searchQuery     = '';
-let currentMode     = 'basic';   // 'basic' | 'semantic'
-let currentView     = 'list';    // 'grid' | 'list' (during search)
-let vectorData      = null;      // loaded semantic vector data
-let vectorsLoaded   = false;
-let vectorsChecked  = false;
+══════════════════════════════════════════════════════════════════ */
+let allHadith     = [];
+let searchQuery   = '';
+let currentMode   = 'basic';
+let currentView   = 'list';
+let lastResults   = null;
+let vectorData    = null;   // pre-computed JSON from generate-vectors.js
+let vectorsLoaded = false;
+let vectorsChecked= false;
+// Transformers.js pipeline (loaded lazily on first semantic search)
+let embedPipeline = null;
+let modelLoading  = false;
+let modelReady    = false;
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    MODE TOGGLE
-════════════════════════════════════════════════════ */
-function setMode(mode) {
+══════════════════════════════════════════════════════════════════ */
+window.setMode = function(mode) {
   currentMode = mode;
-  const pillBg = document.getElementById('modePillBg');
+  const pillBg   = document.getElementById('modePillBg');
   const basicBtn = document.getElementById('modeBasic');
-  const semBtn = document.getElementById('modeSemantic');
-  const searchBox = document.getElementById('searchBox');
-  const searchBtn = document.getElementById('searchBtn');
-  const searchBtnLabel = document.getElementById('searchBtnLabel');
-  const semDesc = document.getElementById('semDesc');
-  const inp = document.getElementById('searchInp');
+  const semBtn   = document.getElementById('modeSemantic');
+  const sBox     = document.getElementById('searchBox');
+  const sBtn     = document.getElementById('searchBtn');
+  const sBtnLbl  = document.getElementById('searchBtnLabel');
+  const semPanel = document.getElementById('semInfoPanel');
+  const inp      = document.getElementById('searchInp');
 
   if (mode === 'basic') {
     basicBtn.classList.add('active');
     semBtn.classList.remove('active');
     pillBg.className = 'mode-pill-bg basic';
-    // Move bg under basic pill
-    pillBg.style.left = basicBtn.offsetLeft + 'px';
-    pillBg.style.width = basicBtn.offsetWidth + 'px';
-    searchBox.classList.remove('semantic-mode');
-    searchBtn.classList.remove('semantic-btn');
-    searchBtnLabel.textContent = 'Search';
+    sBox.classList.remove('semantic-mode');
+    sBtn.classList.remove('semantic-btn');
+    sBtnLbl.textContent = 'Search';
     inp.placeholder = 'শিরোনাম, বর্ণনাকারী, কিতাব, ট্যাগ দিয়ে অনুসন্ধান করুন…';
-    semDesc.classList.remove('show');
+    semPanel.classList.remove('show', 'visible');
+    document.getElementById('noVecWarn').classList.remove('show');
   } else {
     semBtn.classList.add('active');
     basicBtn.classList.remove('active');
     pillBg.className = 'mode-pill-bg semantic';
-    pillBg.style.left = semBtn.offsetLeft + 'px';
-    pillBg.style.width = semBtn.offsetWidth + 'px';
-    searchBox.classList.add('semantic-mode');
-    searchBtn.classList.add('semantic-btn');
-    searchBtnLabel.textContent = 'অনুসন্ধান';
+    sBox.classList.add('semantic-mode');
+    sBtn.classList.add('semantic-btn');
+    sBtnLbl.textContent = 'অনুসন্ধান';
     inp.placeholder = 'বিষয়বস্তু বা ধারণা দিয়ে অনুসন্ধান করুন…';
-    semDesc.classList.add('show');
-    // Try to load vectors if not already
+    semPanel.classList.add('show');
+    requestAnimationFrame(() => semPanel.classList.add('visible'));
+    // Load vectors + model lazily
     if (!vectorsChecked) loadVectors();
   }
 
-  // Re-run if there's an active query
-  if (searchQuery) doSearch();
-}
+  // Reposition pill bg
+  const activeBtn = mode === 'basic' ? basicBtn : semBtn;
+  pillBg.style.left  = activeBtn.offsetLeft + 'px';
+  pillBg.style.width = activeBtn.offsetWidth + 'px';
 
-// Position the pill bg correctly on load
+  if (searchQuery) doSearch();
+};
+
 window.addEventListener('load', () => {
   const basicBtn = document.getElementById('modeBasic');
-  const pillBg = document.getElementById('modePillBg');
+  const pillBg   = document.getElementById('modePillBg');
   if (basicBtn && pillBg) {
-    pillBg.style.left = basicBtn.offsetLeft + 'px';
+    pillBg.style.left  = basicBtn.offsetLeft + 'px';
     pillBg.style.width = basicBtn.offsetWidth + 'px';
   }
 });
 
-/* ════════════════════════════════════════════════════
-   SEMANTIC — load vector file
-════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   LOAD PRE-COMPUTED VECTORS
+══════════════════════════════════════════════════════════════════ */
 async function loadVectors() {
   vectorsChecked = true;
   try {
     const r = await fetch(VECTORS_URL, { cache: 'no-cache' });
     if (!r.ok) throw new Error('not found');
-    vectorData = await r.json();
+    vectorData    = await r.json();
     vectorsLoaded = true;
     document.getElementById('noVecWarn').classList.remove('show');
   } catch {
@@ -749,185 +681,316 @@ async function loadVectors() {
   }
 }
 
-/* ════════════════════════════════════════════════════
-   SEMANTIC — tokenize (mirrors generate-vectors.js)
-════════════════════════════════════════════════════ */
-function tokenizeQuery(text) {
-  if (!text) return [];
-  const cleaned = String(text)
-    .replace(/[^\u0980-\u09FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-zA-Z0-9]+/g, ' ')
-    .toLowerCase().trim();
-  const words = cleaned.split(/\s+/).filter(w => w.length > 1);
-  const tokens = [...words];
-  for (let i = 0; i < words.length - 1; i++) tokens.push(words[i] + '_' + words[i+1]);
-  return tokens;
-}
-
-function cosine(vecA, idf) {
-  // vecA = {term: weight} (query vector, TF=1/count * IDF)
-  // idf = global IDF table from vector file
-  // document vectors are pre-stored in vectorData.documents[i].vector
-  return (docVec) => {
-    let dot = 0, magA = 0, magB = 0;
-    for (const term in vecA) {
-      dot += (vecA[term] || 0) * (docVec[term] || 0);
-      magA += vecA[term] ** 2;
-    }
-    for (const term in docVec) magB += docVec[term] ** 2;
-    if (!magA || !magB) return 0;
-    return dot / (Math.sqrt(magA) * Math.sqrt(magB));
-  };
-}
-
-function buildQueryVector(tokens, idf) {
-  if (!tokens.length) return {};
-  const tf = {};
-  for (const t of tokens) tf[t] = (tf[t]||0) + 1;
-  const total = tokens.length;
-  const vec = {};
-  for (const t in tf) {
-    const idfVal = idf[t] || (Math.log(1 + 1) + 1); // smooth for unseen terms
-    vec[t] = (tf[t] / total) * idfVal;
+/* ══════════════════════════════════════════════════════════════════
+   LOAD TRANSFORMERS.JS MODEL (browser-side embedding)
+══════════════════════════════════════════════════════════════════ */
+async function ensureModel() {
+  if (modelReady) return true;
+  if (modelLoading) {
+    // Wait for model
+    while (modelLoading) await new Promise(r => setTimeout(r, 100));
+    return modelReady;
   }
-  return vec;
+  modelLoading = true;
+  const wrap = document.getElementById('modelLoadingWrap');
+  const bar  = document.getElementById('modelDlBar');
+  const msg  = document.getElementById('modelLoadMsg');
+  wrap.classList.add('show');
+
+  try {
+    const { pipeline, env } = await import(
+      'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js'
+    );
+    // Use cached WASM models
+    env.useBrowserCache = true;
+    env.allowLocalModels = false;
+
+    embedPipeline = await pipeline(
+      'feature-extraction',
+      'Xenova/paraphrase-multilingual-MiniLM-L12-v2',
+      {
+        progress_callback: p => {
+          if (p.status === 'downloading') {
+            const pct = p.total ? Math.round((p.loaded / p.total) * 100) : 0;
+            bar.style.width = pct + '%';
+            msg.textContent = `মডেল ডাউনলোড হচ্ছে… ${pct}%`;
+          } else if (p.status === 'loading') {
+            msg.textContent = 'মডেল মেমোরিতে লোড হচ্ছে…';
+            bar.style.width = '90%';
+          }
+        }
+      }
+    );
+    bar.style.width = '100%';
+    msg.textContent = 'Model is Ready ✓';
+    setTimeout(() => wrap.classList.remove('show'), 1200);
+    modelReady = true;
+  } catch (e) {
+    msg.textContent = '⚠ মডেল লোড ব্যর্থ: ' + e.message;
+    modelReady = false;
+  }
+  modelLoading = false;
+  return modelReady;
 }
 
-/* ════════════════════════════════════════════════════
-   BASIC SEARCH — full-text scan of all fields
-════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   EMBED A SINGLE TEXT via Transformers.js
+══════════════════════════════════════════════════════════════════ */
+async function embedText(text) {
+  const out = await embedPipeline(text, { pooling: 'mean', normalize: true });
+  return Array.from(out.data);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   COSINE SIMILARITY (pure JS, no library)
+══════════════════════════════════════════════════════════════════ */
+function cosineSim(vecA, vecB) {
+  let dot = 0, magA = 0, magB = 0;
+  const len = Math.min(vecA.length, vecB.length);
+  for (let i = 0; i < len; i++) {
+    dot  += vecA[i] * vecB[i];
+    magA += vecA[i] * vecA[i];
+    magB += vecB[i] * vecB[i];
+  }
+  if (!magA || !magB) return 0;
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BASIC SEARCH — exhaustive full-text scan across ALL fields
+══════════════════════════════════════════════════════════════════ */
 function basicSearch(query, items) {
-  if (!query) return items.map(h => ({ item: h, score: 1, matches: [] }));
+  if (!query) return items.map(h => ({ item: h, score: 1, matchedSegments: [] }));
 
-  // Normalize query for matching (lowercase, trim)
   const q = query.trim().toLowerCase();
-  // For Bengali: also match partial words
-  const results = [];
 
+  // Also try each individual word for partial match collection
+  const qWords = q.split(/\s+/).filter(w => w.length > 0);
+
+  const results = [];
   for (const h of items) {
     const blob = (h.searchBlob || '').toLowerCase();
-    if (blob.includes(q)) {
-      // Find all fields that contain the match
-      const matchedFields = findMatchedFields(h, q);
-      results.push({ item: h, score: computeBasicScore(h, q), matches: matchedFields });
+    const hasMatch = qWords.every(w => blob.includes(w));  // all words must appear
+    if (!hasMatch) continue;
+
+    // Build field-level match segments
+    const matchedSegments = [];
+    for (const [label, text] of Object.entries(h.fields || {})) {
+      if (!text) continue;
+      const tl = text.toLowerCase();
+      // Check if any query word appears in this field
+      if (qWords.some(w => tl.includes(w))) {
+        matchedSegments.push({ label, text, type: 'basic' });
+      }
     }
+
+    const score = computeBasicScore(h, q, qWords);
+    results.push({ item: h, score, matchedSegments });
   }
 
-  // Sort: title matches first, then others
   results.sort((a, b) => b.score - a.score);
   return results;
 }
 
-function computeBasicScore(h, q) {
+function computeBasicScore(h, q, qWords) {
   let score = 0;
-  if (h.title.toLowerCase().includes(q)) score += 10;
-  if (h.subTitle.toLowerCase().includes(q)) score += 5;
-  if (h.banglaScript.toLowerCase().includes(q)) score += 4;
-  if (h.book.toLowerCase().includes(q)) score += 3;
-  if (h.narrator.toLowerCase().includes(q)) score += 3;
-  if (h.details.toLowerCase().includes(q)) score += 2;
-  if (h.tags.some(t => t.toLowerCase().includes(q))) score += 2;
+  const hit = (text, weight) => {
+    if (!text) return;
+    const tl = text.toLowerCase();
+    if (tl.includes(q)) score += weight * 2;              // full phrase bonus
+    else qWords.forEach(w => { if (tl.includes(w)) score += weight; });
+  };
+  hit(h.title, 10);
+  hit(h.subTitle, 5);
+  hit(h.banglaScript, 4);
+  hit(h.book, 3);
+  hit(h.narrator, 3);
+  hit(h.details, 2);
+  h.tags.forEach(t => hit(t, 2));
+  hit(h.arabicScript, 1);
   return score;
 }
 
-function findMatchedFields(h, q) {
-  const fields = [];
-  const check = (label, text) => {
-    if (text && text.toLowerCase().includes(q)) fields.push({ label, text });
-  };
-  check('শিরোনাম', h.title);
-  check('সাব-টাইটেল', h.subTitle);
-  check('বাংলা পাঠ', h.banglaScript);
-  check('বিস্তারিত', h.details);
-  check('কিতাব', h.book);
-  check('বর্ণনাকারী', h.narrator);
-  check('আরবি পাঠ', h.arabicScript);
-  return fields;
-}
-
-/* ════════════════════════════════════════════════════
-   SEMANTIC SEARCH — cosine similarity on TF-IDF vectors
-════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   SEMANTIC SEARCH — real multilingual sentence embeddings
+   Phase A: Embed query in browser via Transformers.js
+   Phase B: Cosine similarity against pre-computed segment vectors
+══════════════════════════════════════════════════════════════════ */
 async function semanticSearch(query) {
-  if (!vectorsLoaded || !vectorData) {
-    // fallback to basic
-    showHint(`Semantic vectors not available. Showing basic results for "${query}".`);
+  const progressWrap = document.getElementById('semProgress');
+  const semBar       = document.getElementById('semBar');
+  const semMsg       = document.getElementById('semProgressMsg');
+  const semStage     = document.getElementById('semStage');
+
+  progressWrap.classList.add('show');
+  semBar.style.width = '5%';
+  semStage.textContent = 'Loading Model';
+  semMsg.textContent  = 'AI মডেল প্রস্তুত করা হচ্ছে…';
+
+  // Ensure model is loaded
+  const modelOk = await ensureModel();
+  if (!modelOk) {
+    progressWrap.classList.remove('show');
+    showHint('⚠ মডেল লোড করা যায়নি — Basic search ব্যবহার করা হচ্ছে।', false);
     return basicSearch(query, allHadith);
   }
 
-  const tokens = tokenizeQuery(query);
-  const queryVec = buildQueryVector(tokens, vectorData.idf);
-  const scoreFn = cosine(queryVec, vectorData.idf);
-
-  // Show progress
-  const progressWrap = document.getElementById('semProgress');
-  const semBar = document.getElementById('semBar');
-  const semMsg = document.getElementById('semProgressMsg');
-  progressWrap.classList.add('show');
-
-  const docs = vectorData.documents;
-  const total = docs.length;
-  const scored = [];
-
-  // Process in small chunks to yield to UI and show progress
-  const CHUNK = 5;
-  for (let i = 0; i < total; i += CHUNK) {
-    const chunk = docs.slice(i, i + CHUNK);
-    for (const doc of chunk) {
-      const sim = scoreFn(doc.vector);
-      // Find matching hadith in allHadith by slug
-      const hadith = allHadith.find(h => h.slug === doc.slug);
-      if (hadith && sim > 0.01) {
-        scored.push({ item: hadith, score: sim, matches: [] });
-      }
-    }
-    const pct = Math.round(((i + CHUNK) / total) * 100);
-    semBar.style.width = Math.min(pct, 100) + '%';
-    semMsg.textContent = `বিশ্লেষণ করা হচ্ছে… ${Math.min(i + CHUNK, total)}/${total} নথি`;
-    await new Promise(r => setTimeout(r, 0)); // yield
+  // Check vectors
+  if (!vectorsLoaded || !vectorData) {
+    progressWrap.classList.remove('show');
+    showHint('⚠ Vector ফাইল পাওয়া যায়নি। Basic search দেখানো হচ্ছে।', false);
+    return basicSearch(query, allHadith);
   }
+
+  // Step 1: Embed the query
+  semStage.textContent = 'Embedding Query';
+  semMsg.textContent   = 'প্রশ্নটি বিশ্লেষণ করা হচ্ছে…';
+  semBar.style.width   = '15%';
+  await new Promise(r => setTimeout(r, 0));
+
+  let queryVec;
+  try {
+    queryVec = await embedText(query);
+  } catch (e) {
+    progressWrap.classList.remove('show');
+    showHint('⚠ Query embedding ব্যর্থ: ' + e.message, false);
+    return basicSearch(query, allHadith);
+  }
+
+  // Step 2: Score all pre-computed segments
+  semStage.textContent = 'Comparing';
+  semMsg.textContent   = 'সকল হাদিস সেগমেন্টের সাথে তুলনা করা হচ্ছে…';
+  semBar.style.width   = '30%';
+  await new Promise(r => setTimeout(r, 0));
+
+  const segments = vectorData.segments || [];
+  const total    = segments.length;
+
+  // Group best-matching segments per hadith slug
+  const hadithBestSegs = new Map(); // slug → { score, segments[] }
+
+  const CHUNK = 50;
+  for (let i = 0; i < total; i += CHUNK) {
+    const batch = segments.slice(i, i + CHUNK);
+    for (const seg of batch) {
+      const sim = cosineSim(queryVec, seg.vector);
+      if (sim < 0.25) continue; // skip low relevance
+
+      if (!hadithBestSegs.has(seg.hadithSlug)) {
+        hadithBestSegs.set(seg.hadithSlug, { topScore: 0, segs: [] });
+      }
+      const entry = hadithBestSegs.get(seg.hadithSlug);
+      entry.segs.push({ ...seg, sim });
+      if (sim > entry.topScore) entry.topScore = sim;
+    }
+
+    const pct = 30 + Math.round(((i + CHUNK) / total) * 60);
+    semBar.style.width = Math.min(pct, 90) + '%';
+    semMsg.textContent = `${Math.min(i + CHUNK, total)} / ${total} সেগমেন্ট বিশ্লেষিত`;
+    await new Promise(r => setTimeout(r, 0));
+  }
+
+  semBar.style.width   = '95%';
+  semStage.textContent = 'Ranking';
+  semMsg.textContent   = 'ফলাফল সাজানো হচ্ছে…';
+  await new Promise(r => setTimeout(r, 0));
+
+  // Build final results
+  const scored = [];
+  for (const [slug, entry] of hadithBestSegs) {
+    const hadith = allHadith.find(h => h.slug === slug);
+    if (!hadith) continue;
+
+    // Sort segs by similarity desc, keep top 3
+    entry.segs.sort((a, b) => b.sim - a.sim);
+    const topSegs = entry.segs.slice(0, 3);
+
+    scored.push({
+      item:  hadith,
+      score: entry.topScore,
+      matchedSegments: topSegs.map(s => ({
+        label:  segTypeLabel(s.type),
+        text:   s.text,
+        sim:    s.sim,
+        type:   'semantic',
+      })),
+    });
+  }
+
+  scored.sort((a, b) => b.score - a.score);
 
   progressWrap.classList.remove('show');
   semBar.style.width = '0%';
 
-  scored.sort((a, b) => b.score - a.score);
-
-  // Filter low-relevance results (keep top with sim > threshold)
-  const threshold = 0.03;
-  return scored.filter(r => r.score >= threshold).slice(0, 50);
+  return scored.slice(0, 60);
 }
 
-/* ════════════════════════════════════════════════════
-   HIGHLIGHT
-════════════════════════════════════════════════════ */
+function segTypeLabel(type) {
+  const map = {
+    title: 'শিরোনাম', subtitle: 'সাব-টাইটেল',
+    bangla_full: 'বাংলা পাঠ', book_meta: 'কিতাব',
+    arabic: 'আরবি পাঠ', tags: 'ট্যাগ', image_desc: 'ছবি',
+    details: 'বিস্তারিত',
+  };
+  if (type in map) return map[type];
+  if (type.startsWith('bangla_para')) return 'বাংলা অনুচ্ছেদ';
+  if (type.startsWith('details_p'))  return 'বিস্তারিত অনুচ্ছেদ';
+  return type;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   HIGHLIGHT — inject <mark> tags, never faking content
+══════════════════════════════════════════════════════════════════ */
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+/**
+ * Highlight all occurrences of query (and individual words) in text.
+ * isSemantic controls mark class.
+ */
 function highlight(text, query, isSemantic) {
   if (!text) return '';
   const escaped = esc(text);
   if (!query) return escaped;
-  const cls = isSemantic ? 'sem-mark' : '';
-  try {
-    // Escape the query for regex use
-    const qEsc = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return escaped.replace(new RegExp(qEsc, 'gi'), m => `<mark class="${cls}">${m}</mark>`);
-  } catch { return escaped; }
+  const cls  = isSemantic ? ' class="sem-mark"' : '';
+  const words = query.trim().split(/\s+/).filter(w => w.length > 0);
+  // Try full phrase first, then individual words
+  const patterns = query.trim().length > 1 ? [query.trim(), ...words] : words;
+  let result = escaped;
+  const seen = new Set();
+  for (const pat of patterns) {
+    if (seen.has(pat.toLowerCase())) continue;
+    seen.add(pat.toLowerCase());
+    try {
+      const re = new RegExp(pat.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+      result = result.replace(re, m => `<mark${cls}>${m}</mark>`);
+    } catch { /* skip bad regex */ }
+  }
+  return result;
 }
 
-/** Extract a snippet of text around the first query match (~160 chars) */
+/** Extract a window of text around the first match, ~200 chars */
 function extractSnippet(text, query) {
-  if (!text || !query) return text ? text.slice(0, 180) + (text.length > 180 ? '…' : '') : '';
-  const idx = text.toLowerCase().indexOf(query.toLowerCase());
-  if (idx === -1) return text.slice(0, 180) + (text.length > 180 ? '…' : '');
-  const start = Math.max(0, idx - 60);
-  const end   = Math.min(text.length, idx + query.length + 100);
+  if (!text) return '';
+  if (!query) return text.slice(0, 200) + (text.length > 200 ? '…' : '');
+
+  const words = query.trim().toLowerCase().split(/\s+/);
+  const tl    = text.toLowerCase();
+  let bestIdx = -1;
+  for (const w of words) {
+    const idx = tl.indexOf(w);
+    if (idx !== -1 && (bestIdx === -1 || idx < bestIdx)) bestIdx = idx;
+  }
+  if (bestIdx === -1) return text.slice(0, 200) + (text.length > 200 ? '…' : '');
+  const start = Math.max(0, bestIdx - 70);
+  const end   = Math.min(text.length, bestIdx + 160);
   return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
 }
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    RENDER — GRID (browse mode)
-════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════ */
 const fallbackImg = 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=400&fit=crop';
 
 function renderGrid(items) {
@@ -937,26 +1000,30 @@ function renderGrid(items) {
   document.getElementById('countEl').textContent = items.length;
   document.getElementById('viewToggleWrap').style.display = 'none';
 
-  if (!items.length) {
-    grid.innerHTML = emptyState('');
-    return;
-  }
-
+  if (!items.length) { grid.innerHTML = emptyState(''); return; }
   grid.innerHTML = '';
+
   items.forEach((item, i) => {
-    const h = item.item || item;
+    const h     = item.item || item;
+    const score = item.score && item.score < 1 ? item.score : null;
     const imgSrc = h.banner || h.thumb || fallbackImg;
-    const delay = Math.min(i * 40, 500);
+    const delay  = Math.min(i * 40, 500);
+
     const card = document.createElement('a');
     card.className = 'h-card';
-    card.href = `hadith/index.html?id=${encodeURIComponent(h.slug)}`;
+    card.href  = `hadith/index.html?id=${encodeURIComponent(h.slug)}`;
     card.style.animationDelay = delay + 'ms';
     card.title = h.title;
+
+    const scoreBadge = score !== null && currentMode === 'semantic'
+      ? `<div class="score-badge">${Math.round(score * 100)}% মিল</div>` : '';
+
     card.innerHTML = `
       <div class="h-cover-wrap">
         <img class="h-cover" src="${esc(imgSrc)}" alt="${esc(h.title)}" loading="lazy"
              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
         <div class="h-cover-placeholder" style="display:none;">📖</div>
+        ${scoreBadge}
       </div>
       <div class="h-body">
         <div class="h-title">${esc(h.title)}</div>
@@ -973,9 +1040,9 @@ function renderGrid(items) {
   });
 }
 
-/* ════════════════════════════════════════════════════
-   RENDER — LIST (search results)
-════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   RENDER — LIST (search results with highlighted segments)
+══════════════════════════════════════════════════════════════════ */
 function renderList(results, query, isSemantic) {
   document.getElementById('grid').style.display = 'none';
   const list = document.getElementById('resultList');
@@ -990,55 +1057,70 @@ function renderList(results, query, isSemantic) {
 
   list.innerHTML = '';
   results.forEach((result, i) => {
-    const h = result.item || result;
+    const h     = result.item || result;
     const score = result.score;
+    const segs  = result.matchedSegments || [];
     const imgSrc = h.thumb || h.banner || fallbackImg;
-    const delay = Math.min(i * 35, 400);
-
-    // Best snippet: prefer bangla, fallback to details
-    const rawSnippet = h.banglaScript || h.details || h.subTitle || '';
-    const snippet = extractSnippet(rawSnippet, query);
-    const snippetHtml = highlight(snippet, query, isSemantic);
-    const titleHtml   = highlight(h.title, query, isSemantic);
-
-    // Matched fields (basic search)
-    const matchedField = result.matches && result.matches.length > 0 ? result.matches[0] : null;
+    const delay  = Math.min(i * 35, 400);
 
     const card = document.createElement('a');
     card.className = 'r-card' + (isSemantic ? ' semantic-result' : '');
-    card.href = `hadith/index.html?id=${encodeURIComponent(h.slug)}`;
+    card.href  = `hadith/index.html?id=${encodeURIComponent(h.slug)}`;
     card.style.animationDelay = delay + 'ms';
 
-    const scoreLabel = isSemantic && score ? `${Math.round(score * 100)}% মিল` : '';
-    const scorePillHtml = isSemantic && score
-      ? `<span class="r-score-pill show">${scoreLabel}</span>`
-      : '';
+    // Score pill
+    const scorePct = isSemantic && score ? Math.round(score * 100) : null;
+    const scorePillHtml = scorePct !== null
+      ? `<span class="r-score-pill show">${scorePct}% Match</span>` : '';
 
-    // Determine best highlighted snippet to show
-    let snippetDisplay = snippetHtml;
-    let snippetLabel = '';
-    if (matchedField && matchedField.label !== 'শিরোনাম' && matchedField.text !== h.title) {
-      const fieldSnippet = extractSnippet(matchedField.text, query);
-      snippetDisplay = highlight(fieldSnippet, query, isSemantic);
-      snippetLabel = matchedField.label;
+    // Match type badge
+    const matchTypeTxt = isSemantic ? 'Semantic' : 'Keyword';
+    const matchTypeCls  = 'r-match-type show';
+
+    // Build highlighted segment blocks
+    // Always show at least 1 relevant snippet; for semantic show top matched segs
+    let segBlocks = '';
+    if (segs.length > 0) {
+      const shown = segs.slice(0, isSemantic ? 3 : 2);
+      segBlocks = '<div class="r-segments">';
+      for (const seg of shown) {
+        const rawText   = seg.text || '';
+        const snippet   = isSemantic ? rawText : extractSnippet(rawText, query);
+        const hiSnippet = highlight(snippet, query, isSemantic);
+        const simTxt    = seg.sim ? ` · ${Math.round(seg.sim * 100)}%` : '';
+        segBlocks += `
+          <div class="r-seg${isSemantic ? ' sem-seg' : ''}">
+            <span class="r-seg-label">${esc(seg.label)}${simTxt}</span>
+            ${hiSnippet}
+          </div>`;
+      }
+      segBlocks += '</div>';
+    } else {
+      // Fallback snippet from bangla or details
+      const raw     = h.banglaScript || h.details || h.subTitle || '';
+      const snippet = extractSnippet(raw, query);
+      const hiSnip  = highlight(snippet, query, isSemantic);
+      if (hiSnip) {
+        segBlocks = `<div class="r-segments"><div class="r-seg${isSemantic?' sem-seg':''}">
+          <span class="r-seg-label">বাংলা পাঠ</span>${hiSnip}</div></div>`;
+      }
     }
+
+    const titleHtml = highlight(h.title, query, isSemantic);
 
     card.innerHTML = `
       <div class="r-thumb">
-        <img src="${esc(imgSrc)}" alt="${esc(h.title)}" loading="lazy"
-             style="height:100%;"
+        <img src="${esc(imgSrc)}" alt="${esc(h.title)}" loading="lazy" style="height:100%;"
              onerror="this.src='${fallbackImg}'"/>
       </div>
       <div class="r-body">
         <div class="r-meta">
           ${h.book ? `<span class="r-book">${esc(h.book)}</span>` : ''}
           ${scorePillHtml}
+          <span class="${matchTypeCls}">${matchTypeTxt}</span>
         </div>
         <div class="r-title">${titleHtml}</div>
-        ${snippetDisplay ? `
-          <div class="r-snippet">${snippetDisplay}</div>
-          ${snippetLabel ? `<div class="r-snippet-label">— ${esc(snippetLabel)}</div>` : ''}
-        ` : ''}
+        ${segBlocks}
         <div class="r-footer">
           <div class="r-tags">
             ${h.tags.slice(0,3).map(t=>`<span class="r-tag">${esc(t)}</span>`).join('')}
@@ -1054,48 +1136,43 @@ function emptyState(query) {
   return `<div class="state-empty">
     <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--gold-dk);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     <div class="state-msg">
-      <strong>কোনো ফলাফল পাওয়া যায়নি</strong>
-      ${query ? `"${esc(query)}" এর জন্য কিছু পাওয়া যায়নি। ভিন্ন শব্দ বা বাক্যাংশ দিয়ে চেষ্টা করুন।` : 'আর্কাইভে এখনো কোনো এন্ট্রি নেই।'}
+      <strong>Nothing Found</strong>
+      ${query ? `"${esc(query)}" এর জন্য কিছু পাওয়া যায়নি। Try with Long Sentence।` : 'Archieve is Empty'}
     </div>
   </div>`;
 }
 
-/* ════════════════════════════════════════════════════
-   VIEW TOGGLE (grid/list during search results)
-════════════════════════════════════════════════════ */
-function setView(v) {
+/* ══════════════════════════════════════════════════════════════════
+   VIEW TOGGLE
+══════════════════════════════════════════════════════════════════ */
+window.setView = function(v) {
   currentView = v;
   document.getElementById('viewGrid').classList.toggle('active', v === 'grid');
   document.getElementById('viewList').classList.toggle('active', v === 'list');
-  if (!searchQuery) return;
-  // Re-render with current results
-  if (lastResults) {
-    if (v === 'grid') renderGrid(lastResults);
-    else renderList(lastResults, searchQuery, currentMode === 'semantic');
-  }
-}
-let lastResults = null;
+  if (!searchQuery || !lastResults) return;
+  if (v === 'grid') renderGrid(lastResults);
+  else renderList(lastResults, searchQuery, currentMode === 'semantic');
+};
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    SEARCH — main entry point
-════════════════════════════════════════════════════ */
-async function doSearch() {
+══════════════════════════════════════════════════════════════════ */
+window.doSearch = async function() {
   const q = document.getElementById('searchInp').value.trim();
   searchQuery = q;
   hideDrop();
-
   document.getElementById('searchClear').classList.toggle('show', q.length > 0);
 
   if (!q) {
     clearSearchUI();
+    lastResults = null;
+    document.getElementById('viewToggleWrap').style.display = 'none';
     renderGrid(allHadith.map(h => ({ item: h })));
     return;
   }
 
   let results;
-
   if (currentMode === 'semantic') {
-    showHint('', true); // clear
     results = await semanticSearch(q);
   } else {
     results = basicSearch(q, allHadith);
@@ -1104,35 +1181,36 @@ async function doSearch() {
   lastResults = results;
   const isSem = currentMode === 'semantic';
 
-  const hintEl = document.getElementById('searchHint');
-  const hintText = document.getElementById('searchHintText');
-  hintEl.classList.add('show');
-  const icon = isSem
-    ? `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--sem-dk);flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
-    : `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="color:var(--gold-dk);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+  // Update hint
+  const hint = document.getElementById('searchHint');
+  hint.classList.add('show');
+  const iconSvg = isSem
+    ? `<svg width="13" height="13" fill="none" stroke="var(--sem-dk)" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+    : `<svg width="13" height="13" fill="none" stroke="var(--gold-dk)" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+  hint.innerHTML = iconSvg +
+    `<span><strong style="color:var(--ink)">${results.length}</strong> টি ফলাফল &ldquo;${esc(q)}&rdquo; — ${isSem ? 'Semantic' : 'Basic'} Search</span>`;
 
-  hintEl.innerHTML = icon + `<span>${results.length} টি ফলাফল "${esc(q)}" — ${isSem ? 'সিমান্টিক' : 'বেসিক'} অনুসন্ধান</span>`;
-
-  // Always show list view for search results
+  // Always list view for results
   currentView = 'list';
   document.getElementById('viewGrid').classList.remove('active');
   document.getElementById('viewList').classList.add('active');
   renderList(results, q, isSem);
-}
+};
 
 function showHint(text, clear) {
   const el = document.getElementById('searchHint');
-  if (clear) { el.classList.remove('show'); return; }
+  if (clear) { el.classList.remove('show'); el.innerHTML = ''; return; }
   el.classList.add('show');
-  document.getElementById('searchHintText').textContent = text;
+  el.innerHTML = text;
 }
 
 function clearSearchUI() {
   document.getElementById('searchHint').classList.remove('show');
+  document.getElementById('searchHint').innerHTML = '';
   document.getElementById('semProgress').classList.remove('show');
 }
 
-function clearSearch() {
+window.clearSearch = function() {
   document.getElementById('searchInp').value = '';
   searchQuery = '';
   document.getElementById('searchClear').classList.remove('show');
@@ -1141,11 +1219,11 @@ function clearSearch() {
   lastResults = null;
   document.getElementById('viewToggleWrap').style.display = 'none';
   renderGrid(allHadith.map(h => ({ item: h })));
-}
+};
 
-/* ════════════════════════════════════════════════════
-   LIVE DROPDOWN
-════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════
+   LIVE DROPDOWN (title + bangla quick suggest)
+══════════════════════════════════════════════════════════════════ */
 let dropTimer;
 const searchInp  = document.getElementById('searchInp');
 const searchDrop = document.getElementById('searchDrop');
@@ -1154,28 +1232,29 @@ searchInp.addEventListener('input', () => {
   const q = searchInp.value.trim();
   document.getElementById('searchClear').classList.toggle('show', q.length > 0);
   clearTimeout(dropTimer);
-  if (!q || q.length < 2) { hideDrop(); return; }
-  dropTimer = setTimeout(() => buildDrop(q), 200);
+  if (!q || q.length < 1) { hideDrop(); return; }
+  dropTimer = setTimeout(() => buildDrop(q), 180);
 });
-
 searchInp.addEventListener('keydown', e => {
   if (e.key === 'Enter') { doSearch(); hideDrop(); }
-  if (e.key === 'Escape') { hideDrop(); }
+  if (e.key === 'Escape') hideDrop();
 });
-
 document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) hideDrop(); });
 
 function buildDrop(q) {
-  // Quick scan for title matches
+  const ql = q.toLowerCase();
   const hits = allHadith
-    .filter(h => h.title.toLowerCase().includes(q.toLowerCase()) ||
-                 h.banglaScript.toLowerCase().includes(q.toLowerCase()) ||
-                 h.book.toLowerCase().includes(q.toLowerCase()))
-    .slice(0, 6);
+    .filter(h =>
+      h.title.toLowerCase().includes(ql) ||
+      h.banglaScript.toLowerCase().includes(ql) ||
+      h.book.toLowerCase().includes(ql) ||
+      h.tags.some(t => t.toLowerCase().includes(ql))
+    )
+    .slice(0, 7);
 
   if (!hits.length) { hideDrop(); return; }
 
-  searchDrop.innerHTML = `<div class="dd-section">পরামর্শ</div>`;
+  searchDrop.innerHTML = `<div class="dd-section">Suggestions</div>`;
   hits.forEach(h => {
     const div = document.createElement('div');
     div.className = 'dd-item';
@@ -1184,7 +1263,7 @@ function buildDrop(q) {
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
       </svg>
       <span class="dd-item-text">${esc(h.title)}</span>
-      ${h.book ? `<span class="dd-item-sub">${esc(h.book)}</span>` : ''}`;
+      ${h.book ? `<span class="dd-item-sub">${esc(h.book.slice(0,18))}</span>` : ''}`;
     div.addEventListener('mousedown', e => {
       e.preventDefault();
       searchInp.value = h.title;
@@ -1193,21 +1272,19 @@ function buildDrop(q) {
     });
     searchDrop.appendChild(div);
   });
-
   searchDrop.classList.add('show');
 }
 
 function hideDrop() { searchDrop.classList.remove('show'); searchDrop.innerHTML = ''; }
 
-/* ════════════════════════════════════════════════════
+/* ══════════════════════════════════════════════════════════════════
    INIT
-════════════════════════════════════════════════════ */
+══════════════════════════════════════════════════════════════════ */
 (async () => {
   try {
     allHadith = await loadHadith();
-    // Try to preload vectors in background
+    // Preload vectors silently in background
     loadVectors().catch(() => {});
-    // Render initial grid
     renderGrid(allHadith.map(h => ({ item: h })));
   } catch (err) {
     console.error('[safeenah hadith]', err);
@@ -1215,7 +1292,7 @@ function hideDrop() { searchDrop.classList.remove('show'); searchDrop.innerHTML 
       <div class="state-empty">
         <div class="state-msg">
           <strong>হাদিস লোড করা যায়নি</strong>
-          <code style="color:var(--gold-dk);">data/hadith/</code> ফোল্ডার এবং ফাইলের নাম যাচাই করুন।
+          <code style="color:var(--gold-dk);">data/hadith/</code> ফোল্ডার ও ফাইলের নাম যাচাই করুন।
         </div>
       </div>`;
     document.getElementById('countEl').textContent = '0';

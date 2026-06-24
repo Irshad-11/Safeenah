@@ -1,272 +1,402 @@
-
 /**
- * generate-vectors.js — Safeenah Semantic Search Preprocessor
+ * ╔══════════════════════════════════════════════════════════════════╗
+ * ║           SAFEENAH — HADITH SEMANTIC VECTOR GENERATOR           ║
+ * ║  Run this locally before pushing to GitHub to enable AI Search  ║
+ * ║                                                                  ║
+ * ║  Usage:  node generate-vectors.js                               ║
+ * ║  Output: data/vectors/hadith-vectors.json                       ║
+ * ║                                                                  ║
+ * ║  Model:  paraphrase-multilingual-MiniLM-L12-v2                  ║
+ * ║  Supports Bengali, Arabic, English — no backend required        ║
+ * ╚══════════════════════════════════════════════════════════════════╝
  *
- * Usage:
- *   node generate-vectors.js
+ * Dependencies:  npm install @xenova/transformers --ignore-scripts
  *
- * What it does:
- *   1. Reads all JSON files from data/hadith/ and data/events/
- *   2. Extracts all text content (Bengali, Arabic, English)
- *   3. Builds TF-IDF term-weight vectors for each document
- *   4. Saves the vectors to:
- *        data/vectors/hadith-vectors.json
- *        data/vectors/event-vectors.json
+ * How it works:
+ *   1. Scans data/hadith/*.json for all hadith files
+ *   2. Extracts text segments (title, subTitle, bangla_script paragraphs, details <p> blocks)
+ *   3. Embeds each segment into a 384-dim float32 vector using a multilingual model
+ *   4. Saves all vectors + metadata to data/vectors/hadith-vectors.json
+ *   5. Uses a cache (.vector-cache.json) to skip already-vectorized files
  *
- * Run this script locally whenever you add new JSON files and
- * commit the resulting vector files to GitHub alongside your data.
- *
- * Requirements: Node.js ≥ 14  (no npm packages needed)
+ * The output JSON is loaded by hadith.html in the browser for cosine-similarity search.
  */
 
-'use strict';
+import { pipeline } from '@xenova/transformers';
+import fs from 'fs';
+import path from 'path';
+import { createRequire } from 'module';
 
-const fs   = require('fs');
-const path = require('path');
+// ──────────────────────────────────────────────
+// CONFIG
+// ──────────────────────────────────────────────
+const HADITH_DIR   = 'data/hadith';
+const OUTPUT_FILE  = 'data/vectors/hadith-vectors.json';
+const CACHE_FILE   = '.vector-cache.json';
+const MODEL_NAME   = 'Xenova/paraphrase-multilingual-MiniLM-L12-v2';
+const BATCH_SIZE   = 8;   // segments per model batch (tune to your RAM)
+const MAX_CHARS    = 800; // max chars per text segment before trimming
 
-/* ─── Config ─────────────────────────────────────────────── */
-const CONFIG = {
-  hadith: {
-    folder : 'data/hadith',
-    output : 'data/vectors/hadith-vectors.json',
-  },
-  events: {
-    folder : 'data/events',
-    output : 'data/vectors/event-vectors.json',
-  },
+// ──────────────────────────────────────────────
+// TERMINAL COLOURS
+// ──────────────────────────────────────────────
+const C = {
+  reset: '\x1b[0m', bold: '\x1b[1m', dim: '\x1b[2m',
+  gold:  '\x1b[33m', blue: '\x1b[36m', green: '\x1b[32m',
+  red:   '\x1b[31m', yellow: '\x1b[93m', gray: '\x1b[90m',
 };
+const log  = (msg)  => console.log(`${C.gold}◆${C.reset} ${msg}`);
+const info = (msg)  => console.log(`  ${C.blue}→${C.reset} ${msg}`);
+const ok   = (msg)  => console.log(`  ${C.green}✓${C.reset} ${msg}`);
+const warn = (msg)  => console.log(`  ${C.yellow}⚠${C.reset} ${msg}`);
+const err  = (msg)  => console.log(`  ${C.red}✗${C.reset} ${msg}`);
+const dim  = (msg)  => process.stdout.write(`${C.gray}${msg}${C.reset}`);
 
-/* ─── Helpers ────────────────────────────────────────────── */
-
-/** Strip HTML tags from a string */
-function stripHtml(str) {
-  return String(str || '').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/gi, ' ');
+// ──────────────────────────────────────────────
+// CACHE
+// ──────────────────────────────────────────────
+function loadCache() {
+  try { return JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8')); }
+  catch { return { files: {}, modelName: '' }; }
+}
+function saveCache(cache) {
+  fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2), 'utf8');
 }
 
-/** Normalize + tokenize any script (Bengali, Arabic, Latin) into unigrams + bigrams */
-function tokenize(text) {
-  if (!text) return [];
-
-  const cleaned = stripHtml(text)
-    // keep Bengali Unicode range (U+0980–U+09FF), Arabic (U+0600–U+06FF),
-    // Urdu extended, Latin letters, digits; replace everything else with space
-    .replace(/[^\u0980-\u09FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FFa-zA-Z0-9]+/g, ' ')
-    .toLowerCase()
+// ──────────────────────────────────────────────
+// HTML STRIPPING
+// ──────────────────────────────────────────────
+function stripHtml(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"')
+    .replace(/[ \t]+/g, ' ')
     .trim();
-
-  const words = cleaned.split(/\s+/).filter(w => w.length > 1);
-
-  // Unigrams
-  const tokens = [...words];
-
-  // Bigrams (adjacent word pairs) — crucial for Bengali phrase matching
-  for (let i = 0; i < words.length - 1; i++) {
-    tokens.push(words[i] + '_' + words[i + 1]);
-  }
-
-  return tokens;
 }
 
-/** Compute term frequency map for a token list */
-function termFrequency(tokens) {
-  const tf = {};
-  for (const t of tokens) {
-    tf[t] = (tf[t] || 0) + 1;
+// ──────────────────────────────────────────────
+// EXTRACT <p> BLOCKS from HTML details field
+// ──────────────────────────────────────────────
+function extractParagraphs(html) {
+  if (!html) return [];
+  const paragraphs = [];
+  // Match <p ...>...</p> blocks
+  const re = /<p[^>]*>([\s\S]*?)<\/p>/gi;
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    const text = stripHtml(m[1]).trim();
+    if (text.length > 20) paragraphs.push(text);
   }
-  const total = tokens.length || 1;
-  for (const t in tf) tf[t] /= total;
-  return tf;
+  // If no <p> tags, split by newlines
+  if (!paragraphs.length) {
+    const plain = stripHtml(html);
+    plain.split(/\n{2,}/).forEach(seg => {
+      const t = seg.trim();
+      if (t.length > 20) paragraphs.push(t);
+    });
+  }
+  return paragraphs;
 }
 
-/** Extract all searchable text from a hadith JSON object */
-function extractHadithText(h) {
-  const parts = [
-    h.title        || '',
-    h.subTitle     || '',
-    h.bangla_script || '',
-    h.arabic_script || '',
-    stripHtml(h.details || ''),
-    h.book_name    || '',
-    h.book_author  || '',
-    h.publication  || '',
-    h.edition      || '',
-    h.enlist_author || '',
-    Array.isArray(h.tags) ? h.tags.join(' ') : (h.tags || ''),
-    h.author_manhaj || '',
-    Array.isArray(h.chain_of_narrator)
-      ? h.chain_of_narrator.map(n => n.name || '').join(' ')
-      : '',
-    // image alt text
-    Array.isArray(h.images) ? h.images.map(img => img.text || '').join(' ') : '',
-  ];
-  return parts.join(' ');
+// ──────────────────────────────────────────────
+// SPLIT LONG TEXT into overlapping windows
+// ──────────────────────────────────────────────
+function splitIntoWindows(text, maxChars = MAX_CHARS, overlap = 100) {
+  if (text.length <= maxChars) return [text];
+  const segments = [];
+  let start = 0;
+  while (start < text.length) {
+    const end = Math.min(start + maxChars, text.length);
+    segments.push(text.slice(start, end).trim());
+    if (end >= text.length) break;
+    start += maxChars - overlap;
+  }
+  return segments;
 }
 
-/** Extract all searchable text from an event JSON object */
-function extractEventText(e) {
-  const parts = [
-    e.title        || '',
-    e.subTitle     || e.subtitle || '',
-    e.description  || '',
-    stripHtml(e.details || e.content || ''),
-    e.location     || '',
-    e.year         || '',
-    Array.isArray(e.tags) ? e.tags.join(' ') : (e.tags || ''),
-    e.category     || '',
-    e.source       || '',
-    e.book         || '',
-  ];
-  return parts.join(' ');
-}
-
-/** Compute IDF across a corpus (array of token lists) */
-function computeIDF(allTokenSets) {
-  const docCount = allTokenSets.length;
-  const df = {};   // document frequency per term
-
-  for (const tokenSet of allTokenSets) {
-    const seen = new Set(tokenSet);
-    for (const t of seen) {
-      df[t] = (df[t] || 0) + 1;
-    }
-  }
-
-  const idf = {};
-  for (const t in df) {
-    idf[t] = Math.log((docCount + 1) / (df[t] + 1)) + 1;  // smoothed IDF
-  }
-  return idf;
-}
-
-/** Multiply TF × IDF and keep only top-N terms by weight to save space */
-function tfidfVector(tf, idf, topN = 200) {
-  const vec = {};
-  for (const t in tf) {
-    if (idf[t]) vec[t] = tf[t] * idf[t];
-  }
-
-  // Keep only topN highest-weight terms
-  const sorted = Object.entries(vec).sort((a, b) => b[1] - a[1]);
-  const trimmed = {};
-  for (let i = 0; i < Math.min(topN, sorted.length); i++) {
-    trimmed[sorted[i][0]] = +sorted[i][1].toFixed(6);
-  }
-  return trimmed;
-}
-
-/** Parse a JSON file: handles single object or array */
-function readJsonFile(filePath) {
-  const raw = fs.readFileSync(filePath, 'utf8');
-  const parsed = JSON.parse(raw);
-  return Array.isArray(parsed) ? parsed : [parsed];
-}
-
-/** Process one corpus (hadith or events) */
-function processCorpus(folderPath, outputPath, extractFn, label) {
-  console.log(`\n${'═'.repeat(52)}`);
-  console.log(` Processing: ${label}`);
-  console.log(`${'═'.repeat(52)}`);
-
-  if (!fs.existsSync(folderPath)) {
-    console.error(`  ✗  Folder not found: ${folderPath}`);
-    return;
-  }
-
-  const jsonFiles = fs.readdirSync(folderPath)
-    .filter(f => f.endsWith('.json'))
-    .sort();
-
-  if (!jsonFiles.length) {
-    console.warn(`  ⚠  No JSON files found in ${folderPath}`);
-    return;
-  }
-
-  console.log(`  Source Folder : ${folderPath}`);
-  console.log(`  Files Found   : ${jsonFiles.length}`);
-
-  // Step 1: load all docs and extract text
-  const docs = [];
-  for (const fname of jsonFiles) {
-    const filePath = path.join(folderPath, fname);
-    try {
-      const items = readJsonFile(filePath);
-      for (const item of items) {
-        const text   = extractFn(item);
-        const tokens = tokenize(text);
-        docs.push({
-          slug    : item.slug || fname.replace('.json', ''),
-          title   : item.title || item.name || fname,
-          file    : fname,
-          tokens,
-          rawText : text,
-        });
-      }
-    } catch (err) {
-      console.error(`  ✗  Failed to parse ${fname}: ${err.message}`);
-    }
-  }
-
-  console.log(`  Documents     : ${docs.length}`);
-
-  // Step 2: compute IDF
-  const idf = computeIDF(docs.map(d => d.tokens));
-
-  // Step 3: compute TF-IDF vectors
-  const vectors = docs.map(doc => {
-    const tf  = termFrequency(doc.tokens);
-    const vec = tfidfVector(tf, idf, 250);
-    console.log(`  ✓  ${doc.slug} (${Object.keys(vec).length} terms)`);
-    return {
-      slug  : doc.slug,
-      title : doc.title,
-      file  : doc.file,
-      vector: vec,
-    };
-  });
-
-  // Step 4: also store the global IDF so browser can vectorize queries the same way
-  const output = {
-    generated: new Date().toISOString(),
-    docCount : docs.length,
-    idf,          // global IDF table — browser uses this to vectorize the query
-    documents: vectors,
+// ──────────────────────────────────────────────
+// EXTRACT ALL SEGMENTS from a hadith JSON object
+// Each segment gets: { segId, type, text, hadithSlug, hadithTitle }
+// ──────────────────────────────────────────────
+function extractSegments(hadith, slug) {
+  const segs = [];
+  const add = (type, text) => {
+    if (!text || text.trim().length < 10) return;
+    const chunks = splitIntoWindows(text.trim());
+    chunks.forEach((chunk, ci) => {
+      segs.push({
+        segId:       `${slug}::${type}::${ci}`,
+        type,
+        text:        chunk,
+        hadithSlug:  slug,
+        hadithTitle: hadith.title || slug,
+      });
+    });
   };
 
-  // Ensure output directory exists
-  const outDir = path.dirname(outputPath);
-  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+  // Title & subTitle
+  add('title',    hadith.title);
+  add('subtitle', hadith.subTitle);
 
-  fs.writeFileSync(outputPath, JSON.stringify(output));
+  // Bangla script — split by double newline (natural paragraph breaks)
+  if (hadith.bangla_script) {
+    const bParas = hadith.bangla_script.split(/\n{2,}/);
+    bParas.forEach((p, i) => {
+      const t = p.trim();
+      if (t.length > 10) add(`bangla_para_${i}`, t);
+    });
+    // Also add the whole bangla text (truncated) as one segment for overall matching
+    if (hadith.bangla_script.length > 50) {
+      add('bangla_full', hadith.bangla_script.slice(0, MAX_CHARS));
+    }
+  }
 
-  const sizeKb = (fs.statSync(outputPath).size / 1024).toFixed(1);
-  console.log(`\n  Output → ${outputPath}  (${sizeKb} KB)`);
-  console.log(`  ✓  Done — ${vectors.length} document vectors saved.`);
+  // Arabic script
+  if (hadith.arabic_script) {
+    add('arabic', hadith.arabic_script.slice(0, MAX_CHARS));
+  }
+
+  // Details (HTML) — extract <p> blocks
+  if (hadith.details) {
+    const paras = extractParagraphs(hadith.details);
+    paras.forEach((p, i) => add(`details_p_${i}`, p));
+    if (!paras.length) add('details', stripHtml(hadith.details).slice(0, MAX_CHARS));
+  }
+
+  // Book meta (useful for "which book says X")
+  const bookMeta = [hadith.book_name, hadith.book_author, hadith.publication].filter(Boolean).join(' — ');
+  if (bookMeta) add('book_meta', bookMeta);
+
+  // Tags combined
+  const tags = Array.isArray(hadith.tags) ? hadith.tags.join(', ') : (hadith.tags || '');
+  if (tags) add('tags', tags);
+
+  // Images text descriptions
+  if (Array.isArray(hadith.images)) {
+    const imgTexts = hadith.images.map(img => img.text || '').filter(Boolean).join('. ');
+    if (imgTexts) add('image_desc', imgTexts);
+  }
+
+  return segs;
 }
 
+// ──────────────────────────────────────────────
+// PROGRESS BAR
+// ──────────────────────────────────────────────
+function progressBar(done, total, width = 28) {
+  const pct  = total ? Math.round((done / total) * 100) : 0;
+  const fill = Math.round((done / total) * width);
+  const bar  = '█'.repeat(fill) + '░'.repeat(width - fill);
+  return `${C.gold}[${bar}]${C.reset} ${pct}% (${done}/${total})`;
+}
 
-/* ─── Main ───────────────────────────────────────────────── */
-console.log('\n╔══════════════════════════════════════════════════════╗');
-console.log('║        SAFEENAH — Semantic Vector Generator         ║');
-console.log('╚══════════════════════════════════════════════════════╝');
-console.log(`  Run at: ${new Date().toLocaleString()}`);
+// ──────────────────────────────────────────────
+// EMBED TEXT BATCH using @xenova/transformers
+// Returns Float32Array[] (one per text)
+// ──────────────────────────────────────────────
+async function embedBatch(pipe, texts) {
+  const output = await pipe(texts, { pooling: 'mean', normalize: true });
+  // output.tolist() returns Array<number[]>
+  const vecs = output.tolist ? output.tolist() : Array.from({ length: texts.length }, (_, i) => Array.from(output.data.slice(i * 384, (i + 1) * 384)));
+  return vecs;
+}
 
-processCorpus(
-  CONFIG.hadith.folder,
-  CONFIG.hadith.output,
-  extractHadithText,
-  'HADITH'
-);
+// ──────────────────────────────────────────────
+// FILE HASH — simple content hash for cache
+// ──────────────────────────────────────────────
+function fileHash(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  let h = 0;
+  for (let i = 0; i < content.length; i++) {
+    h = ((h << 5) - h + content.charCodeAt(i)) | 0;
+  }
+  return h.toString(16);
+}
 
-processCorpus(
-  CONFIG.events.folder,
-  CONFIG.events.output,
-  extractEventText,
-  'EVENTS'
-);
+// ──────────────────────────────────────────────
+// MAIN
+// ──────────────────────────────────────────────
+(async () => {
+  console.log(`\n${C.bold}${C.gold}╔══════════════════════════════════════════╗${C.reset}`);
+  console.log(`${C.bold}${C.gold}║   SAFEENAH HADITH VECTOR GENERATOR      ║${C.reset}`);
+  console.log(`${C.bold}${C.gold}╚══════════════════════════════════════════╝${C.reset}\n`);
 
-console.log('\n╔══════════════════════════════════════════════════════╗');
-console.log('║                    SUMMARY                          ║');
-console.log('╚══════════════════════════════════════════════════════╝');
-console.log('  Vector files written to data/vectors/');
-console.log('  Commit these files to GitHub alongside your JSON data.');
-console.log('  Run this script again after adding any new JSON files.\n');
+  // Ensure output directory exists
+  const outDir = path.dirname(OUTPUT_FILE);
+  if (!fs.existsSync(outDir)) { fs.mkdirSync(outDir, { recursive: true }); ok(`Created ${outDir}`); }
+
+  // Load cache
+  const cache = loadCache();
+  if (cache.modelName && cache.modelName !== MODEL_NAME) {
+    warn('Model changed — rebuilding all vectors from scratch.');
+    cache.files = {};
+  }
+  cache.modelName = MODEL_NAME;
+
+  // Scan hadith files
+  if (!fs.existsSync(HADITH_DIR)) { err(`Directory not found: ${HADITH_DIR}`); process.exit(1); }
+  const jsonFiles = fs.readdirSync(HADITH_DIR)
+    .filter(f => f.endsWith('.json'))
+    .sort()
+    .map(f => path.join(HADITH_DIR, f));
+
+  if (!jsonFiles.length) { warn('No JSON files found in data/hadith/'); process.exit(0); }
+  log(`Found ${jsonFiles.length} hadith JSON files`);
+
+  // Load existing output (for merging)
+  let existingOutput = { segments: [], generatedAt: '', model: MODEL_NAME };
+  if (fs.existsSync(OUTPUT_FILE)) {
+    try { existingOutput = JSON.parse(fs.readFileSync(OUTPUT_FILE, 'utf8')); }
+    catch { warn('Could not parse existing output — rebuilding.'); }
+  }
+  // Index existing segments by segId for quick lookup
+  const existingMap = new Map((existingOutput.segments || []).map(s => [s.segId, s]));
+
+  // Determine which files need (re)processing
+  const toProcess = [];
+  const upToDate  = [];
+  for (const fpath of jsonFiles) {
+    const hash = fileHash(fpath);
+    if (cache.files[fpath] && cache.files[fpath].hash === hash) {
+      upToDate.push(fpath);
+    } else {
+      toProcess.push({ fpath, hash });
+    }
+  }
+
+  if (upToDate.length) info(`${upToDate.length} file(s) up-to-date (skipped)`);
+  if (!toProcess.length) {
+    ok('All files are up-to-date. Nothing to do.');
+    // Still write output in case it was missing
+    if (!fs.existsSync(OUTPUT_FILE)) {
+      fs.writeFileSync(OUTPUT_FILE, JSON.stringify(existingOutput, null, 2), 'utf8');
+      ok(`Written: ${OUTPUT_FILE}`);
+    }
+    process.exit(0);
+  }
+
+  log(`${toProcess.length} file(s) need vectorization`);
+
+  // Load model
+  log(`Loading model: ${C.blue}${MODEL_NAME}${C.reset}`);
+  info('This downloads ~120 MB on first run, then caches locally.');
+  const pipe = await pipeline('feature-extraction', MODEL_NAME, {
+    progress_callback: (progress) => {
+      if (progress.status === 'downloading') {
+        process.stdout.write(`\r  ${C.gray}Downloading model: ${Math.round((progress.loaded / progress.total) * 100)}%   ${C.reset}`);
+      }
+    },
+  });
+  process.stdout.write('\n');
+  ok('Model ready');
+
+  // Process each new/changed file
+  let totalNewSegments = 0;
+
+  for (let fi = 0; fi < toProcess.length; fi++) {
+    const { fpath, hash } = toProcess[fi];
+    const fname = path.basename(fpath);
+
+    console.log(`\n  ${C.bold}[${fi + 1}/${toProcess.length}]${C.reset} ${C.gold}${fname}${C.reset}`);
+
+    // Parse JSON
+    let raw;
+    try { raw = JSON.parse(fs.readFileSync(fpath, 'utf8')); }
+    catch (e) { err(`JSON parse error: ${e.message}`); continue; }
+
+    const hadithArray = Array.isArray(raw) ? raw : [raw];
+    const slug = path.basename(fname, '.json');
+
+    // Remove old segments for this file from existingMap
+    for (const [key] of existingMap) {
+      if (key.startsWith(slug + '::')) existingMap.delete(key);
+    }
+
+    // Extract segments
+    let allSegs = [];
+    for (const hadith of hadithArray) {
+      const hslug = hadith.slug || slug;
+      const segs = extractSegments(hadith, hslug);
+      allSegs = allSegs.concat(segs);
+    }
+
+    info(`  ${allSegs.length} text segments extracted`);
+
+    // Embed in batches
+    for (let bi = 0; bi < allSegs.length; bi += BATCH_SIZE) {
+      const batch = allSegs.slice(bi, bi + BATCH_SIZE);
+      const texts = batch.map(s => s.text);
+      try {
+        const vecs = await embedBatch(pipe, texts);
+        batch.forEach((seg, idx) => {
+          existingMap.set(seg.segId, { ...seg, vector: vecs[idx] });
+        });
+        totalNewSegments += batch.length;
+        process.stdout.write(`\r    ${progressBar(Math.min(bi + BATCH_SIZE, allSegs.length), allSegs.length)}`);
+      } catch (e) {
+        err(`\n  Embedding failed for batch ${bi}: ${e.message}`);
+      }
+    }
+    process.stdout.write('\n');
+
+    // Update cache
+    cache.files[fpath] = { hash, segments: allSegs.length, processedAt: new Date().toISOString() };
+    ok(`  Done — ${allSegs.length} segments embedded`);
+  }
+
+  // Compile output — filter to only keep segments from files we still have
+  const validSlugs = new Set(jsonFiles.map(f => path.basename(f, '.json')));
+  const allSegments = [];
+  for (const [segId, seg] of existingMap) {
+    const hadithSlug = seg.hadithSlug;
+    if (validSlugs.has(hadithSlug) || jsonFiles.some(f => f.includes(hadithSlug))) {
+      allSegments.push(seg);
+    }
+  }
+
+  // Group by hadithSlug for statistics
+  const bySlug = {};
+  for (const seg of allSegments) {
+    (bySlug[seg.hadithSlug] = bySlug[seg.hadithSlug] || []).push(seg);
+  }
+
+  // Build output JSON
+  const output = {
+    model:        MODEL_NAME,
+    generatedAt:  new Date().toISOString(),
+    vectorDim:    384,
+    totalHadith:  Object.keys(bySlug).length,
+    totalSegments: allSegments.length,
+    hadithFiles:  jsonFiles.map(f => path.basename(f)),
+    // Per-hadith index (for browser to know which hadith each segment belongs to)
+    hadithIndex:  Object.fromEntries(
+      Object.entries(bySlug).map(([slug, segs]) => [
+        slug,
+        { title: segs[0]?.hadithTitle || slug, segmentCount: segs.length }
+      ])
+    ),
+    segments: allSegments,
+  };
+
+  // Write output
+  const outJson = JSON.stringify(output);
+  fs.writeFileSync(OUTPUT_FILE, outJson, 'utf8');
+  const sizeKB = Math.round(fs.statSync(OUTPUT_FILE).size / 1024);
+  saveCache(cache);
+
+  // Summary
+  console.log(`\n${C.bold}${C.gold}══════════════════════════════════════════${C.reset}`);
+  console.log(`${C.bold} SUMMARY${C.reset}`);
+  console.log(`${C.gold}══════════════════════════════════════════${C.reset}`);
+  ok(`Model        : ${MODEL_NAME}`);
+  ok(`Hadith files : ${jsonFiles.length}`);
+  ok(`Total segs   : ${allSegments.length}`);
+  ok(`New segs     : ${totalNewSegments}`);
+  ok(`Output size  : ${sizeKB} KB`);
+  ok(`Output file  : ${OUTPUT_FILE}`);
+  console.log(`\n${C.green}${C.bold}✓ Done. Commit ${OUTPUT_FILE} to GitHub.${C.reset}\n`);
+})();
