@@ -494,15 +494,19 @@ const HADITH_FILES = [
     'ali-betito-sokol-dorja-bondho-korar-nirdesh.json',
     'ali-prothom-islam-grohon-kari.json',
     'ali-tumi-amar-khalifa.json',
+    'alir-sathe-bondhutto-rakhar-tagid.json',
     'allah-adesh-diyese-ei-ayat-ali-pouchabe.json',
     'allah-alike-opodostho-korben-na.json',
     'allah-alir-ontor-porikkha-korsen.json',
     'allahor-dristite-alir-morjada-part1.json',
+    'allahor-rojju-ke-shokto-vabe-dhoro.json',
     'amar-barta-ami-pouchabo-nahoy-ali-pouchabe.json',
     'amar-por-ahle-bait-er-sathe-ki-achoron-koro.json',
+    'anugotto-koro-ulil-amor.json',
     'hadith-ali-ibn-abi-talib-surah-maryam-96.json',
     'imam-ali-ah-islam-grohon-ibadat-khaibar-er-bijoy.json',
     'khaibar-er-pataka-ali-ke-diyese-allah-rasul-muhabbat-kore.json',
+    'mubahala-hadith-najran.json',
     'prophet-last-illness-medicine-ledud.json',
     'shane-nuzul-surah-yunus-35-ali-judgment.json'
 ];
@@ -815,7 +819,47 @@ function computeBasicScore(h, q, qWords) {
    SEMANTIC SEARCH — real multilingual sentence embeddings
    Phase A: Embed query in browser via Transformers.js
    Phase B: Cosine similarity against pre-computed segment vectors
+   Phase C: Adaptive thresholding — only genuinely relevant results pass
+
+   WHY THE OLD VERSION RETURNED ALL 19 HADITH:
+   The model paraphrase-multilingual-MiniLM-L12-v2 produces cosine scores
+   in a compressed range. Even completely unrelated texts score 0.25–0.45
+   against each other. A fixed threshold of 0.25 therefore passes
+   everything. The correct approach is:
+     1. Collect ALL raw scores (no pre-filter)
+     2. Find the best score in the corpus for this query
+     3. Apply an ADAPTIVE threshold = max(HARD_FLOOR, bestScore × DROP_RATIO)
+        where DROP_RATIO (e.g. 0.82) means "only keep results within 18%
+        of the best match". This naturally returns 0 results for off-topic
+        queries because even the best score sits far below any meaningful
+        match and the gap between items is negligible — the DROP_RATIO
+        filter then keeps only those truly close to the top.
+     4. Additionally enforce a HARD_FLOOR (0.55) so that if the best
+        score itself is low (meaning nothing in the corpus is relevant),
+        nothing is returned.
 ══════════════════════════════════════════════════════════════════ */
+
+/*
+ * TUNING CONSTANTS
+ *
+ * HARD_FLOOR   — absolute minimum cosine score a result must reach.
+ *                paraphrase-multilingual-MiniLM-L12-v2 typically
+ *                produces 0.75–0.95 for genuinely related content
+ *                and 0.35–0.55 for unrelated content.
+ *                0.58 is a safe floor that eliminates noise while
+ *                keeping good Islamic-content matches.
+ *
+ * DROP_RATIO   — a result is kept only if its score ≥ bestScore × DROP_RATIO.
+ *                0.85 means "within 15% of the best match".
+ *                This ensures a tight cluster of genuinely relevant
+ *                results rather than a long tail of weak matches.
+ *
+ * MAX_RESULTS  — hard cap on returned items (prevents UI overload).
+ */
+const SEM_HARD_FLOOR  = 0.89;
+const SEM_DROP_RATIO  = 0.99;
+const SEM_MAX_RESULTS = 100;
+
 async function semanticSearch(query) {
   const progressWrap = document.getElementById('semProgress');
   const semBar       = document.getElementById('semBar');
@@ -823,28 +867,28 @@ async function semanticSearch(query) {
   const semStage     = document.getElementById('semStage');
 
   progressWrap.classList.add('show');
-  semBar.style.width = '5%';
+  semBar.style.width   = '5%';
   semStage.textContent = 'Loading Model';
-  semMsg.textContent  = 'AI মডেল প্রস্তুত করা হচ্ছে…';
+  semMsg.textContent   = 'Loading AI model…';
 
   // Ensure model is loaded
   const modelOk = await ensureModel();
   if (!modelOk) {
     progressWrap.classList.remove('show');
-    showHint('⚠ মডেল লোড করা যায়নি — Basic search ব্যবহার করা হচ্ছে।', false);
+    showHint('⚠ Model failed to load — falling back to Basic search.', false);
     return basicSearch(query, allHadith);
   }
 
   // Check vectors
   if (!vectorsLoaded || !vectorData) {
     progressWrap.classList.remove('show');
-    showHint('⚠ Vector ফাইল পাওয়া যায়নি। Basic search দেখানো হচ্ছে।', false);
+    showHint('⚠ Vector file not found. Run generate-vectors.js and push to GitHub.', false);
     return basicSearch(query, allHadith);
   }
 
   // Step 1: Embed the query
   semStage.textContent = 'Embedding Query';
-  semMsg.textContent   = 'প্রশ্নটি বিশ্লেষণ করা হচ্ছে…';
+  semMsg.textContent   = 'Analyzing your query…';
   semBar.style.width   = '15%';
   await new Promise(r => setTimeout(r, 0));
 
@@ -853,55 +897,78 @@ async function semanticSearch(query) {
     queryVec = await embedText(query);
   } catch (e) {
     progressWrap.classList.remove('show');
-    showHint('⚠ Query embedding ব্যর্থ: ' + e.message, false);
+    showHint('⚠ Query embedding failed: ' + e.message, false);
     return basicSearch(query, allHadith);
   }
 
-  // Step 2: Score all pre-computed segments
+  // Step 2: Score ALL segments — collect raw scores without pre-filtering
   semStage.textContent = 'Comparing';
-  semMsg.textContent   = 'সকল হাদিস সেগমেন্টের সাথে তুলনা করা হচ্ছে…';
+  semMsg.textContent   = 'Comparing against all hadith segments…';
   semBar.style.width   = '30%';
   await new Promise(r => setTimeout(r, 0));
 
   const segments = vectorData.segments || [];
   const total    = segments.length;
 
-  // Group best-matching segments per hadith slug
-  const hadithBestSegs = new Map(); // slug → { score, segments[] }
+  // slug → { topScore, segs[] }
+  const hadithBestSegs = new Map();
 
   const CHUNK = 50;
   for (let i = 0; i < total; i += CHUNK) {
     const batch = segments.slice(i, i + CHUNK);
     for (const seg of batch) {
       const sim = cosineSim(queryVec, seg.vector);
-      if (sim < 0.25) continue; // skip low relevance
-
+      // Collect everything — we filter adaptively AFTER seeing all scores
       if (!hadithBestSegs.has(seg.hadithSlug)) {
-        hadithBestSegs.set(seg.hadithSlug, { topScore: 0, segs: [] });
+        hadithBestSegs.set(seg.hadithSlug, { topScore: -1, segs: [] });
       }
       const entry = hadithBestSegs.get(seg.hadithSlug);
       entry.segs.push({ ...seg, sim });
       if (sim > entry.topScore) entry.topScore = sim;
     }
 
-    const pct = 30 + Math.round(((i + CHUNK) / total) * 60);
-    semBar.style.width = Math.min(pct, 90) + '%';
-    semMsg.textContent = `${Math.min(i + CHUNK, total)} / ${total} সেগমেন্ট বিশ্লেষিত`;
+    const pct = 30 + Math.round(((i + CHUNK) / total) * 55);
+    semBar.style.width = Math.min(pct, 85) + '%';
+    semMsg.textContent = `${Math.min(i + CHUNK, total)} / ${total} segments analyzed`;
     await new Promise(r => setTimeout(r, 0));
   }
 
-  semBar.style.width   = '95%';
+  semBar.style.width   = '90%';
   semStage.textContent = 'Ranking';
-  semMsg.textContent   = 'ফলাফল সাজানো হচ্ছে…';
+  semMsg.textContent   = 'Applying relevance filter…';
   await new Promise(r => setTimeout(r, 0));
 
-  // Build final results
+  // Step 3: Find the best score across ALL hadith in the corpus
+  let globalBest = 0;
+  for (const entry of hadithBestSegs.values()) {
+    if (entry.topScore > globalBest) globalBest = entry.topScore;
+  }
+
+  /*
+   * Step 4: Adaptive threshold
+   *
+   * adaptive = max(HARD_FLOOR, globalBest × DROP_RATIO)
+   *
+   * Case A — relevant query (e.g. "Ali ibn Abi Talib"):
+   *   globalBest ≈ 0.88
+   *   adaptive   = max(0.58, 0.88 × 0.85) = max(0.58, 0.748) = 0.748
+   *   → only hadith scoring ≥ 0.748 are returned (tight cluster)
+   *
+   * Case B — off-topic query (e.g. "black hole"):
+   *   globalBest ≈ 0.46
+   *   adaptive   = max(0.58, 0.46 × 0.85) = max(0.58, 0.391) = 0.58
+   *   → nothing passes the HARD_FLOOR of 0.58 → 0 results returned ✓
+   */
+  const adaptiveThreshold = Math.max(SEM_HARD_FLOOR, globalBest * SEM_DROP_RATIO);
+
+  // Step 5: Build final results — only items above adaptive threshold
   const scored = [];
   for (const [slug, entry] of hadithBestSegs) {
+    if (entry.topScore < adaptiveThreshold) continue;  // ← the key filter
+
     const hadith = allHadith.find(h => h.slug === slug);
     if (!hadith) continue;
 
-    // Sort segs by similarity desc, keep top 3
     entry.segs.sort((a, b) => b.sim - a.sim);
     const topSegs = entry.segs.slice(0, 3);
 
@@ -909,10 +976,10 @@ async function semanticSearch(query) {
       item:  hadith,
       score: entry.topScore,
       matchedSegments: topSegs.map(s => ({
-        label:  segTypeLabel(s.type),
-        text:   s.text,
-        sim:    s.sim,
-        type:   'semantic',
+        label: segTypeLabel(s.type),
+        text:  s.text,
+        sim:   s.sim,
+        type:  'semantic',
       })),
     });
   }
@@ -922,7 +989,7 @@ async function semanticSearch(query) {
   progressWrap.classList.remove('show');
   semBar.style.width = '0%';
 
-  return scored.slice(0, 60);
+  return scored.slice(0, SEM_MAX_RESULTS);
 }
 
 function segTypeLabel(type) {

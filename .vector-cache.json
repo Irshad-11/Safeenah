@@ -3,97 +3,117 @@
     "data/hadith/abu-bakr-dukho-pelen.json": {
       "hash": "-147b69cf",
       "segments": 6,
-      "processedAt": "2026-06-24T06:45:59.561Z"
+      "processedAt": "2026-06-24T16:38:04.183Z"
     },
     "data/hadith/ali-ah-allahor-kase-sobcheye-priyo.json": {
       "hash": "-5f9c3bc6",
       "segments": 7,
-      "processedAt": "2026-06-24T06:46:00.259Z"
+      "processedAt": "2026-06-24T16:38:05.018Z"
     },
     "data/hadith/ali-amar-janer-moto.json": {
       "hash": "-43a80fb3",
       "segments": 5,
-      "processedAt": "2026-06-24T06:46:00.594Z"
+      "processedAt": "2026-06-24T16:38:05.495Z"
     },
     "data/hadith/ali-amar-nirdesh-pouchabe.json": {
       "hash": "-7f9de72d",
       "segments": 8,
-      "processedAt": "2026-06-24T06:46:00.765Z"
+      "processedAt": "2026-06-24T16:38:05.730Z"
     },
     "data/hadith/ali-amar-por-protiti-muminer-oli.json": {
       "hash": "774b2063",
       "segments": 12,
-      "processedAt": "2026-06-24T06:46:01.676Z"
+      "processedAt": "2026-06-24T16:38:06.784Z"
     },
     "data/hadith/ali-betito-sokol-dorja-bondho-korar-nirdesh.json": {
       "hash": "121c9038",
       "segments": 31,
-      "processedAt": "2026-06-24T06:46:03.450Z"
+      "processedAt": "2026-06-24T16:38:08.546Z"
     },
     "data/hadith/ali-prothom-islam-grohon-kari.json": {
       "hash": "758cc16a",
       "segments": 35,
-      "processedAt": "2026-06-24T06:46:06.058Z"
+      "processedAt": "2026-06-24T16:38:11.207Z"
     },
     "data/hadith/ali-tumi-amar-khalifa.json": {
       "hash": "1a0f46fb",
       "segments": 10,
-      "processedAt": "2026-06-24T06:46:06.448Z"
+      "processedAt": "2026-06-24T16:38:11.621Z"
     },
     "data/hadith/allah-adesh-diyese-ei-ayat-ali-pouchabe.json": {
       "hash": "c781f47",
       "segments": 7,
-      "processedAt": "2026-06-24T06:46:06.831Z"
+      "processedAt": "2026-06-24T16:38:12.068Z"
     },
     "data/hadith/allah-alike-opodostho-korben-na.json": {
       "hash": "6bbb86c1",
       "segments": 12,
-      "processedAt": "2026-06-24T06:46:07.702Z"
+      "processedAt": "2026-06-24T16:38:12.978Z"
     },
     "data/hadith/allah-alir-ontor-porikkha-korsen.json": {
       "hash": "6416c1cf",
       "segments": 22,
-      "processedAt": "2026-06-24T06:46:09.059Z"
+      "processedAt": "2026-06-24T16:38:14.434Z"
     },
     "data/hadith/allahor-dristite-alir-morjada-part1.json": {
       "hash": "-75e59a30",
       "segments": 16,
-      "processedAt": "2026-06-24T06:46:11.277Z"
+      "processedAt": "2026-06-24T16:38:16.868Z"
     },
     "data/hadith/amar-barta-ami-pouchabo-nahoy-ali-pouchabe.json": {
       "hash": "-3e6a2271",
       "segments": 61,
-      "processedAt": "2026-06-24T06:46:15.769Z"
+      "processedAt": "2026-06-24T16:38:22.573Z"
     },
     "data/hadith/amar-por-ahle-bait-er-sathe-ki-achoron-koro.json": {
       "hash": "-52666c66",
       "segments": 9,
-      "processedAt": "2026-06-24T06:46:16.199Z"
+      "processedAt": "2026-06-24T16:38:23.026Z"
     },
     "data/hadith/hadith-ali-ibn-abi-talib-surah-maryam-96.json": {
       "hash": "-c73de71",
       "segments": 15,
-      "processedAt": "2026-06-24T06:46:18.497Z"
+      "processedAt": "2026-06-24T16:38:25.373Z"
     },
     "data/hadith/imam-ali-ah-islam-grohon-ibadat-khaibar-er-bijoy.json": {
       "hash": "-1c89a375",
       "segments": 50,
-      "processedAt": "2026-06-24T06:46:24.067Z"
+      "processedAt": "2026-06-24T16:38:31.689Z"
     },
     "data/hadith/khaibar-er-pataka-ali-ke-diyese-allah-rasul-muhabbat-kore.json": {
       "hash": "41407f8e",
       "segments": 9,
-      "processedAt": "2026-06-24T06:46:25.331Z"
+      "processedAt": "2026-06-24T16:38:32.880Z"
     },
     "data/hadith/prophet-last-illness-medicine-ledud.json": {
       "hash": "3dbd841a",
       "segments": 13,
-      "processedAt": "2026-06-24T06:46:26.061Z"
+      "processedAt": "2026-06-24T16:38:33.723Z"
     },
     "data/hadith/shane-nuzul-surah-yunus-35-ali-judgment.json": {
       "hash": "72d3ab1c",
       "segments": 15,
-      "processedAt": "2026-06-24T06:46:26.990Z"
+      "processedAt": "2026-06-24T16:38:34.745Z"
+    },
+    "data/hadith/alir-sathe-bondhutto-rakhar-tagid.json": {
+      "hash": "67376d2e",
+      "segments": 43,
+      "processedAt": "2026-06-29T14:39:46.541Z"
+    },
+    "data/hadith/allahor-rojju-ke-shokto-vabe-dhoro.json": {
+      "hash": "-174a10b1",
+      "segments": 21,
+      "processedAt": "2026-06-29T14:39:48.065Z"
+    },
+    "data/hadith/anugotto-koro-ulil-amor.json": {
+      "hash": "-24265c79",
+      "segments": 32,
+      "processedAt": "2026-06-29T14:39:52.178Z"
+    },
+    "data/hadith/mubahala-hadith-najran.json": {
+      "hash": "-1a9d9c53",
+      "segments": 41,
+      "processedAt": "2026-06-29T14:39:54.668Z"
     }
   },
   "modelName": "Xenova/paraphrase-multilingual-MiniLM-L12-v2"
