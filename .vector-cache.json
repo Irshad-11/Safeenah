@@ -111,9 +111,14 @@
       "processedAt": "2026-06-29T14:39:52.178Z"
     },
     "data/hadith/mubahala-hadith-najran.json": {
-      "hash": "-1a9d9c53",
+      "hash": "348fa67c",
       "segments": 41,
-      "processedAt": "2026-06-29T14:39:54.668Z"
+      "processedAt": "2026-07-01T18:36:28.327Z"
+    },
+    "data/hadith/ali-ruku-obostay-dan-korar-ghotona.json": {
+      "hash": "-340eb60d",
+      "segments": 139,
+      "processedAt": "2026-07-01T18:36:26.015Z"
     }
   },
   "modelName": "Xenova/paraphrase-multilingual-MiniLM-L12-v2"
